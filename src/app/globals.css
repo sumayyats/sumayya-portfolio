@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
+/* Dark mode is driven by an explicit data-theme on <html>, set by the theme
+   toggle (falling back to prefers-color-scheme on first load). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Shelf / global surface — editorial, warm off-white "paper". */
+  --paper: #f4f1e8;
+  --ink: #22271f;
+  --ink-soft: #5c5e52;
+  --accent: #c05f3c;
+  --edge: #e4dfd2;
+  --shelf: #e9e4d7;
+
+  /* Book cover defaults (overridden per-book where needed). */
+  --cover-paper: #f6f3ea;
+  --cover-ink: #23281f;
+
+  /* Type size scale (reading views adjust --reading-scale). */
+  --reading-scale: 1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="dark"] {
+  --paper: #12140f;
+  --ink: #ece8dd;
+  --ink-soft: #a3a598;
+  --accent: #d9754e;
+  --edge: #2a2c24;
+  --shelf: #1a1c15;
+  --cover-paper: #191b14;
+  --cover-ink: #ece8dd;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --paper: #12140f;
+    --ink: #ece8dd;
+    --ink-soft: #a3a598;
+    --accent: #d9754e;
+    --edge: #2a2c24;
+    --shelf: #1a1c15;
+    --cover-paper: #191b14;
+    --cover-ink: #ece8dd;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-accent: var(--accent);
+  --color-edge: var(--edge);
+  --color-shelf: var(--shelf);
+
+  --font-display: var(--font-dico), "Libre Baskerville", Georgia, serif;
+  --font-body: "Helvetica Neue", Helvetica, "Arial Narrow", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* {
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A single, consistent focus treatment. Never remove without replacing. */
+:where(a, button, [tabindex], [role="button"]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

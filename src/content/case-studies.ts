@@ -1,0 +1,383 @@
+import type { CaseStudy, ExternalBook } from "./types";
+
+/**
+ * All copy in the `summary`, `sections[].body`, `role`, `team`, `scope`, `alt`
+ * and `caption` fields is taken verbatim (or assembled only from the author's
+ * own phrases) from portfolio-case-studies.md. Do not rephrase or invent copy.
+ *
+ * Image `src` paths point at /public/images/<slug>/ and are placeholders until
+ * the real Figma exports land. Each is marked with a TODO in the caption data
+ * below where the export is still pending.
+ */
+
+export const caseStudies: CaseStudy[] = [
+  // ─────────────────────────────────────────────────────────────── ASTA ──
+  {
+    slug: "asta",
+    title: "ASTA",
+    subtitle: "Redesigning a school's online registration",
+    year: "2023",
+    role: "UX and UI designer. I owned the information architecture, sketches, design system and high-fidelity designs for the public site and the parent dashboard.",
+    team: "Delivered through new line.lab, my design studio. Maurits Hudaibi (developer).",
+    scope: "The whole website plus the registration flows (regular, internal and transfer students), and a new logged-in dashboard for parents.",
+    meta: "Client project via new line.lab · 2023 · Website (desktop and mobile)",
+    summary:
+      "The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.",
+    teaser: "Before and after, with measured impact.",
+    featured: true,
+    palette: {
+      spine: "#1E4A37",
+      paper: "#F4F1E8",
+      ink: "#20261D",
+      accent: "#6FA46B",
+      darkPaper: "#10150F",
+      darkInk: "#ECE8DD",
+      darkAccent: "#8FC08A",
+    },
+    cover: { image: "/images/asta/cover.png", kicker: "before // after" },
+    sections: [
+      {
+        id: "overview",
+        title: "Overview",
+        body: `**What it is:** The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.
+
+**My role:** UX and UI designer. I owned the information architecture, sketches, design system and high-fidelity designs for the public site and the parent dashboard.
+
+**Team:** Delivered through **new line.lab**, my design studio. Maurits Hudaibi (developer).
+
+**Scope:** The whole website plus the registration flows (regular, internal and transfer students), and a new logged-in dashboard for parents.`,
+      },
+      {
+        id: "impact",
+        title: "Impact",
+        body: `> **~700 families** registered through the new site in the last intake.
+> **~97%** of them completed registration **without help** from school staff.
+>
+> *Figures reported by the school's IT team.*`,
+      },
+      {
+        id: "challenge",
+        title: "The challenge",
+        body: `The old site worked, but it made parents do the work. The school's own feedback was clear: **it looked old, and requirements were hard to find because the pages were text-heavy with no icons.**
+
+- **Text-heavy:** the homepage explained the whole process in dense paragraphs. Parents had to read all of it to find which of three registration types applied to them.
+- **Process hidden in an image:** the 8-step registration journey was a small infographic that parents had to click to zoom.
+- **Dated look:** it looked like a generic template, not the face of a school that parents were about to trust with their child.
+- **No sense of progress:** after submitting the form, parents had no clear view of what was done and what came next (documents, payment, entrance test, results).
+
+For many families, this site is their first real contact with the school. Every parent who gets stuck turns into a phone call or WhatsApp message to admissions staff.
+
+**Goals agreed with the client:**
+
+1. Make admissions information easy to find
+2. Make the application process smoother
+3. Let parents track where they are in the process
+4. Help parents find the right programme quickly`,
+      },
+      {
+        id: "process",
+        title: "Process",
+        body: `**1. Understanding the landscape.** I compared six Indonesian school admissions sites (including Sekolah Kak Seto, SIT Nurul Fikri and Jakarta Intercultural School). I noted what felt familiar to parents and what created friction.
+
+**2. Restructuring the information.** I split the product into two parts with separate information architectures:
+
+- **Public site:** Home → Our programmes → Registration flow → About → Contact → Login
+- **Parent dashboard:** Overview → Profile → Payment information → Document downloads
+
+**3. Sketching.** Low-fidelity sketches of the homepage sections and the dashboard layout, to settle structure before any visual design.
+
+**4. Design system.** I built a small system so the developer could implement the pages consistently: a green colour scale taken from the school's identity, TT Commons for type, and form fields, buttons, cards, navigation and sidebar components with all their states.
+
+**5. High-fidelity design and handover.** I designed the full set of pages and states (form errors, login errors, uploads, success screens) and handed them to the developer in Figma.`,
+      },
+      {
+        id: "decisions",
+        title: "Key design decisions",
+        body: `| Problem | Decision |
+|---|---|
+| Paragraphs of instructions | Replaced them with **programme cards** (one per school unit) and **numbered step graphics** for the regular (8 steps) and internal (6 steps) routes |
+| Requirements buried in text, with no icons to guide the eye | A **programme detail page** that groups requirements into scannable cards, each with its own icon (general, documents, entrance test), with registration options, WhatsApp contact and the brochure in a side panel |
+| Parents unsure what to do after submitting | A **success page** that lists the payment steps and unit codes straight away |
+| No visibility of progress | A **dashboard overview** with an 8-step progress checklist and a single "complete your personal data now" call to action |
+| Long forms that are tiring to complete | **Accordion sections** in the profile (personal data, periodic data, family card, parent data), so parents fill one part at a time |
+| Admissions staff answering the same questions | Payment guides and downloadable documents (form, candidate card, MoU) available from the dashboard |`,
+      },
+      {
+        id: "constraints",
+        title: "Constraints and trade-offs",
+        body: `- **No user testing.** This was a freelance project with a design-only brief, so I didn't test with parents. I relied on the comparative review, the client's requirements, and established patterns parents would recognise from other school sites.
+- **Design handover, not build.** Implementation sat with the developer. My deliverable was a complete set of screens and components that left as little as possible to interpretation.
+- **No "before" numbers.** The school didn't track registrations or support requests before launch. The "before" side of this story is their qualitative feedback (dated, confusing, text-heavy), and the impact figures show how the new site performs now.`,
+      },
+      {
+        id: "learned",
+        title: "What I learned",
+        body: `- **Structure beats styling.** The biggest improvement came from reorganising information (cards, steps, a progress checklist), not from the new visual style.
+- **Plan measurement before launch.** Now I'd agree baseline metrics with the client before launch (registrations, support calls, completion without help) so the change can be measured, not only the outcome.
+- **Test even when the brief doesn't ask for it.** Next time I'd push for a few quick sessions with parents, even informal ones, before handover.`,
+      },
+    ],
+    visuals: [
+      { id: "asta-before", src: "/images/asta/before-homepage.png", sectionId: "challenge", alt: "The old Asy-Syukriyyah admissions homepage before the redesign.", caption: "Before: the old homepage explained the whole process in dense paragraphs. (TODO: export)" },
+      { id: "asta-ia", src: "/images/asta/information-architecture.png", sectionId: "process", alt: "Information architecture splitting the public site and the parent dashboard.", caption: "Information architecture for the public site and parent dashboard. (TODO: export)" },
+      { id: "asta-sketches", src: "/images/asta/sketches.png", sectionId: "process", alt: "Low-fidelity sketches of the homepage sections and dashboard layout.", caption: "Low-fidelity sketches settling structure before visual design. (TODO: export)" },
+      { id: "asta-homepage", src: "/images/asta/homepage.png", sectionId: "decisions", alt: "The full redesigned homepage.", caption: "The new homepage, with programme cards and numbered step graphics. (TODO: export)" },
+      { id: "asta-programme", src: "/images/asta/programme-detail.png", sectionId: "decisions", alt: "The programme detail page grouping requirements into scannable cards with icons.", caption: "Programme detail page: requirements grouped into scannable cards, each with its own icon. (TODO: export)" },
+      { id: "asta-form-success", src: "/images/asta/form-success.png", sectionId: "decisions", alt: "The registration form and its success page.", caption: "Registration form and the success page listing payment steps and unit codes. (TODO: export)" },
+      { id: "asta-dashboard", src: "/images/asta/dashboard.png", sectionId: "decisions", alt: "The login screen and parent dashboard overview.", caption: "Login and dashboard overview with an 8-step progress checklist. (TODO: export)" },
+      { id: "asta-profile", src: "/images/asta/profile-payment-downloads.png", sectionId: "decisions", alt: "Profile accordion sections, payment information and document downloads.", caption: "Profile, payment and downloads. Accordion sections split the long form. (TODO: export)" },
+      { id: "asta-system", src: "/images/asta/design-system.png", sectionId: "process", alt: "The ASTA design system: colour scale, type and components.", caption: "The design system handed to the developer. (TODO: export)" },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────── BINAPANI ──
+  {
+    slug: "binapani",
+    title: "Kyros by Binapani",
+    subtitle: "A visual scheduling app for autistic children",
+    year: "2025–26",
+    role: "UI/UX designer. I owned the onboarding and activities (categories) flows, and built the design system and icon library for both the mobile and tablet versions.",
+    team: "Uduak Duru (UI/UX designer). Designs were handed to Binapani's developers.",
+    scope: "Mobile and tablet app (MVP): the onboarding and activities flows, plus the design system and icon library.",
+    meta: "Internship · Nov 2025 – Jan 2026 · Mobile and tablet app (MVP)",
+    summary:
+      "Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.",
+    teaser: "Research insight turned into design decisions.",
+    featured: true,
+    externalUrl: "https://play.google.com/store",
+    palette: {
+      spine: "#1E2F5A",
+      paper: "#EEF1F6",
+      ink: "#1B2233",
+      accent: "#6E93D6",
+      darkPaper: "#0E1424",
+      darkInk: "#E7ECF5",
+      darkAccent: "#8FB0E6",
+    },
+    cover: { image: "/images/binapani/cover.png", kicker: "symbols over text" },
+    sections: [
+      {
+        id: "overview",
+        title: "Overview",
+        body: `**What it is:** Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.
+
+**My role:** UI/UX designer. I owned the **onboarding** and **activities (categories)** flows, and built the **design system and icon library** for both the mobile and tablet versions.
+
+**Team:** Uduak Duru (UI/UX designer). Designs were handed to Binapani's developers.
+
+**Timeline:** November 2025 to January 2026 (3 months), alongside my Master's studies.`,
+      },
+      {
+        id: "challenge",
+        title: "The challenge",
+        body: `For many autistic children, a predictable routine means less anxiety and more independence. Schools already know this: they use physical timeline boards, symbol cards and communication boards every day. But these tools are manual (printing and moving symbols around), they're hard to personalise, and there was no digital scheduling app that fit these children's needs.
+
+The brief: a clean, calm scheduling app for mobile and tablet with visual task cards, timers, and tasks that can be edited, skipped or replaced.`,
+      },
+      {
+        id: "research",
+        title: "Research",
+        body: `**Literature review.** Uduak and I split the reading. The evidence pointed clearly towards **visual schedules**: they increase on-task behaviour and independence, and make transitions smoother because upcoming events are visible.
+
+**Interview.** I interviewed a teaching assistant who supports autistic children at school. Key insights:
+
+- **Every child is different.** Support follows each child's personal plan (Behaviour Intervention Plan / Personal Learning Plan), so a one-size-fits-all schedule won't work.
+- **Symbols over text.** Many children communicate in one or two words or by pointing at a communication board.
+- **Routine changes cause distress.** Teachers struggle when a plan falls through.
+- **Choice matters.** Children are encouraged to choose their own optional activities.`,
+      },
+      {
+        id: "insight-to-design",
+        title: "From insight to design",
+        body: `| Insight | What I designed |
+|---|---|
+| Symbols over text | **Activity cards led by a large icon**, with a short label underneath |
+| Each child needs a personal schedule | An **add-activity flow** where carers pick an icon or **upload their own image**, choose a card colour, and add a name and description |
+| Colour-coded timeline boards are already familiar | **Colour-coded cards** with a soft pastel palette, plus a custom colour picker |
+| Calm, low-sensory interface (from the brief) | A restrained blue brand palette, generous spacing and a simple grid |
+| Routines change | An **edit mode** to remove or replace activities (with a confirmation step so nothing is deleted by accident), plus **suggested activities** for adding quickly |
+| Children and carers share the device | **4-digit passcode login** and short, low-effort onboarding. Registration asks only for essentials; medical category and calendar import are optional |
+| First-time users face an empty screen | A friendly **empty state** that invites carers to create their first activity, with a "do it later" option |
+
+**Mobile and tablet.** I adapted both flows to iPad landscape, where the larger cards and 3-column grid suit shared use in a classroom.`,
+      },
+      {
+        id: "constraints",
+        title: "Constraints and trade-offs",
+        body: `- **Time.** Three months, part-time around my studies, so we prioritised the core flows over extra features.
+- **Custom icons.** Binapani wanted every icon drawn in-house, which wasn't achievable for a full library in three months. Instead, I adapted icons from **Streamline** into one consistent style, which gave the team a complete, usable set within the timeline.
+- **Handover.** The flows shipped as designed, but the build changed some visual details: the icons were swapped, and some buttons were restyled. For example, the **remove button became red**. Strong reds can read as alarming and be overstimulating for autistic children, which is why I had kept destructive actions calm and relied on a confirmation step instead. This case study shows my original designs and the reasoning behind them.`,
+      },
+      {
+        id: "feedback",
+        title: "Feedback and iteration",
+        body: `Feedback centred on the **card style**, which I refined. The flow structure itself held up without major changes.`,
+      },
+      {
+        id: "learned",
+        title: "What I learned",
+        body: `- **Designing for accessibility starts with restraint.** Fewer colours, fewer words and bigger targets did more than any added feature.
+- **Research can be small and still useful.** One interview grounded in lived classroom experience changed how we thought about personalisation and choice.
+- **Document the "why", not just the "what".** The red remove button taught me that a design system needs its accessibility reasoning written down. Otherwise, a well-meant change can undo a deliberate decision. Next time I'd add usage notes (e.g. "no high-alert colours for destructive actions") to key components.`,
+      },
+    ],
+    visuals: [
+      { id: "bina-onboarding", src: "/images/binapani/onboarding.png", sectionId: "insight-to-design", alt: "Onboarding screens in blue and light directions.", caption: "Onboarding, explored in blue and light directions. (TODO: export)" },
+      { id: "bina-registration", src: "/images/binapani/registration-empty.png", sectionId: "insight-to-design", alt: "Registration and the first-activity empty state.", caption: "Registration and the first-activity empty state. (TODO: export)" },
+      { id: "bina-activities-mobile", src: "/images/binapani/activities-mobile.png", sectionId: "insight-to-design", alt: "The activities flow on mobile.", caption: "Activities flow, mobile: cards led by a large icon. (TODO: export)" },
+      { id: "bina-activities-tablet", src: "/images/binapani/activities-tablet.png", sectionId: "insight-to-design", alt: "The activities flow on tablet in landscape.", caption: "Activities flow, tablet: larger cards and a 3-column grid for shared classroom use. (TODO: export)" },
+      { id: "bina-system", src: "/images/binapani/design-system.png", sectionId: "insight-to-design", alt: "Design system: colours, typography, buttons, fields and icons.", caption: "The design system: colours, typography, buttons, fields and icons. (TODO: export)" },
+      { id: "bina-research", src: "/images/binapani/communication-board.png", sectionId: "research", alt: "An example of a communication board used to support autistic children.", caption: "Research: a communication board, one of the physical tools schools use every day. (TODO: export)" },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────── GUT-SKIN ──
+  {
+    slug: "gut-skin",
+    title: "Gut-Skin",
+    subtitle: "A holistic companion for skin and gut health",
+    year: "2026",
+    role: "Sole designer and researcher, covering research, synthesis, workshop facilitation, information architecture, prototyping and usability testing.",
+    team: "Solo. MSc UX Design final project, Kingston University.",
+    scope: "iOS app concept: research, synthesis, prototyping and three rounds of usability testing, using Double Diamond with Design Thinking techniques.",
+    meta: "MSc UX Design final project, Kingston University · 2026 · iOS app concept",
+    summary:
+      "Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.",
+    teaser: "Three rounds of testing and what each one revealed.",
+    featured: true,
+    prototype: {
+      type: "figma",
+      url: "https://www.figma.com/proto/wptX60vQQEM6d5OnTL7LWe/Final-project---Gut-Skin?node-id=1118-20426&viewport=1403%2C630%2C0.08&t=9Ni4ytDPeBaVXpjF-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1118%3A20426&page-id=3%3A6",
+    },
+    palette: {
+      spine: "#3E5B3A",
+      paper: "#F3EFE7",
+      ink: "#2A2A22",
+      accent: "#8A5A3C",
+      darkPaper: "#14130E",
+      darkInk: "#ECE6DA",
+      darkAccent: "#C08A63",
+    },
+    cover: { image: "/images/gut-skin/cover.png", kicker: "three rounds of testing" },
+    sections: [
+      {
+        id: "overview",
+        title: "Overview",
+        body: `**What it is:** Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.
+
+**My role:** Sole designer and researcher, covering research, synthesis, workshop facilitation, information architecture, prototyping and usability testing.
+
+**Methods:** Double Diamond, with Design Thinking techniques in the Discover and Define stages.`,
+      },
+      {
+        id: "impact",
+        title: "Impact",
+        body: `| | Round 1 · Low-fi | Round 2 · Mid-fi | Round 3 · Hi-fi |
+|---|---|---|---|
+| Task success | 69.0% | 68.6% | **100%** |
+| Confusion moments | 46 | 42 | **26** |
+| Participants | 5 | 6 | 5 |
+
+Final round: **SUS 82.5** (grade A, above the 68 benchmark) and an average **+2.00 confidence gain**.`,
+      },
+      {
+        id: "challenge",
+        title: "The challenge",
+        body: `The problem isn't a lack of information. It's that the information is scattered.
+
+- **38 survey responses:** 63% had managed their skin concern for **more than two years**.
+- **71%** already believed gut and skin are connected, and **84%** would try lifestyle changes with personalised guidance.
+- **53%** felt overwhelmed by skincare information often or almost always.
+- **More users relied on Google (53%) and social media (39%) than on a clinician (21%)**, which left them acting as their own researchers.
+
+Existing apps don't close the gap. I scored **17 apps** across five dimensions. Skin apps focus on products, gut apps ignore skin, and AI scanners give a one-off snapshot with no lifestyle context.
+
+> *"I know sugar and stress do something to my skin. I just do not know what to actually do about it."*
+> Aliya, the persona built from the research
+
+**The real design problem:** lifestyle changes take weeks to show on the skin, but users want feedback every day. Without visible progress, people doubt and drop off.`,
+      },
+      {
+        id: "process",
+        title: "Process",
+        body: `**Discover.** Survey, semi-structured interviews and a competitor review. Five interviewees asked, unprompted, for a skin scanner.
+
+**Define.** A remote co-creation workshop with 3 participants (card sorting, dot voting, a prioritisation matrix and Crazy 8s). It changed two of my assumptions:
+
+1. **"Evidence-based content" isn't a feature.** Participants expected it as a quality of the AI guidance.
+2. **Online doctor access was dropped.** Participants rated it high effort, low impact, and some trusted their own long-term data more.
+
+Card sorting also showed that **tracking is the foundation and guidance is its output**, so I designed the app as two layers rather than a set of equal features. A current-state journey map (Notice → Search → Buy → Try → Doubt → Drop) pinpointed the break point: **Doubt**, where there's no feedback loop.
+
+**Develop: three rounds of testing.** Each round fixed one layer of problems and exposed the next.
+
+| Round | What I changed | What testing revealed |
+|---|---|---|
+| **1 · Low-fi** | Six core flows in greyscale | Participants didn't understand how content was **grouped and labelled** |
+| **2 · Mid-fi** | Split scan and log history into two separate places | **3 of 6** participants started a new scan when asked to find an old one, and **nobody** found scan history unaided. Controls also didn't look tappable. |
+| **3 · Hi-fi** | Merged history into **one screen with filters**; renamed actions so "scan" no longer meant both the act and the record; added a history shortcut on the home page, clear card signifiers and an onboarding progress bar | **100% task success**, and no one confused the two histories. New issue: Insights screens were **too text-dense**. |
+
+**Deliver: refinements after round 3.**
+
+- **Previous scan vs today** comparison, plus a **weekly progress summary** (Day 1 vs Day 7). This answers the "Doubt" stage directly.
+- **Story cards** that turn long Insights pages into one idea per slide, followed by short recommendation cards.
+- **Product tiles relabelled by category** ("Food supplement") instead of brand name, so third-party products no longer looked like app features.
+- A **time filter** on History (today, this week, this month, this year).`,
+      },
+      {
+        id: "ai",
+        title: "Designing AI responsibly",
+        body: `- **Patterns, not diagnoses.** Individual microbiome responses vary a lot, so the app helps users notice their own patterns instead of claiming to know the cause.
+- **Sources.** The assistant cites its sources and makes clear it doesn't replace a GP or dermatologist.
+- **Privacy at the point of use.** A first-time participant asked, *"When I am scanning my face, I want to know how that is being taken care of."* Face images count as special category data under UK GDPR, so the scan screen states how long images are kept.
+- **Pseudonymous names** (e.g. "Sunshine") reduce the stigma risk tied to visible skin conditions.
+- **Accessibility:** dark mode, adjustable font size and speech-to-text.`,
+      },
+      {
+        id: "risks",
+        title: "Risks and trade-offs",
+        body: `- **The 100% needs context.** Four of the five round-3 participants had seen an earlier version, and task titles named the destinations. The one true newcomer scored lowest (SUS 60). The design is well liked, but first-use learnability is only partly proven.
+- **Scoped out on purpose:** visual grouping inside History and moving one progress control. I explored three options for grouping but didn't build them before the deadline.
+- **Not yet tested:** whether users understand that scan results and the assistant's answers are AI-generated.`,
+      },
+      {
+        id: "learned",
+        title: "What I learned",
+        body: `- **Fixing one layer reveals the next.** A flat score between rounds 1 and 2 wasn't failure; the problems had moved from labels to structure.
+- **A headline number needs its caveats alongside it**, not in a footnote.
+- **Recruit fresh participants for the final round.** Next time I'd bring in at least two first-time users.`,
+      },
+    ],
+    visuals: [
+      { id: "gs-axis", src: "/images/gut-skin/gut-skin-axis.png", sectionId: "challenge", alt: "A diagram of the gut-skin axis and how AI works in the app.", caption: "The gut-skin axis, and how the AI works. (TODO: export)" },
+      { id: "gs-competitors", src: "/images/gut-skin/competitor-matrix.png", sectionId: "challenge", alt: "A competitor matrix scoring 17 apps across five dimensions.", caption: "Competitor matrix: 17 apps scored across five dimensions. (TODO: export)" },
+      { id: "gs-workshop", src: "/images/gut-skin/workshop.png", sectionId: "process", alt: "Workshop artefacts: card sort and prioritisation matrix.", caption: "Workshop: card sorting and a prioritisation matrix. (TODO: export)" },
+      { id: "gs-persona", src: "/images/gut-skin/persona-journey.png", sectionId: "process", alt: "Persona and current-state journey map.", caption: "Persona and the journey map that pinpointed the Doubt stage. (TODO: export)" },
+      { id: "gs-ia", src: "/images/gut-skin/information-architecture.png", sectionId: "process", alt: "The app's information architecture.", caption: "Information architecture: tracking as the foundation, guidance as its output. (TODO: export)" },
+      { id: "gs-lofi-midfi", src: "/images/gut-skin/lofi-midfi.png", sectionId: "process", alt: "Low-fidelity and mid-fidelity screens.", caption: "Low-fi and mid-fi screens across the testing rounds. (TODO: export)" },
+      { id: "gs-hifi", src: "/images/gut-skin/hifi-main.png", sectionId: "process", alt: "Hi-fidelity main feature screens.", caption: "Hi-fi main features after round 3. (TODO: export)" },
+      { id: "gs-insights", src: "/images/gut-skin/insights-story-cards.png", sectionId: "process", alt: "AI Insights screens and story cards.", caption: "AI Insights turned into story cards, one idea per slide. (TODO: export)" },
+      { id: "gs-before-after", src: "/images/gut-skin/before-after.png", sectionId: "process", alt: "Before and after the round 3 refinements.", caption: "Before and after the refinements. (TODO: export)" },
+      { id: "gs-accessibility", src: "/images/gut-skin/accessibility-dark.png", sectionId: "ai", alt: "Accessibility features and dark mode.", caption: "Accessibility and dark mode. (TODO: export)" },
+    ],
+  },
+];
+
+/**
+ * Quieter spine-only books that sit after the featured three and open a
+ * Behance case study in a new tab. No case study page on this site.
+ */
+export const externalBooks: ExternalBook[] = [
+  { slug: "halodoc", title: "Halodoc — Health Tech App", externalUrl: "https://www.behance.net/gallery/131979515/Halodoc-Health-Tech-App-UXUI-Case-Study" },
+  { slug: "garmin-heuristic", title: "Heuristic Evaluation — Garmin Connect", externalUrl: "https://www.behance.net/gallery/245237533/Heuristic-Evaluation-Garmin-Connect" },
+  { slug: "tiket-forum", title: "Tiket.com Travel App — Forum Feature", externalUrl: "https://www.behance.net/gallery/236923431/Tiketcom-Travel-App-Forum-Feature" },
+  { slug: "cctv-dashboard", title: "AI Face Recognition CCTV Dashboard", externalUrl: "https://www.behance.net/gallery/236918417/AI-Face-Recognition-CCTV-Dashboard" },
+  { slug: "grab-concept", title: "Grab Improvement Concept", externalUrl: "https://www.behance.net/gallery/142122325/Grab-Improvement-Concept-UX-Case-Study" },
+  { slug: "lion-air", title: "Lion Air — Flight Booking", externalUrl: "https://www.behance.net/gallery/131938349/Lion-Air-Flight-Booking-Ticket-Mobile-App" },
+  { slug: "e-township", title: "E-Township S Residence", externalUrl: "https://www.behance.net/gallery/151959117/E-Township-S-Residence-Design-Concept" },
+  { slug: "death-of-democracy", title: "Death of Democracy Poster", externalUrl: "https://www.behance.net/gallery/236076629/Death-of-Democracy-Poster" },
+];
+
+export function getCaseStudy(slug: string): CaseStudy | undefined {
+  return caseStudies.find((c) => c.slug === slug);
+}
