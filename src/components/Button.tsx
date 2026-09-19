@@ -6,8 +6,9 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "secondary";
 type Size = "md" | "lg";
 
+// Duolingo-style: a solid offset ledge (blur 0) that the button presses into.
 const base =
-  "inline-flex select-none items-center justify-center gap-2 rounded-[14px] font-display leading-none tracking-tight transition-all duration-150 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex select-none items-center justify-center gap-2 rounded-[14px] font-display leading-none tracking-tight transition-[transform,box-shadow,filter] duration-100 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50";
 
 const sizes: Record<Size, string> = {
   md: "px-6 py-3 text-[1.15rem]",
@@ -16,9 +17,9 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-button text-button-ink shadow-[0_10px_22px_-12px_rgba(107,45,26,0.7)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 active:brightness-95",
+    "bg-button text-button-ink shadow-[0_5px_0_0_color-mix(in_srgb,var(--button)_62%,#000)] hover:brightness-105 active:translate-y-[4px] active:shadow-[0_1px_0_0_color-mix(in_srgb,var(--button)_62%,#000)]",
   secondary:
-    "border-2 border-[color-mix(in_srgb,var(--ink)_22%,transparent)] text-ink hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--ink)_7%,transparent)] active:translate-y-0",
+    "bg-paper border-2 border-[color-mix(in_srgb,var(--ink)_18%,var(--paper))] text-ink shadow-[0_5px_0_0_color-mix(in_srgb,var(--ink)_18%,var(--paper))] hover:bg-[color-mix(in_srgb,var(--ink)_5%,var(--paper))] active:translate-y-[4px] active:shadow-[0_1px_0_0_color-mix(in_srgb,var(--ink)_18%,var(--paper))]",
 };
 
 function classes(variant: Variant, size: Size, className?: string) {
