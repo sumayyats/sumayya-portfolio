@@ -4,8 +4,7 @@ import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  // TODO: confirm display name + positioning line.
-  title: "Case studies — a bookshelf",
+  title: "Case studies — selected works",
   description:
     "A shelf of UX case studies. Browse the books, open one, and read.",
 };

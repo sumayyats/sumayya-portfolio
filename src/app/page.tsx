@@ -6,16 +6,12 @@ export default function Home() {
     <main className="flex min-h-dvh flex-col">
       <header className="flex items-start justify-between gap-4 px-[max(1rem,8vw)] pt-10">
         <div className="max-w-[46ch]">
-          {/* TODO: confirm display name + one-line positioning. */}
           <h1 className="font-display text-2xl leading-tight tracking-tight text-ink sm:text-[1.7rem]">
-            Sumayya Tsabitah
+            Case studies — selected works
           </h1>
           <p className="mt-1 text-[15px] text-ink-soft">
-            UX designer. A shelf of case studies — pick one up to read.
-            {" "}
-            <span className="font-mono text-[11px] uppercase tracking-widest text-accent">
-              (TODO: positioning)
-            </span>
+            {/* TODO: one-line positioning statement. */}
+            A shelf of UX case studies — pick one up to read.
           </p>
         </div>
         <ThemeToggle className="mt-1 shrink-0" />
