@@ -37,6 +37,7 @@ export function Shelf() {
       : null;
 
   const position = (activeIndex >= 0 ? activeIndex : centerIndex) + 1;
+  const progress = total > 1 ? (position - 1) / (total - 1) : 0;
 
   // ── open / close ──────────────────────────────────────────────
   const open = useCallback((slug: string) => {
@@ -176,20 +177,12 @@ export function Shelf() {
     setCenterIndex(best);
   }, []);
 
-  const scrollBy = (dir: 1 | -1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * Math.min(420, el.clientWidth * 0.7), behavior: "smooth" });
-  };
-
   return (
     <MotionConfig reducedMotion="user">
       <div className="relative">
-        {/* the shelf row */}
+        {/* the shelf row (centred when it fits, scrolls when it doesn't) */}
         <div
           ref={scrollerRef}
-          role="list"
-          aria-label="Bookshelf of case studies"
           tabIndex={0}
           onKeyDown={onScrollerKeyDown}
           onWheel={onWheel}
@@ -198,66 +191,64 @@ export function Shelf() {
           onPointerUp={endDrag}
           onPointerLeave={endDrag}
           onScroll={onScroll}
-          className="no-scrollbar flex touch-pan-y snap-x snap-mandatory items-end gap-[2px] overflow-x-auto px-[max(1rem,8vw)] pb-6 pt-20 outline-none [scrollbar-width:none]"
+          aria-label="Bookshelf of case studies"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,6vw)] pb-6 pt-24 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
-          {shelfItems.map((item, i) => {
-            const isActive = item.slug === activeSlug;
-            // Render a same-width placeholder for the active featured book so the
-            // shared-layout element lives only in the overlay (no duplicate id).
-            if (isActive && item.kind === "featured") {
-              const g = bookGeometry(i, "featured");
+          <div
+            role="list"
+            className="mx-auto flex w-max items-end gap-[2px]"
+          >
+            {shelfItems.map((item, i) => {
+              const isActive = item.slug === activeSlug;
+              // Same-width placeholder for the active featured book so the
+              // shared-layout element lives only in the overlay (no dup id).
+              if (isActive && item.kind === "featured") {
+                const g = bookGeometry(i, "featured");
+                return (
+                  <div
+                    key={item.slug}
+                    aria-hidden="true"
+                    className="shrink-0 snap-center self-end"
+                    style={{ width: projectedWidth(g), height: g.height + 12 }}
+                  />
+                );
+              }
               return (
-                <div
-                  key={item.slug}
-                  aria-hidden="true"
-                  className="shrink-0 snap-center self-end"
-                  style={{ width: projectedWidth(g), height: g.height + 12 }}
-                />
+                <div key={item.slug} role="listitem" className="shrink-0">
+                  <BookSpine
+                    ref={(el: HTMLElement | null) => {
+                      bookRefs.current[i] = el;
+                    }}
+                    item={item}
+                    index={i}
+                    onOpen={open}
+                    onFocusItem={setCenterIndex}
+                  />
+                </div>
               );
-            }
-            return (
-              <div key={item.slug} role="listitem" className="shrink-0">
-                <BookSpine
-                  ref={(el: HTMLElement | null) => {
-                    bookRefs.current[i] = el;
-                  }}
-                  item={item}
-                  index={i}
-                  onOpen={open}
-                  onFocusItem={setCenterIndex}
-                />
-              </div>
-            );
-          })}
+            })}
+          </div>
         </div>
 
         {/* shelf ledge */}
         <div className="mx-[max(1rem,8vw)] h-[3px] rounded-full bg-[color-mix(in_srgb,var(--ink)_16%,transparent)]" />
         <div className="mx-[max(1rem,8vw)] h-4 rounded-b-md bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_9%,transparent)] to-transparent" />
 
-        {/* controls: arrows, hint, counter */}
-        <div className="mt-6 flex items-center justify-center gap-4 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
-          <button
-            type="button"
-            onClick={() => scrollBy(-1)}
-            aria-label="Scroll shelf left"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-edge hover:text-ink"
-          >
-            ←
-          </button>
-          <span className="hidden sm:inline">drag · scroll · arrow keys</span>
+        {/* progress bar + page count */}
+        <div className="mt-7 flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
           <span aria-live="polite" className="tabular-nums">
             {position} / {total}
           </span>
-          <button
-            type="button"
-            onClick={() => scrollBy(1)}
-            aria-label="Scroll shelf right"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-edge hover:text-ink"
+          <span
+            className="relative h-[3px] w-40 overflow-hidden rounded-full bg-edge"
+            aria-hidden="true"
           >
-            →
-          </button>
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-ink-soft transition-[width] duration-300 ease-out"
+              style={{ width: `${progress * 100}%` }}
+            />
+          </span>
         </div>
 
         {/* ── open book overlay ── */}

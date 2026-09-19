@@ -59,4 +59,6 @@ export type ExternalBook = {
   slug: string;
   title: string;
   externalUrl: string;
+  /** Optional publication year, shown in the hover label. TODO: supply. */
+  year?: string;
 };

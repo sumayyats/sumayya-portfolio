@@ -38,19 +38,19 @@ export function bookGeometry(
 
   if (kind === "featured") {
     return {
-      spineW: Math.round(44 + r1 * 12), // 44–56
-      depth: Math.round(52 + r4 * 14), // 52–66
-      height: Math.round(320 + r2 * 36), // 320–356
-      lean: round2((r3 - 0.5) * 3.6), // ~ -1.8 .. +1.8
+      spineW: Math.round(54 + r1 * 14), // 54–68 (chunkier)
+      depth: Math.round(62 + r4 * 16), // 62–78
+      height: Math.round(250 + r2 * 34), // 250–284 (shorter)
+      lean: round2((r3 - 0.5) * 3.2), // ~ -1.6 .. +1.6
       angleY: round2(15 + r1 * 5), // 15–20 (spine-forward, slim cover sliver)
       angleX: round2(5 + r4 * 2.5), // 5–7.5
     };
   }
   return {
-    spineW: Math.round(28 + r1 * 12), // 28–40
-    depth: Math.round(38 + r4 * 12), // 38–50
-    height: Math.round(240 + r2 * 66), // 240–306
-    lean: round2((r3 - 0.5) * 5), // ~ -2.5 .. +2.5
+    spineW: Math.round(36 + r1 * 12), // 36–48
+    depth: Math.round(46 + r4 * 12), // 46–58
+    height: Math.round(198 + r2 * 42), // 198–240
+    lean: round2((r3 - 0.5) * 4.4), // ~ -2.2 .. +2.2
     angleY: round2(13 + r1 * 5), // 13–18
     angleX: round2(4 + r4 * 2.5), // 4–6.5
   };

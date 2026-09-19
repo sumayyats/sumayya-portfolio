@@ -3,7 +3,7 @@ import type { CaseStudy, ExternalBook } from "@/content/types";
 
 export type ShelfItem =
   | { kind: "featured"; slug: string; title: string; study: CaseStudy }
-  | { kind: "external"; slug: string; title: string; url: string };
+  | { kind: "external"; slug: string; title: string; url: string; year?: string };
 
 /** Featured books first (so the eye lands on them), then the Behance spines. */
 export const shelfItems: ShelfItem[] = [
@@ -21,6 +21,7 @@ export const shelfItems: ShelfItem[] = [
       slug: b.slug,
       title: b.title,
       url: b.externalUrl,
+      year: b.year,
     })
   ),
 ];

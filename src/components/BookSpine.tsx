@@ -18,9 +18,10 @@ const PERSPECTIVE = 1000;
 
 /**
  * An upright, spine-out book on the shelf — a real CSS 3D cuboid (spine + a
- * sliver of front cover + a page-block on top). Featured books are richer and
- * carry a Framer `layoutId` so they can pull forward into a face-out cover.
- * Behance books are quieter, narrower, and open in a new tab.
+ * sliver of front cover + a page-block on top), with a hover/focus label and a
+ * cast shadow. Featured books carry a Framer `layoutId` so they can pull
+ * forward into a face-out cover. Behance books are quieter and open in a new
+ * tab, flagged as an optional read.
  */
 export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
   { item, index, onOpen, onFocusItem },
@@ -40,10 +41,14 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         data-book
         data-index={index}
         onFocus={() => onFocusItem(index)}
-        aria-label={`${item.title} — opens the case study on Behance in a new tab`}
-        className="group relative flex shrink-0 snap-center items-end justify-center self-end outline-none [--lift:0px] group-focus-visible:[--lift:-8px] hover:[--lift:-8px] focus-visible:[--lift:-8px]"
+        aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens the case study on Behance in a new tab`}
+        className="group relative flex shrink-0 snap-center items-end justify-center self-end outline-none [--lift:0px] hover:[--lift:-9px] focus-visible:[--lift:-9px]"
         style={{ width: projW, height: geo.height + 10, perspective: PERSPECTIVE }}
       >
+        <HoverLabel
+          title={item.title}
+          meta={item.year ? `Optional read ↗ · ${item.year}` : "Optional read ↗"}
+        />
         <Book3D
           geo={geo}
           spineColor={spineColor}
@@ -65,6 +70,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             </div>
           }
         />
+        <CastShadow />
       </a>
     );
   }
@@ -82,11 +88,12 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       data-index={index}
       onFocus={() => onFocusItem(index)}
       onClick={() => onOpen(study.slug)}
-      aria-label={`${study.title}: ${study.subtitle}. Open this book.`}
+      aria-label={`${study.title}, ${study.year}: ${study.subtitle}. Open this book.`}
       className="group relative flex shrink-0 cursor-pointer snap-center items-end justify-center self-end outline-none [--lift:0px] hover:[--lift:-14px] focus-visible:[--lift:-14px]"
       style={{ width: projW, height: geo.height + 12, perspective: PERSPECTIVE }}
       transition={{ type: "spring", stiffness: 260, damping: 30 }}
     >
+      <HoverLabel title={study.title} meta={study.year} accent />
       <Book3D
         geo={geo}
         spineColor={p.spine}
@@ -104,7 +111,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
                 writingMode: "vertical-rl",
                 transform: "rotate(180deg)",
                 color: light,
-                fontSize: geo.spineW >= 52 ? 15 : 14,
+                fontSize: geo.spineW >= 60 ? 16 : 15,
               }}
             >
               {study.title}
@@ -125,28 +132,61 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             className="absolute inset-[3px] flex flex-col justify-between p-1.5"
             style={{ color: `color-mix(in srgb, ${light} 45%, transparent)` }}
           >
-            {/* board impression / inset frame */}
             <span
               aria-hidden
               className="pointer-events-none absolute inset-0 rounded-[1px]"
               style={{ boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${light} 16%, transparent)` }}
             />
-            <span
-              className="font-mono text-[6px] uppercase tracking-[0.16em]"
-              style={{ color: `color-mix(in srgb, ${light} 52%, transparent)` }}
-            >
+            <span className="font-mono text-[6px] uppercase tracking-[0.16em]">
               {study.year}
             </span>
-            <FootEmblem
-              variant={index + 2}
-              className="opacity-40"
-            />
+            <FootEmblem variant={index + 2} className="opacity-40" />
           </div>
         }
       />
+      <CastShadow />
     </motion.button>
   );
 });
+
+/** Readable label that fades in above the book on hover / focus. */
+function HoverLabel({
+  title,
+  meta,
+  accent = false,
+}: {
+  title: string;
+  meta: string;
+  accent?: boolean;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 max-w-[240px] -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full border border-edge bg-paper px-3 py-1.5 opacity-0 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
+    >
+      <span className="font-display text-[13px] leading-none tracking-tight text-ink">
+        {title}
+      </span>
+      <span
+        className={`ml-2 font-mono text-[10px] uppercase tracking-wide ${
+          accent ? "text-accent" : "text-ink-soft"
+        }`}
+      >
+        {meta}
+      </span>
+    </span>
+  );
+}
+
+/** Soft contact shadow on the shelf; grows when the book lifts on hover. */
+function CastShadow() {
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute -bottom-2 left-1/2 h-3 w-[76%] -translate-x-1/2 rounded-[50%] bg-black/25 opacity-30 blur-[6px] transition-all duration-200 ease-out group-hover:opacity-60 group-hover:blur-[9px] group-focus-visible:opacity-60"
+    />
+  );
+}
 
 function ExternalArrow() {
   return (
