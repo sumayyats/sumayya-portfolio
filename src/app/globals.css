@@ -13,6 +13,10 @@
   --edge: #e4dfd2;
   --shelf: #e9e4d7;
 
+  /* Button system */
+  --button: #6b2d1a; /* dark terracotta */
+  --button-ink: #f6efe3;
+
   /* Book cover defaults (overridden per-book where needed). */
   --cover-paper: #f6f3ea;
   --cover-ink: #23281f;
@@ -30,6 +34,8 @@
   --shelf: #1a1c15;
   --cover-paper: #191b14;
   --cover-ink: #ece8dd;
+  --button: #8a4529;
+  --button-ink: #f6efe3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,6 +48,8 @@
     --shelf: #1a1c15;
     --cover-paper: #191b14;
     --cover-ink: #ece8dd;
+    --button: #8a4529;
+    --button-ink: #f6efe3;
   }
 }
 
@@ -52,6 +60,8 @@
   --color-accent: var(--accent);
   --color-edge: var(--edge);
   --color-shelf: var(--shelf);
+  --color-button: var(--button);
+  --color-button-ink: var(--button-ink);
 
   --font-display: var(--font-dico), "Libre Baskerville", Georgia, serif;
   --font-body: "Helvetica Neue", Helvetica, "Arial Narrow", Arial, sans-serif;
