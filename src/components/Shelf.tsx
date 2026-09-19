@@ -11,6 +11,7 @@ import { BookSpine } from "./BookSpine";
 import { BookCover } from "./BookCover";
 import { ShelfBookDetail } from "./ShelfBookDetail";
 import { shelfItems } from "./shelf-data";
+import { bookGeometry } from "./book-geometry";
 
 export function Shelf() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -197,7 +198,7 @@ export function Shelf() {
           onPointerUp={endDrag}
           onPointerLeave={endDrag}
           onScroll={onScroll}
-          className="no-scrollbar flex touch-pan-y snap-x snap-mandatory items-end gap-3 overflow-x-auto px-[max(1rem,8vw)] pb-6 pt-16 outline-none [scrollbar-width:none] sm:gap-4"
+          className="no-scrollbar flex touch-pan-y snap-x snap-mandatory items-end gap-[2px] overflow-x-auto px-[max(1rem,8vw)] pb-6 pt-20 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           {shelfItems.map((item, i) => {
@@ -205,11 +206,13 @@ export function Shelf() {
             // Render a same-width placeholder for the active featured book so the
             // shared-layout element lives only in the overlay (no duplicate id).
             if (isActive && item.kind === "featured") {
+              const g = bookGeometry(i, "featured");
               return (
                 <div
                   key={item.slug}
                   aria-hidden="true"
-                  className="h-[344px] w-[54px] shrink-0 snap-center"
+                  className="shrink-0 snap-center self-end"
+                  style={{ width: g.width, height: g.height }}
                 />
               );
             }
