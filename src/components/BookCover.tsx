@@ -75,10 +75,11 @@ export function BookCover({ study }: { study: CaseStudy }) {
 
         {/* footer */}
         <div
-          className="flex shrink-0 items-end justify-between text-[12px] uppercase tracking-[0.1em]"
+          className="flex shrink-0 items-end justify-between gap-3 text-[12px] uppercase"
           style={{
             color: `color-mix(in srgb, ${ink} 62%, transparent)`,
             fontFamily: '"Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif',
+            letterSpacing: "0",
           }}
         >
           <span>{study.subtitle}</span>
