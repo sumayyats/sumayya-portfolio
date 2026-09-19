@@ -9,11 +9,12 @@ import { bookGeometry, projectedWidth } from "./book-geometry";
 type Props = {
   item: ShelfItem;
   index: number;
+  scale?: number;
   onOpen: (slug: string) => void;
   onFocusItem: (index: number) => void;
 };
 
-const PERSPECTIVE = 1000;
+const PERSPECTIVE = 1200;
 
 /**
  * An upright, spine-out book on the shelf — a real CSS 3D cuboid (spine + a
@@ -23,10 +24,10 @@ const PERSPECTIVE = 1000;
  * tab, flagged as an optional read.
  */
 export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
-  { item, index, onOpen, onFocusItem },
+  { item, index, scale = 1, onOpen, onFocusItem },
   ref
 ) {
-  const geo = bookGeometry(index, item.kind);
+  const geo = bookGeometry(index, item.kind, scale);
   const projW = projectedWidth(geo);
 
   if (item.kind === "external") {
@@ -58,8 +59,12 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             <div className="absolute inset-0 flex flex-col items-center justify-between py-4 text-ink-soft">
               <span className="h-3 w-[2px] rounded bg-[color-mix(in_srgb,var(--ink)_28%,transparent)]" />
               <span
-                className="min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-2 text-center font-mono text-[10px] uppercase leading-none tracking-[0.14em]"
-                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                className="min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-2 text-center font-mono uppercase leading-none tracking-[0.14em]"
+                style={{
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                  fontSize: Math.max(9, Math.round(geo.spineW * 0.25)),
+                }}
               >
                 {item.title}
               </span>
@@ -108,7 +113,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
                 writingMode: "vertical-rl",
                 transform: "rotate(180deg)",
                 color: light,
-                fontSize: geo.spineW >= 60 ? 16 : 15,
+                fontSize: Math.round(geo.spineW * 0.28),
               }}
             >
               {study.title}

@@ -27,9 +27,15 @@ export type BookGeometry = {
   angleX: number; // deg, slight downward tilt (reveals the page-block on top)
 };
 
+/**
+ * `scale` lets the shelf grow/shrink the books to fit the viewport height
+ * (measured in <Shelf/>). Defaults to 1 so SSR and the first client render
+ * agree; the effect then applies the real scale.
+ */
 export function bookGeometry(
   index: number,
-  kind: "featured" | "external"
+  kind: "featured" | "external",
+  scale = 1
 ): BookGeometry {
   const r1 = frac(index * 12.9898 + 1.31);
   const r2 = frac(index * 78.233 + 2.71);
@@ -38,18 +44,18 @@ export function bookGeometry(
 
   if (kind === "featured") {
     return {
-      spineW: Math.round(54 + r1 * 14), // 54–68 (chunkier)
-      depth: Math.round(62 + r4 * 16), // 62–78
-      height: Math.round(250 + r2 * 34), // 250–284 (shorter)
+      spineW: Math.round((60 + r1 * 16) * scale), // 60–76 (chunky)
+      depth: Math.round((70 + r4 * 18) * scale), // 70–88
+      height: Math.round((452 + r2 * 68) * scale), // 452–520 (fills the screen)
       lean: round2((r3 - 0.5) * 3.2), // ~ -1.6 .. +1.6
       angleY: round2(15 + r1 * 5), // 15–20 (spine-forward, slim cover sliver)
       angleX: round2(5 + r4 * 2.5), // 5–7.5
     };
   }
   return {
-    spineW: Math.round(36 + r1 * 12), // 36–48
-    depth: Math.round(46 + r4 * 12), // 46–58
-    height: Math.round(198 + r2 * 42), // 198–240
+    spineW: Math.round((42 + r1 * 14) * scale), // 42–56
+    depth: Math.round((54 + r4 * 14) * scale), // 54–68
+    height: Math.round((356 + r2 * 78) * scale), // 356–434
     lean: round2((r3 - 0.5) * 4.4), // ~ -2.2 .. +2.2
     angleY: round2(13 + r1 * 5), // 13–18
     angleX: round2(4 + r4 * 2.5), // 4–6.5

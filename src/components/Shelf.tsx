@@ -21,6 +21,18 @@ export function Shelf() {
 
   const [centerIndex, setCenterIndex] = useState(0);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [scale, setScale] = useState(1);
+
+  // Fit the books to the viewport height (tallest featured book ≈ base 520px).
+  useEffect(() => {
+    const measure = () => {
+      const avail = window.innerHeight - 250; // header + progress + gutters
+      setScale(Math.max(0.55, Math.min(1.28, avail / 620)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const total = shelfItems.length;
   const featuredIndexes = useMemo(
@@ -192,7 +204,7 @@ export function Shelf() {
           onPointerLeave={endDrag}
           onScroll={onScroll}
           aria-label="Bookshelf of case studies"
-          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,6vw)] pb-6 pt-24 outline-none [scrollbar-width:none]"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,4vw)] pb-6 pt-14 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           <div
@@ -204,7 +216,7 @@ export function Shelf() {
               // Same-width placeholder for the active featured book so the
               // shared-layout element lives only in the overlay (no dup id).
               if (isActive && item.kind === "featured") {
-                const g = bookGeometry(i, "featured");
+                const g = bookGeometry(i, "featured", scale);
                 return (
                   <div
                     key={item.slug}
@@ -222,6 +234,7 @@ export function Shelf() {
                     }}
                     item={item}
                     index={i}
+                    scale={scale}
                     onOpen={open}
                     onFocusItem={setCenterIndex}
                   />

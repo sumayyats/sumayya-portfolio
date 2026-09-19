@@ -49,16 +49,17 @@ export function BookCover({ study }: { study: CaseStudy }) {
       />
 
       <div className="flex h-full flex-col pl-[11%] pr-[7%] pt-[7%] pb-[6%]">
-        {/* title + rule */}
+        {/* title + subtitle + rule */}
         <div className="shrink-0">
-          {study.cover.kicker && (
-            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em]" style={{ color: accent }}>
-              {study.cover.kicker}
-            </p>
-          )}
           <h2 className="font-display text-[clamp(1.6rem,4.2vw,2.6rem)] leading-[1.02] tracking-tight">
             {study.title}
           </h2>
+          <p
+            className="mt-1.5 font-body text-[clamp(0.9rem,2.1vw,1.1rem)] leading-snug"
+            style={{ color: `color-mix(in srgb, ${ink} 52%, transparent)` }}
+          >
+            {study.subtitle}
+          </p>
           <div className="mt-3 h-px w-full" style={{ background: `color-mix(in srgb, ${ink} 26%, transparent)` }} />
         </div>
 
@@ -73,16 +74,16 @@ export function BookCover({ study }: { study: CaseStudy }) {
           />
         </div>
 
-        {/* footer */}
+        {/* footer: category + year */}
         <div
-          className="flex shrink-0 items-end justify-between gap-3 text-[12px] uppercase"
+          className="flex shrink-0 items-end justify-between gap-3 text-[12px] uppercase tracking-[0.08em]"
           style={{
-            color: `color-mix(in srgb, ${ink} 62%, transparent)`,
+            color: `color-mix(in srgb, ${ink} 58%, transparent)`,
             fontFamily: '"Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif',
             letterSpacing: "0",
           }}
         >
-          <span>{study.subtitle}</span>
+          <span>{study.cover.kicker}</span>
           <span>{study.year}</span>
         </div>
       </div>
