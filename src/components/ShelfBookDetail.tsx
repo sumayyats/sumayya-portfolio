@@ -59,7 +59,7 @@ export function ShelfBookDetail({
       <div className="mt-6 flex items-center gap-3">
         <Link
           href={`/case/${study.slug}`}
-          className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-[#fbf7ee] transition-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 font-plex text-sm font-medium text-[#fbf7ee] transition-transform hover:-translate-y-0.5"
         >
           Read
           <span aria-hidden="true">→</span>
@@ -67,7 +67,7 @@ export function ShelfBookDetail({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full border border-edge px-4 py-2.5 text-sm text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_8%,transparent)]"
+          className="rounded-full border border-edge px-4 py-2.5 font-plex text-sm text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_8%,transparent)]"
         >
           Put the book back
         </button>

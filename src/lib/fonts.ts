@@ -1,4 +1,13 @@
 import localFont from "next/font/local";
+import { IBM_Plex_Mono } from "next/font/google";
+
+/** IBM Plex Mono — used for buttons. */
+export const plexMono = IBM_Plex_Mono({
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 /**
  * Dico — display / titles. Files live in /public/fonts.

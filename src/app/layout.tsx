@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { dico } from "@/lib/fonts";
+import { dico, plexMono } from "@/lib/fonts";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Case studies — selected works",
+  title: "Sumayya's case studies — selected works",
   description:
     "A shelf of UX case studies. Browse the books, open one, and read.",
 };
@@ -21,7 +21,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={dico.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${dico.variable} ${plexMono.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
