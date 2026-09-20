@@ -55,8 +55,11 @@ export function BookCover({ study }: { study: CaseStudy }) {
             {study.title}
           </h2>
           <p
-            className="mt-1.5 font-body text-[clamp(0.9rem,2.1vw,1.1rem)] leading-snug"
-            style={{ color: `color-mix(in srgb, ${ink} 52%, transparent)` }}
+            className="mt-1.5 text-[clamp(0.95rem,2.2vw,1.18rem)] leading-snug"
+            style={{
+              color: `color-mix(in srgb, ${ink} 52%, transparent)`,
+              fontFamily: '"Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif',
+            }}
           >
             {study.subtitle}
           </p>
@@ -76,12 +79,8 @@ export function BookCover({ study }: { study: CaseStudy }) {
 
         {/* footer: category + year */}
         <div
-          className="flex shrink-0 items-end justify-between gap-3 text-[12px] uppercase tracking-[0.08em]"
-          style={{
-            color: `color-mix(in srgb, ${ink} 58%, transparent)`,
-            fontFamily: '"Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif',
-            letterSpacing: "0",
-          }}
+          className="flex shrink-0 items-end justify-between gap-3 font-plex text-[11px] uppercase tracking-[0.06em]"
+          style={{ color: `color-mix(in srgb, ${ink} 58%, transparent)` }}
         >
           <span>{study.cover.kicker}</span>
           <span>{study.year}</span>
