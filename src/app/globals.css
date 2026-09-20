@@ -96,6 +96,76 @@ body {
   display: none;
 }
 
+/* ── Reading prose ─────────────────────────────────────────────── */
+.prose-body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  font-size: calc(1.0625rem * var(--reading-scale)); /* 17px * scale */
+  line-height: 1.65;
+  max-width: 68ch;
+}
+.prose-body > * + * {
+  margin-top: 1.05em;
+}
+.prose-body strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.prose-body em {
+  font-style: italic;
+}
+.prose-body ul,
+.prose-body ol {
+  padding-left: 1.35em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.prose-body ul {
+  list-style: disc;
+}
+.prose-body ol {
+  list-style: decimal;
+}
+.prose-body li {
+  padding-left: 0.2em;
+}
+.prose-body li::marker {
+  color: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.prose-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.2em 0 0.2em 1.1em;
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+.prose-body blockquote strong {
+  color: var(--ink);
+}
+.prose-body .table-wrap {
+  overflow-x: auto;
+  margin-top: 1.2em;
+}
+.prose-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94em;
+}
+.prose-body th,
+.prose-body td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6em 0.9em;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+}
+.prose-body th {
+  font-weight: 700;
+  border-bottom-color: color-mix(in srgb, var(--ink) 32%, transparent);
+  white-space: nowrap;
+}
+.prose-body thead tr {
+  border-top: 1px solid color-mix(in srgb, var(--ink) 32%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
