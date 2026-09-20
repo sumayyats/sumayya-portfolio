@@ -6,6 +6,7 @@ import type { CaseStudy } from "@/content/types";
 import { useTheme } from "@/lib/theme";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ReaderScroll } from "./ReaderScroll";
+import { ReaderFlip } from "./ReaderFlip";
 
 type View = "scroll" | "flip";
 type TextSize = "S" | "M" | "L";
@@ -16,17 +17,36 @@ export function Reader({ study }: { study: CaseStudy }) {
   const { theme } = useTheme();
   const [view, setView] = useState<View>("scroll");
   const [size, setSize] = useState<TextSize>("M");
+  const [soundOn, setSoundOn] = useState(false);
 
   useEffect(() => {
     try {
-      const v = localStorage.getItem("sp-view");
-      if (v === "flip" || v === "scroll") setView(v);
+      // ?view= takes precedence (and is persisted), else fall back to storage.
+      const urlView = new URLSearchParams(window.location.search).get("view");
+      if (urlView === "flip" || urlView === "scroll") {
+        setView(urlView);
+        localStorage.setItem("sp-view", urlView);
+      } else {
+        const v = localStorage.getItem("sp-view");
+        if (v === "flip" || v === "scroll") setView(v);
+      }
       const s = localStorage.getItem("sp-textsize");
       if (s === "S" || s === "M" || s === "L") setSize(s);
+      setSoundOn(localStorage.getItem("sp-sound") === "on");
     } catch {
       /* storage unavailable */
     }
   }, []);
+
+  const toggleSound = () => {
+    setSoundOn((on) => {
+      const next = !on;
+      try {
+        localStorage.setItem("sp-sound", next ? "on" : "off");
+      } catch {}
+      return next;
+    });
+  };
 
   const chooseView = (v: View) => {
     setView(v);
@@ -87,16 +107,28 @@ export function Reader({ study }: { study: CaseStudy }) {
               onChange={(s) => chooseSize(s as TextSize)}
               compact
             />
+            {view === "flip" && (
+              <button
+                type="button"
+                onClick={toggleSound}
+                aria-pressed={soundOn}
+                aria-label={soundOn ? "Mute page-turn sound" : "Enable page-turn sound"}
+                title={soundOn ? "Sound on" : "Sound off"}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-edge text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_8%,transparent)]"
+              >
+                {soundOn ? <SpeakerOn /> : <SpeakerOff />}
+              </button>
+            )}
             <ThemeToggle />
           </div>
         </div>
       </header>
 
-      <main className="pt-10">
+      <main className="pt-8">
         {view === "scroll" ? (
           <ReaderScroll study={study} />
         ) : (
-          <FlipPlaceholder onSwitch={() => chooseView("scroll")} />
+          <ReaderFlip study={study} scale={SCALE[size]} soundOn={soundOn} />
         )}
       </main>
     </div>
@@ -146,21 +178,20 @@ function Segmented({
   );
 }
 
-function FlipPlaceholder({ onSwitch }: { onSwitch: () => void }) {
+function SpeakerOn() {
   return (
-    <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-6 py-24 text-center">
-      <p className="font-display text-2xl tracking-tight text-ink">Flip view</p>
-      <p className="text-[15px] text-ink-soft">
-        The two-page flip reader arrives in Phase 3. For now, read in scroll
-        view.
-      </p>
-      <button
-        type="button"
-        onClick={onSwitch}
-        className="rounded-full border border-edge px-4 py-2 font-mono text-[12px] uppercase tracking-widest text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_8%,transparent)]"
-      >
-        Switch to scroll
-      </button>
-    </div>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8 8 0 0 1 0 12" />
+    </svg>
+  );
+}
+
+function SpeakerOff() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+      <path d="m16 9 5 6M21 9l-5 6" />
+    </svg>
   );
 }

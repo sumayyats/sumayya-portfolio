@@ -7,7 +7,11 @@ import { Fragment, type ReactNode } from "react";
  * is authored in-repo so the supported syntax is known and fixed.
  */
 export function Markdown({ source }: { source: string }) {
-  const blocks = parseBlocks(source.trim());
+  return <Blocks blocks={parseMarkdown(source)} />;
+}
+
+/** Render a pre-parsed list of blocks (used by the flip paginator). */
+export function Blocks({ blocks }: { blocks: Block[] }) {
   return (
     <div className="prose-body">
       {blocks.map((b, i) => (
@@ -17,7 +21,12 @@ export function Markdown({ source }: { source: string }) {
   );
 }
 
-type Block =
+/** Parse a Markdown string into the block list. */
+export function parseMarkdown(source: string): Block[] {
+  return parseBlocks(source.trim());
+}
+
+export type Block =
   | { type: "p"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
