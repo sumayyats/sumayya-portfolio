@@ -25,6 +25,7 @@ export const caseStudies: CaseStudy[] = [
       "The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.",
     teaser: "Before and after, with measured impact.",
     featured: true,
+    link: { label: "See the live site", href: "https://ppdb.asy-syukriyyah.sch.id/" },
     palette: {
       spine: "#1E4A37",
       paper: "#F4F1E8",
@@ -144,7 +145,10 @@ For many families, this site is their first real contact with the school. Every 
       "Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.",
     teaser: "Research insight turned into design decisions.",
     featured: true,
-    externalUrl: "https://play.google.com/store",
+    link: {
+      label: "Kyros on Google Play",
+      href: "https://play.google.com/store/apps/details?id=com.binapani.kyros",
+    },
     palette: {
       spine: "#1E2F5A",
       paper: "#EEF1F6",
@@ -245,6 +249,10 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       "Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.",
     teaser: "Three rounds of testing and what each one revealed.",
     featured: true,
+    link: {
+      label: "Open the prototype",
+      href: "https://www.figma.com/proto/wptX60vQQEM6d5OnTL7LWe/Final-project---Gut-Skin?node-id=1118-20426&viewport=1403%2C630%2C0.08&t=9Ni4ytDPeBaVXpjF-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1118%3A20426&page-id=3%3A6",
+    },
     prototype: {
       type: "figma",
       url: "https://www.figma.com/proto/wptX60vQQEM6d5OnTL7LWe/Final-project---Gut-Skin?node-id=1118-20426&viewport=1403%2C630%2C0.08&t=9Ni4ytDPeBaVXpjF-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1118%3A20426&page-id=3%3A6",

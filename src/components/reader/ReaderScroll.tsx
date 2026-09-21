@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import type { CaseStudy } from "@/content/types";
 import { Markdown } from "@/components/Markdown";
+import { StudyLink } from "@/components/StudyLink";
 import { Figure } from "./Figure";
 import { SectionNav } from "./SectionNav";
 import { NextOnShelf } from "./NextOnShelf";
@@ -142,6 +143,7 @@ function RailMeta({ study }: { study: CaseStudy }) {
         {study.title}
       </h1>
       <p className="mt-1 text-[15px] text-ink-soft">{study.subtitle}</p>
+      <StudyLink study={study} className="mt-3 text-[11px]" />
 
       <dl className="mt-5 flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--ink)_12%,transparent)] pt-4">
         {rows.map(([k, v]) => (

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { CaseStudy } from "@/content/types";
 import { useSound } from "@/lib/sound";
 import { Button, ButtonLink } from "./Button";
+import { StudyLink } from "./StudyLink";
 
 type Props = {
   study: CaseStudy;
@@ -57,6 +58,8 @@ export function ShelfBookDetail({
       <p className="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-ink">
         {study.summary}
       </p>
+
+      <StudyLink study={study} className="mt-3 text-[11px]" />
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <ButtonLink href={`/case/${study.slug}`} variant="primary">

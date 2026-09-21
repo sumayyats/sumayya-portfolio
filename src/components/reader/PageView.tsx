@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CaseStudy } from "@/content/types";
 import { caseStudies } from "@/content/case-studies";
 import { Blocks } from "@/components/Markdown";
+import { StudyLink } from "@/components/StudyLink";
 import type { Page } from "./paginate";
 
 /**
@@ -62,6 +63,7 @@ function TitlePage({ study }: { study: CaseStudy }) {
         {study.subtitle}
       </p>
       <div className="mt-4 h-px w-full bg-[color-mix(in_srgb,var(--ink)_22%,transparent)]" />
+      <StudyLink study={study} className="book-small mt-4 self-start" />
 
       <dl className="mt-auto grid grid-cols-1 gap-3 pt-6">
         {(
