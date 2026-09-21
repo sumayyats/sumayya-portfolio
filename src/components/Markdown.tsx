@@ -29,7 +29,7 @@ export function parseMarkdown(source: string): Block[] {
 export type Block =
   | { type: "p"; text: string }
   | { type: "ul"; items: string[] }
-  | { type: "ol"; items: string[] }
+  | { type: "ol"; items: string[]; start?: number }
   | { type: "quote"; paras: string[] }
   | { type: "table"; head: string[]; rows: string[][] };
 
@@ -146,7 +146,7 @@ function Block({ block }: { block: Block }) {
       );
     case "ol":
       return (
-        <ol>
+        <ol start={block.start}>
           {block.items.map((it, i) => (
             <li key={i}>{inline(it)}</li>
           ))}

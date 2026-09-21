@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { useSound } from "@/lib/sound";
 
 type Variant = "primary" | "secondary";
 type Size = "md" | "lg";
@@ -39,10 +40,19 @@ export function ButtonLink({
   size = "md",
   className,
   children,
+  onClick,
   ...rest
 }: CommonProps & ComponentProps<typeof Link>) {
+  const { click } = useSound();
   return (
-    <Link className={classes(variant, size, className)} {...rest}>
+    <Link
+      className={classes(variant, size, className)}
+      onClick={(e) => {
+        click();
+        onClick?.(e);
+      }}
+      {...rest}
+    >
       {children}
     </Link>
   );
@@ -55,10 +65,20 @@ export function Button({
   className,
   children,
   type = "button",
+  onClick,
   ...rest
 }: CommonProps & ComponentProps<"button">) {
+  const { click } = useSound();
   return (
-    <button type={type} className={classes(variant, size, className)} {...rest}>
+    <button
+      type={type}
+      className={classes(variant, size, className)}
+      onClick={(e) => {
+        click();
+        onClick?.(e);
+      }}
+      {...rest}
+    >
       {children}
     </button>
   );

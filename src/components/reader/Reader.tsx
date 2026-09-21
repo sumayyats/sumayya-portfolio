@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import type { CaseStudy } from "@/content/types";
 import { useTheme } from "@/lib/theme";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SoundToggle } from "@/components/SoundToggle";
+import { useSound } from "@/lib/sound";
 import { ReaderScroll } from "./ReaderScroll";
 import { ReaderFlip } from "./ReaderFlip";
 
@@ -17,7 +19,7 @@ export function Reader({ study }: { study: CaseStudy }) {
   const { theme } = useTheme();
   const [view, setView] = useState<View>("scroll");
   const [size, setSize] = useState<TextSize>("M");
-  const [soundOn, setSoundOn] = useState(false);
+  const { click } = useSound();
 
   useEffect(() => {
     try {
@@ -32,29 +34,20 @@ export function Reader({ study }: { study: CaseStudy }) {
       }
       const s = localStorage.getItem("sp-textsize");
       if (s === "S" || s === "M" || s === "L") setSize(s);
-      setSoundOn(localStorage.getItem("sp-sound") === "on");
     } catch {
       /* storage unavailable */
     }
   }, []);
 
-  const toggleSound = () => {
-    setSoundOn((on) => {
-      const next = !on;
-      try {
-        localStorage.setItem("sp-sound", next ? "on" : "off");
-      } catch {}
-      return next;
-    });
-  };
-
   const chooseView = (v: View) => {
+    click();
     setView(v);
     try {
       localStorage.setItem("sp-view", v);
     } catch {}
   };
   const chooseSize = (s: TextSize) => {
+    click();
     setSize(s);
     try {
       localStorage.setItem("sp-textsize", s);
@@ -107,18 +100,7 @@ export function Reader({ study }: { study: CaseStudy }) {
               onChange={(s) => chooseSize(s as TextSize)}
               compact
             />
-            {view === "flip" && (
-              <button
-                type="button"
-                onClick={toggleSound}
-                aria-pressed={soundOn}
-                aria-label={soundOn ? "Mute page-turn sound" : "Enable page-turn sound"}
-                title={soundOn ? "Sound on" : "Sound off"}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-edge text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_8%,transparent)]"
-              >
-                {soundOn ? <SpeakerOn /> : <SpeakerOff />}
-              </button>
-            )}
+            <SoundToggle />
             <ThemeToggle />
           </div>
         </div>
@@ -128,7 +110,7 @@ export function Reader({ study }: { study: CaseStudy }) {
         {view === "scroll" ? (
           <ReaderScroll study={study} />
         ) : (
-          <ReaderFlip study={study} scale={SCALE[size]} soundOn={soundOn} />
+          <ReaderFlip study={study} scale={SCALE[size]} />
         )}
       </main>
     </div>
@@ -175,23 +157,5 @@ function Segmented({
         );
       })}
     </div>
-  );
-}
-
-function SpeakerOn() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M4 9v6h4l5 4V5L8 9H4Z" />
-      <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8 8 0 0 1 0 12" />
-    </svg>
-  );
-}
-
-function SpeakerOff() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M4 9v6h4l5 4V5L8 9H4Z" />
-      <path d="m16 9 5 6M21 9l-5 6" />
-    </svg>
   );
 }

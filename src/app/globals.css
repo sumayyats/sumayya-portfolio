@@ -166,6 +166,58 @@ body {
   border-top: 1px solid color-mix(in srgb, var(--ink) 32%, transparent);
 }
 
+/* ── Flip reader (page-flip engine) ───────────────────────────── */
+/* The engine positions each .stf__item and tags it --left / --right; the
+   page surface inside picks up its rounded outer corners and gutter shade. */
+.stf__item.--left .book-page {
+  border-radius: 10px 3px 3px 10px;
+}
+.stf__item.--right .book-page {
+  border-radius: 3px 10px 10px 3px;
+}
+.stf__item.--left .book-gutter {
+  background: linear-gradient(90deg, transparent 88%, rgba(0, 0, 0, 0.1));
+}
+.stf__item.--right .book-gutter {
+  background: linear-gradient(270deg, transparent 88%, rgba(0, 0, 0, 0.1));
+}
+/* single-page (portrait) mode: no gutter, all corners rounded */
+.stf__wrapper.--portrait .book-page {
+  border-radius: 8px;
+}
+.stf__wrapper.--portrait .book-gutter {
+  background: none;
+}
+.book-mount .stf__parent {
+  margin: 0 auto;
+}
+
+/* Book typography scales with the page width (1cqw = 1% of the page), so
+   characters-per-line and lines-per-page match the paginator's model at
+   every book size. Reference: a 500px page ≈ 17px body text. */
+.book-page {
+  container-type: inline-size;
+}
+.book-page .prose-body {
+  font-size: calc(3.4cqw * var(--reading-scale));
+  max-width: none;
+}
+.book-page .book-h1 {
+  font-size: calc(8cqw * var(--reading-scale));
+}
+.book-page .book-h2 {
+  font-size: calc(5.2cqw * var(--reading-scale));
+}
+.book-page .book-sub {
+  font-size: calc(3.8cqw * var(--reading-scale));
+}
+.book-page .book-meta {
+  font-size: calc(2.6cqw * var(--reading-scale));
+}
+.book-page .book-small {
+  font-size: calc(2.1cqw * var(--reading-scale));
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

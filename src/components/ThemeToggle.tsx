@@ -2,9 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "@/lib/theme";
+import { useSound } from "@/lib/sound";
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const { theme, toggle } = useTheme();
+  const { theme, toggle: toggleTheme } = useTheme();
+  const { click } = useSound();
+  const toggle = () => {
+    click();
+    toggleTheme();
+  };
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 

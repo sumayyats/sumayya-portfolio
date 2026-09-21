@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { CaseStudy } from "@/content/types";
+import { useSound } from "@/lib/sound";
 import { Button, ButtonLink } from "./Button";
 
 type Props = {
@@ -25,6 +26,7 @@ export function ShelfBookDetail({
   onPrev,
   onNext,
 }: Props) {
+  const { click } = useSound();
   return (
     <motion.aside
       key={study.slug}
@@ -69,7 +71,10 @@ export function ShelfBookDetail({
       <div className="mt-5 flex items-center gap-3 font-mono text-[11px] text-ink-soft">
         <button
           type="button"
-          onClick={onPrev}
+          onClick={() => {
+            click();
+            onPrev();
+          }}
           aria-label="Previous book"
           className="rounded px-1 hover:text-ink"
         >
@@ -77,7 +82,10 @@ export function ShelfBookDetail({
         </button>
         <button
           type="button"
-          onClick={onNext}
+          onClick={() => {
+            click();
+            onNext();
+          }}
           aria-label="Next book"
           className="rounded px-1 hover:text-ink"
         >

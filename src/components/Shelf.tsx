@@ -12,12 +12,14 @@ import { BookCover } from "./BookCover";
 import { ShelfBookDetail } from "./ShelfBookDetail";
 import { shelfItems } from "./shelf-data";
 import { bookGeometry, projectedWidth } from "./book-geometry";
+import { useSound } from "@/lib/sound";
 
 export function Shelf() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const bookRefs = useRef<(HTMLElement | null)[]>([]);
   const triggerRef = useRef<HTMLElement | null>(null);
   const reduce = useReducedMotion();
+  const { click } = useSound();
 
   const [centerIndex, setCenterIndex] = useState(0);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
@@ -52,10 +54,14 @@ export function Shelf() {
   const progress = total > 1 ? (position - 1) / (total - 1) : 0;
 
   // ── open / close ──────────────────────────────────────────────
-  const open = useCallback((slug: string) => {
-    triggerRef.current = (document.activeElement as HTMLElement) ?? null;
-    setActiveSlug(slug);
-  }, []);
+  const open = useCallback(
+    (slug: string) => {
+      click();
+      triggerRef.current = (document.activeElement as HTMLElement) ?? null;
+      setActiveSlug(slug);
+    },
+    [click]
+  );
 
   const close = useCallback(() => {
     setActiveSlug(null);
