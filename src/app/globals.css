@@ -5,8 +5,8 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Shelf / global surface — editorial, warm off-white "paper". */
-  --paper: #f4f1e8;
+  /* Shelf / global surface. */
+  --paper: #fafafa;
   --ink: #22271f;
   --ink-soft: #5c5e52;
   --accent: #c05f3c;
