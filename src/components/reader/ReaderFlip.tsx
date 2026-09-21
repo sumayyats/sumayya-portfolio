@@ -17,7 +17,10 @@ import { PageView } from "./PageView";
 const PAGE_W = 500;
 const PAGE_H = 690;
 const MAX_PAGE_W = 520;
-const CHROME = 260; // header + progress row + gutters, in px
+// Smallest page the engine will draw as a two-page spread; below twice this
+// (phones) it falls back to one page at a time.
+const MIN_PAGE_W = 240;
+const CHROME = 200; // header + nav row + gutters, in px
 
 /**
  * Flip reading view. The page curl, corner drag, swipe and shadows come from
@@ -54,11 +57,14 @@ export function ReaderFlip({
   const [tocOpen, setTocOpen] = useState(false);
   const [fitWidth, setFitWidth] = useState(2 * MAX_PAGE_W);
 
-  // Cap the spread width so the book also fits the viewport height.
+  // Cap the spread width so the book also fits the viewport height — but
+  // never below the two-page threshold, so a short window shrinks the spread
+  // rather than collapsing it to a single page.
   useEffect(() => {
     const measure = () => {
-      const h = Math.max(320, window.innerHeight - CHROME);
-      setFitWidth(Math.min(2 * MAX_PAGE_W, 2 * h * (PAGE_W / PAGE_H)));
+      const h = window.innerHeight - CHROME;
+      const byHeight = 2 * h * (PAGE_W / PAGE_H);
+      setFitWidth(Math.max(2 * MIN_PAGE_W, Math.min(2 * MAX_PAGE_W, byHeight)));
     };
     measure();
     window.addEventListener("resize", measure);
@@ -95,9 +101,9 @@ export function ReaderFlip({
       width: PAGE_W,
       height: PAGE_H,
       size: "stretch",
-      minWidth: 300,
+      minWidth: MIN_PAGE_W,
       maxWidth: MAX_PAGE_W,
-      minHeight: Math.round(300 * (PAGE_H / PAGE_W)),
+      minHeight: Math.round(MIN_PAGE_W * (PAGE_H / PAGE_W)),
       maxHeight: Math.round(MAX_PAGE_W * (PAGE_H / PAGE_W)),
       showCover: true,
       usePortrait: true,
@@ -136,6 +142,12 @@ export function ReaderFlip({
       flipRef.current = null;
     };
   }, [pages, pageOf, reduce]);
+
+  // The engine only re-measures on window resize; nudge it when the mount's
+  // width cap changes so the spread is sized to the real container.
+  useEffect(() => {
+    flipRef.current?.update();
+  }, [fitWidth, hosts]);
 
   const canPrev = index > 0;
   const canNext = index < pages.length - 1;
