@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import type { CaseStudy } from "@/content/types";
 import { useSound } from "@/lib/sound";
 
+// Figma's prototype embed: canvas margin above/below the device (px), and the
+// device frame's aspect ratio, measured from the rendered embed.
+const FIGMA_PAD = 96;
+const PHONE_FRAME_RATIO = "0.47";
+
 /** figma.com/proto/… → embed.figma.com/proto/…&embed-host=share */
 export function figmaEmbedUrl(url: string): string {
   const u = new URL(url);
@@ -72,21 +77,30 @@ export function PrototypeEmbed({ study }: { study: CaseStudy }) {
         }
       >
         {near && state !== "failed" && (
-          // The frame is phone-shaped and centred so the backdrop shows
-          // around it; Figma's own canvas colour fills whatever is left.
-          <iframe
-            title={`${study.title} — Figma prototype`}
-            src={figmaEmbedUrl(proto.url)}
-            allowFullScreen
-            loading="lazy"
-            onLoad={() => setState("loaded")}
-            onError={() => setState("failed")}
-            className={`absolute left-1/2 top-0 h-full max-w-full -translate-x-1/2 border-0 transition-opacity duration-500 ${
+          // Figma draws the device centred on a black canvas with a fixed
+          // ~92px margin above and below it. Size the frame from that and clip
+          // it to the phone's outline so only the device shows on the backdrop.
+          <div
+            className={`absolute left-1/2 top-[7%] h-[86%] -translate-x-1/2 overflow-hidden rounded-[14%/6.5%] transition-opacity duration-500 ${
               state === "loaded" ? "opacity-100" : "opacity-0"
             }`}
-            // `lighten` lets the backdrop show through Figma's black canvas
-            style={{ aspectRatio: "1 / 2", mixBlendMode: proto.background ? "lighten" : undefined }}
-          />
+            style={{ aspectRatio: PHONE_FRAME_RATIO }}
+          >
+            <iframe
+              title={`${study.title} — Figma prototype`}
+              src={figmaEmbedUrl(proto.url)}
+              allowFullScreen
+              loading="lazy"
+              onLoad={() => setState("loaded")}
+              onError={() => setState("failed")}
+              className="absolute left-1/2 -translate-x-1/2 border-0"
+              style={{
+                top: -FIGMA_PAD,
+                height: `calc(100% + ${2 * FIGMA_PAD}px)`,
+                aspectRatio: "1 / 2",
+              }}
+            />
+          </div>
         )}
 
         {state !== "loaded" && (
