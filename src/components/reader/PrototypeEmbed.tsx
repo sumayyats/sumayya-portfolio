@@ -64,9 +64,16 @@ export function PrototypeEmbed({ study }: { study: CaseStudy }) {
       </p>
 
       <div
-        className="relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] sm:aspect-[16/10]"
+        className="relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] bg-cover bg-center sm:aspect-[16/10]"
+        style={
+          proto.background
+            ? { backgroundImage: `url(${proto.background})` }
+            : undefined
+        }
       >
         {near && state !== "failed" && (
+          // The frame is phone-shaped and centred so the backdrop shows
+          // around it; Figma's own canvas colour fills whatever is left.
           <iframe
             title={`${study.title} — Figma prototype`}
             src={figmaEmbedUrl(proto.url)}
@@ -74,14 +81,16 @@ export function PrototypeEmbed({ study }: { study: CaseStudy }) {
             loading="lazy"
             onLoad={() => setState("loaded")}
             onError={() => setState("failed")}
-            className={`absolute inset-0 h-full w-full border-0 transition-opacity duration-500 ${
+            className={`absolute left-1/2 top-0 h-full max-w-full -translate-x-1/2 border-0 transition-opacity duration-500 ${
               state === "loaded" ? "opacity-100" : "opacity-0"
             }`}
+            // `lighten` lets the backdrop show through Figma's black canvas
+            style={{ aspectRatio: "1 / 2", mixBlendMode: proto.background ? "lighten" : undefined }}
           />
         )}
 
         {state !== "loaded" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[color-mix(in_srgb,var(--paper)_70%,transparent)] p-6 text-center backdrop-blur-sm">
             {state === "failed" ? (
               <>
                 <p className="max-w-[36ch] text-sm text-ink-soft">

@@ -256,6 +256,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
     prototype: {
       type: "figma",
       url: "https://www.figma.com/proto/wptX60vQQEM6d5OnTL7LWe/Final-project---Gut-Skin?node-id=1118-20426&viewport=1403%2C630%2C0.08&t=9Ni4ytDPeBaVXpjF-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1118%3A20426&page-id=3%3A6",
+      poster: "/images/gut-skin/splash.png",
+      background: "/images/gut-skin/prototype-bg.jpg",
     },
     palette: {
       spine: "#705A39",

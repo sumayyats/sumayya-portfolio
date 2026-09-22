@@ -42,6 +42,8 @@ export type CaseStudyPrototype = {
   type: "figma" | "video" | "images";
   url?: string;
   poster?: string;
+  /** Backdrop texture behind the embedded prototype. */
+  background?: string;
 };
 
 export type CaseStudy = {
