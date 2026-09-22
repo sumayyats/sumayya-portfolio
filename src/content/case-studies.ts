@@ -129,7 +129,19 @@ For many families, this site is their first real contact with the school. Every 
       { id: "asta-form-success", src: "/images/asta/form-success.png", sectionId: "decisions", alt: "The registration form and its success page.", caption: "Registration form and the success page listing payment steps and unit codes. (TODO: export)" },
       { id: "asta-dashboard", src: "/images/asta/dashboard.png", sectionId: "decisions", alt: "The login screen and parent dashboard overview.", caption: "Login and dashboard overview with an 8-step progress checklist. (TODO: export)" },
       { id: "asta-profile", src: "/images/asta/profile-payment-downloads.png", sectionId: "decisions", alt: "Profile accordion sections, payment information and document downloads.", caption: "Profile, payment and downloads. Accordion sections split the long form. (TODO: export)" },
-      { id: "asta-system", src: "/images/asta/design-system.png", sectionId: "process", alt: "The ASTA design system: colour scale, type and components.", caption: "The design system handed to the developer. (TODO: export)" },
+      {
+        id: "asta-system",
+        title: "Design system",
+        src: "/images/asta/system/colours.png",
+        sectionId: "process",
+        alt: "The ASTA design system: colour scale, type and components.",
+        caption: "The design system handed to the developer.",
+        shape: "wide",
+        frames: [
+          { src: "/images/asta/system/colours.png", width: 2080, height: 1383, label: "Colour scales" },
+          { src: "/images/asta/system/typography.png", width: 799, height: 1942, label: "Typography" },
+        ],
+      },
     ],
   },
 
