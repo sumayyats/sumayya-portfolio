@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { CaseStudy } from "@/content/types";
-import { useTheme } from "@/lib/theme";
 
 /**
  * The face-out book cover, per the reference: a coloured spine strip down the
@@ -13,12 +12,13 @@ import { useTheme } from "@/lib/theme";
  * reads as a physical object.
  */
 export function BookCover({ study }: { study: CaseStudy }) {
-  const { theme } = useTheme();
   const p = study.palette;
-  const dark = theme === "dark";
-  const paper = dark ? p.darkPaper : p.paper;
-  const ink = dark ? p.darkInk : p.ink;
-  const accent = dark ? p.darkAccent : p.accent;
+  // A printed jacket doesn't go dark with the UI: the cover reads the same in
+  // both modes. Themed dark, the mockup's product screens sat as a bright
+  // patch on a black cover.
+  const paper = p.paper;
+  const ink = p.ink;
+  const accent = p.accent;
 
   return (
     <div

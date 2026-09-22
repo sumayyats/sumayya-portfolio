@@ -14,6 +14,9 @@ import { shelfItems } from "./shelf-data";
 import { bookGeometry, projectedWidth } from "./book-geometry";
 import { useSound } from "@/lib/sound";
 
+/** The tallest a book gets (see bookGeometry), before `scale`. */
+const SHELF_MAX_H = 528;
+
 export function Shelf() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const bookRefs = useRef<(HTMLElement | null)[]>([]);
@@ -210,14 +213,25 @@ export function Shelf() {
           onPointerLeave={endDrag}
           onScroll={onScroll}
           aria-label="Bookshelf of case studies"
-          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,4vw)] pb-16 pt-14 outline-none [scrollbar-width:none]"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto pb-16 pt-14 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           <div
             role="list"
-            // shelved tight: the books touch, and only the one you point at
-            // makes room for itself
+            // Shelved tight: the books touch, and only the one you point at
+            // makes room for itself.
             className="mx-auto flex w-max items-end gap-0"
+            // The side margin lives on the row, not the scroller: once the
+            // row is wider than the viewport the scroller's padding stops
+            // holding the first book off the edge. A leaning book paints up
+            // to ~13% of its height left of its own box, so the left margin
+            // is sized from the tallest book at the current scale — enough to
+            // clear it on a phone, invisible on a desktop where the row is
+            // centred anyway.
+            style={{
+              paddingLeft: Math.round(SHELF_MAX_H * 0.13 * scale) + 8,
+              paddingRight: Math.round(24 * scale) + 8,
+            }}
           >
             {shelfItems.map((item, i) => {
               const isActive = item.slug === activeSlug;

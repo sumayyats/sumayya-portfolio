@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { forwardRef } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { CaseStudy } from "@/content/types";
 import type { ShelfItem } from "./shelf-data";
 import { BookCover } from "./BookCover";
@@ -34,23 +35,45 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
 ) {
   const geo = bookGeometry(index, item.kind, scale);
   const projW = projectedWidth(geo);
+  const label = useShelfLabel();
+
+  // keep the caller's ref working while we hold one of our own to measure
+  const attach = useCallback(
+    (el: HTMLElement | null) => {
+      label.host.current = el;
+      if (typeof ref === "function") ref(el);
+      else if (ref) (ref as React.RefObject<HTMLElement | null>).current = el;
+    },
+    [label.host, ref]
+  );
+  const watch = {
+    onPointerEnter: label.place,
+    onPointerMove: label.place,
+    onPointerLeave: label.clear,
+    onBlur: label.clear,
+  };
 
   if (item.kind === "external") {
     const spineColor = "color-mix(in srgb, var(--ink) 13%, var(--paper))";
     return (
       <a
-        ref={ref as React.Ref<HTMLAnchorElement>}
+        ref={attach as React.Ref<HTMLAnchorElement>}
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
         data-book
         data-index={index}
-        onFocus={() => onFocusItem(index)}
+        onFocus={() => {
+          onFocusItem(index);
+          label.place();
+        }}
+        {...watch}
         aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens the case study on Behance in a new tab`}
         className="group relative z-0 mx-0 flex shrink-0 snap-center items-end justify-start self-end outline-none transition-[margin] duration-200 ease-out [--lift:0px] hover:z-20 hover:mx-2 hover:[--lift:-9px] focus-visible:z-20 focus-visible:mx-2 focus-visible:[--lift:-9px]"
         style={{ width: projW, height: geo.height + 10, perspective: PERSPECTIVE }}
       >
         <HoverLabel
+          at={label.at}
           title={item.title}
           meta={item.year ? `Optional read ↗ · ${item.year}` : "Optional read ↗"}
         />
@@ -88,12 +111,16 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
 
   return (
     <motion.button
-      ref={ref as React.Ref<HTMLButtonElement>}
+      ref={attach as React.Ref<HTMLButtonElement>}
       type="button"
       layoutId={`book-${study.slug}`}
       data-book
       data-index={index}
-      onFocus={() => onFocusItem(index)}
+      onFocus={() => {
+        onFocusItem(index);
+        label.place();
+      }}
+      {...watch}
       onClick={() => onOpen(study.slug)}
       aria-label={`${study.title}, ${study.year}: ${study.subtitle}. Open this book.`}
       className="group relative z-0 mx-0 flex shrink-0 cursor-pointer snap-center items-end justify-start self-end outline-none transition-[margin] duration-200 ease-out [--lift:0px] hover:z-20 hover:mx-2.5 hover:[--lift:-14px] focus-visible:z-20 focus-visible:mx-2.5 focus-visible:[--lift:-14px]"
@@ -101,6 +128,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       transition={{ type: "spring", stiffness: 260, damping: 30 }}
     >
       <HoverLabel
+        at={label.at}
         title={study.title}
         meta={study.year}
         teaser={study.teaser}
@@ -187,43 +215,98 @@ function CoverFace({ study, geo }: { study: CaseStudy; geo: BookGeometry }) {
   );
 }
 
-/** Readable label that fades in above the book on hover / focus. */
+/** The widest the label is allowed to get, so it can be kept on screen. */
+const LABEL_MAX = 280;
+
+/** Tracks where a book is on screen, so its label can be drawn over the page. */
+function useShelfLabel() {
+  const host = useRef<HTMLElement | null>(null);
+  const [at, setAt] = useState<{ x: number; y: number } | null>(null);
+  const place = useCallback(() => {
+    const r = host.current?.getBoundingClientRect();
+    if (!r) return;
+    const next = { x: r.left + r.width / 2, y: r.top };
+    // pointermove fires constantly; only re-render when the book has
+    // actually moved (it does, while the shelf makes room for it)
+    setAt((prev) =>
+      prev && Math.abs(prev.x - next.x) < 0.5 && Math.abs(prev.y - next.y) < 0.5
+        ? prev
+        : next
+    );
+  }, []);
+  const clear = useCallback(() => setAt(null), []);
+
+  // the shelf can scroll under a resting cursor (wheel, snap, a neighbour
+  // making room), so follow the book rather than leaving the label behind
+  const shown = at !== null;
+  useEffect(() => {
+    if (!shown) return;
+    const follow = () => place();
+    window.addEventListener("scroll", follow, true);
+    window.addEventListener("resize", follow);
+    return () => {
+      window.removeEventListener("scroll", follow, true);
+      window.removeEventListener("resize", follow);
+    };
+  }, [shown, place]);
+
+  return { host, at, place, clear };
+}
+
+/**
+ * The label that appears above a book on hover or focus. It is drawn into the
+ * body rather than the book, because the shelf scrolls horizontally and any
+ * book near an edge would otherwise have its label clipped — and it is held
+ * inside the viewport, so the first and last books read as well as the rest.
+ */
 function HoverLabel({
+  at,
   title,
   meta,
   teaser,
   accent = false,
 }: {
+  at: { x: number; y: number } | null;
   title: string;
   meta: string;
   teaser?: string;
   accent?: boolean;
 }) {
-  return (
+  if (!at) return null;
+  const edge = LABEL_MAX / 2 + 12;
+  const x = Math.min(Math.max(at.x, edge), window.innerWidth - edge);
+  return createPortal(
     <span
       aria-hidden="true"
-      className={`pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-2xl border border-edge bg-paper px-4 opacity-0 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
-        teaser ? "py-2" : "py-1.5"
-      }`}
+      className="shelf-label pointer-events-none fixed z-[60] block rounded-2xl border border-edge bg-paper px-4 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)]"
+      style={{
+        left: x,
+        top: at.y - 12,
+        maxWidth: LABEL_MAX,
+        transform: "translate(-50%,-100%)",
+        paddingBlock: teaser ? "0.5rem" : "0.375rem",
+      }}
     >
-      <span className="flex items-baseline gap-2">
-        <span className="font-display text-[13px] leading-none tracking-tight text-ink">
-          {title}
-        </span>
-        <span
-          className={`font-mono text-[10px] uppercase tracking-wide ${
-            accent ? "text-accent" : "text-ink-soft"
-          }`}
-        >
-          {meta}
-        </span>
+      {/* meta sits above the title as a kicker, the way the detail card
+          reads: long Behance titles wrap onto two lines, and inline meta
+          would be left stranded beside them */}
+      <span
+        className={`block font-mono text-[10px] uppercase tracking-wide ${
+          accent ? "text-accent" : "text-ink-soft"
+        }`}
+      >
+        {meta}
+      </span>
+      <span className="mt-0.5 block font-display text-[13px] leading-snug tracking-tight text-ink">
+        {title}
       </span>
       {teaser && (
         <span className="mt-1 block text-[12px] leading-snug text-ink-soft">
           {teaser}
         </span>
       )}
-    </span>
+    </span>,
+    document.body
   );
 }
 
