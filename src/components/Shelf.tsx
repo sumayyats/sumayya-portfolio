@@ -251,7 +251,7 @@ export function Shelf() {
         </div>
 
         {/* soft surface — the cast shadows do the grounding, like the reference */}
-        <div className="mx-[max(1rem,6vw)] h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
+        <div className="mx-[max(1rem,6vw)] mt-5 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
 
         {/* progress bar + page count */}
         <div className="mt-7 flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">

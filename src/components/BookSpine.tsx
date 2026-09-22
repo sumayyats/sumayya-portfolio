@@ -6,7 +6,12 @@ import type { CaseStudy } from "@/content/types";
 import type { ShelfItem } from "./shelf-data";
 import { BookCover } from "./BookCover";
 import { Book3D } from "./Book3D";
-import { bookGeometry, projectedWidth, type BookGeometry } from "./book-geometry";
+import {
+  bookGeometry,
+  projectedWidth,
+  PERSPECTIVE,
+  type BookGeometry,
+} from "./book-geometry";
 
 type Props = {
   item: ShelfItem;
@@ -15,8 +20,6 @@ type Props = {
   onOpen: (slug: string) => void;
   onFocusItem: (index: number) => void;
 };
-
-const PERSPECTIVE = 1200;
 
 /**
  * An upright, spine-out book on the shelf — a real CSS 3D cuboid (spine + a
@@ -44,7 +47,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         data-index={index}
         onFocus={() => onFocusItem(index)}
         aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens the case study on Behance in a new tab`}
-        className="group relative flex shrink-0 snap-center items-end justify-center self-end outline-none [--lift:0px] hover:[--lift:-9px] focus-visible:[--lift:-9px]"
+        className="group relative flex shrink-0 snap-center items-end justify-start self-end outline-none [--lift:0px] hover:[--lift:-9px] focus-visible:[--lift:-9px]"
         style={{ width: projW, height: geo.height + 10, perspective: PERSPECTIVE }}
       >
         <HoverLabel
@@ -93,7 +96,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       onFocus={() => onFocusItem(index)}
       onClick={() => onOpen(study.slug)}
       aria-label={`${study.title}, ${study.year}: ${study.subtitle}. Open this book.`}
-      className="group relative flex shrink-0 cursor-pointer snap-center items-end justify-center self-end outline-none [--lift:0px] hover:[--lift:-14px] focus-visible:[--lift:-14px]"
+      className="group relative flex shrink-0 cursor-pointer snap-center items-end justify-start self-end outline-none [--lift:0px] hover:[--lift:-14px] focus-visible:[--lift:-14px]"
       style={{ width: projW, height: geo.height + 12, perspective: PERSPECTIVE }}
       transition={{ type: "spring", stiffness: 260, damping: 30 }}
     >

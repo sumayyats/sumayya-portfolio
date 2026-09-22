@@ -52,6 +52,11 @@ export function Book3D({
           width: w,
           height: h,
           transformStyle: "preserve-3d",
+          // Turn about the spine's leading edge, not the block's centre: that
+          // edge then stays put on the projection plane and the cover swings
+          // back behind it, so the book's painted footprint is exactly
+          // `projectedWidth` and the shelf packs with no stray gaps.
+          transformOrigin: "left center",
           transform: `rotateX(${-angleX}deg) rotateY(${-angleY}deg)`,
         }}
       >
