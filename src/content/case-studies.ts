@@ -272,6 +272,22 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         ],
       },
       {
+        id: "bina-onboarding-tablet",
+        title: "Onboarding and sign-up, tablet",
+        src: "/images/binapani/tablet/onboard-1.png",
+        sectionId: "insight-to-design",
+        alt: "The three onboarding screens, the passcode log-in and the registration form on tablet.",
+        caption: "The same onboarding and sign-up on tablet.",
+        shape: "tablet",
+        frames: [
+          { src: "/images/binapani/tablet/onboard-1.png", label: "Onboarding" },
+          { src: "/images/binapani/tablet/onboard-2.png" },
+          { src: "/images/binapani/tablet/onboard-3.png" },
+          { src: "/images/binapani/tablet/login.png", label: "Log in" },
+          { src: "/images/binapani/tablet/register.png", label: "Register" },
+        ],
+      },
+      {
         id: "bina-activities-mobile",
         title: "Activities flow, mobile",
         src: "/images/binapani/screens/home.png",
