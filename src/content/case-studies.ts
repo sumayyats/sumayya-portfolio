@@ -453,6 +453,12 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
         sectionId: "process",
         alt: "AI Insights as story cards, one idea per slide, followed by a recommendation page.",
         caption: "AI Insights turned into story cards, one idea per slide.",
+        video: {
+          src: "/images/gut-skin/story.mp4",
+          poster: "/images/gut-skin/story-poster.png",
+          width: 472,
+          height: 960,
+        },
         frames: [
           { src: "/images/gut-skin/screens/story-1.png" },
           { src: "/images/gut-skin/screens/story-2.png" },

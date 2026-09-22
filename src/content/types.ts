@@ -39,6 +39,8 @@ export type CaseStudyVisual = {
   height?: number;
   /** Several images instead of one (`src` is the first). */
   frames?: CaseStudyFrame[];
+  /** A screen recording for this figure, played on demand (never autoplays). */
+  video?: { src: string; poster: string; width: number; height: number };
   /**
    * How the frames are laid out.
    * `phone` (default) crops each to a phone screen; `pairs` stacks before over

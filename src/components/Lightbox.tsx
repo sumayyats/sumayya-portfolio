@@ -19,6 +19,8 @@ export type LightboxItem = {
   alt: string;
   caption?: string;
   label?: string;
+  /** When set, the item is a video (with `src` as its poster). */
+  video?: string;
 };
 
 type LightboxApi = {
@@ -125,16 +127,29 @@ function LightboxDialog({
 
       <figure className="relative z-10 flex max-h-full max-w-full flex-col items-center">
         <div className="relative max-h-[78vh] max-w-full overflow-hidden rounded-xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.7)]">
-          <Image
-            key={item.src}
-            src={item.src}
-            alt={item.alt}
-            width={1600}
-            height={1600}
-            sizes="100vw"
-            priority
-            className="block h-auto max-h-[78vh] w-auto max-w-[min(92vw,1200px)] object-contain"
-          />
+          {item.video ? (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video
+              key={item.video}
+              src={item.video}
+              poster={item.src}
+              controls
+              autoPlay
+              playsInline
+              className="block h-auto max-h-[78vh] w-auto max-w-[min(92vw,1200px)]"
+            />
+          ) : (
+            <Image
+              key={item.src}
+              src={item.src}
+              alt={item.alt}
+              width={1600}
+              height={1600}
+              sizes="100vw"
+              priority
+              className="block h-auto max-h-[78vh] w-auto max-w-[min(92vw,1200px)] object-contain"
+            />
+          )}
         </div>
         <figcaption className="mt-4 max-w-[60ch] text-center font-mono text-[11px] leading-relaxed text-[color-mix(in_srgb,var(--paper)_80%,transparent)]">
           {item.label && (

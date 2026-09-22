@@ -19,17 +19,33 @@ const BOOK_BUDGET = 82;
 const bookMaxWidth = (heightPerWidth: number, extra: number) =>
   `min(100%, ${Math.floor((BOOK_BUDGET - extra) / heightPerWidth)}cqw)`;
 
-/** Lightbox items for a visual: one per frame, or the single image. */
+/** Lightbox items for a visual: the video (if any), then one per frame. */
 export function lightboxItems(visual: CaseStudyVisual): LightboxItem[] {
+  const video: LightboxItem[] = visual.video
+    ? [
+        {
+          src: visual.video.poster,
+          video: visual.video.src,
+          alt: visual.alt,
+          caption: visual.caption,
+        },
+      ]
+    : [];
   if (visual.frames) {
-    return visual.frames.map((f) => ({
-      src: f.src,
-      alt: visual.alt,
-      caption: visual.caption,
-      label: f.label,
-    }));
+    return [
+      ...video,
+      ...visual.frames.map((f) => ({
+        src: f.src,
+        alt: visual.alt,
+        caption: visual.caption,
+        label: f.label,
+      })),
+    ];
   }
-  return [{ src: visual.src, alt: visual.alt, caption: visual.caption }];
+  return [
+    ...video,
+    { src: visual.src, alt: visual.alt, caption: visual.caption },
+  ];
 }
 
 /**
@@ -57,13 +73,20 @@ export function Figure({
 
   return (
     <figure className={compact ? "my-0 w-full" : "my-2 w-full"}>
-      {visual.frames ? (
+      {visual.video && !compact ? (
+        <VideoFigure visual={visual} />
+      ) : visual.frames ? (
         visual.shape === "pairs" ? (
           <PairGrid visual={visual} onOpen={show} compact={compact} />
         ) : visual.shape === "wide" ? (
           <WideStack visual={visual} onOpen={show} compact={compact} />
         ) : (
-          <ScreenStrip visual={visual} onOpen={show} compact={compact} />
+          <>
+            <ScreenStrip visual={visual} onOpen={show} compact={compact} />
+            {visual.video && (
+              <PlayButton compact={compact} onClick={() => show(0)} />
+            )}
+          </>
         )
       ) : ready ? (
         <button
@@ -92,6 +115,54 @@ export function Figure({
         {visual.caption}
       </figcaption>
     </figure>
+  );
+}
+
+/** The screen recording, with its own controls. Never autoplays. */
+function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
+  const v = visual.video!;
+  return (
+    <div
+      className="mx-auto overflow-hidden rounded-[9%/4%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
+      style={{ maxWidth: 300 }}
+    >
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <video
+        src={v.src}
+        poster={v.poster}
+        width={v.width}
+        height={v.height}
+        controls
+        preload="none"
+        playsInline
+        aria-label={visual.alt}
+        className="block h-auto w-full"
+      />
+    </div>
+  );
+}
+
+/** Opens the recording in the lightbox (used on a book page). */
+function PlayButton({
+  compact,
+  onClick,
+}: {
+  compact: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`mx-auto mt-2 flex items-center gap-1.5 rounded-full border border-edge px-[1.2em] py-[0.5em] font-mono uppercase tracking-[0.14em] text-ink transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] ${
+        compact ? "book-small" : "text-[10px]"
+      }`}
+    >
+      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5.5v13l11-6.5z" />
+      </svg>
+      Play the flow
+    </button>
   );
 }
 
