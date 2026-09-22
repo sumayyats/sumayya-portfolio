@@ -8,6 +8,7 @@ import { StudyLink } from "@/components/StudyLink";
 import { Figure } from "./Figure";
 import { SectionNav } from "./SectionNav";
 import { NextOnShelf } from "./NextOnShelf";
+import { PrototypeEmbed } from "./PrototypeEmbed";
 
 export function ReaderScroll({ study }: { study: CaseStudy }) {
   const [activeId, setActiveId] = useState(study.sections[0]?.id ?? "");
@@ -100,6 +101,7 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
           );
         })}
 
+        <PrototypeEmbed study={study} />
         <NextOnShelf currentSlug={study.slug} />
       </div>
 

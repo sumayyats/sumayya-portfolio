@@ -1,4 +1,4 @@
-import type { CaseStudy } from "@/content/types";
+import type { CaseStudy, CaseStudyVisual } from "@/content/types";
 import { parseMarkdown, type Block } from "@/components/Markdown";
 
 export type Page =
@@ -12,6 +12,8 @@ export type Page =
       showMeta: boolean;
       blocks: Block[];
     }
+  | { kind: "figure"; visual: CaseStudyVisual }
+  | { kind: "prototype" }
   | { kind: "end" }
   | { kind: "blank" };
 
@@ -63,7 +65,19 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
       }
     }
     flush();
+
+    // each of the section's exported figures gets a page of its own, after
+    // its text (placeholders stay in Scroll view only)
+    for (const v of study.visuals) {
+      if (v.sectionId === section.id && (v.frames || v.width)) {
+        pages.push({ kind: "figure", visual: v });
+      }
+    }
   });
+
+  if (study.prototype?.type === "figma" && study.prototype.url) {
+    pages.push({ kind: "prototype" });
+  }
 
   // The title page is a stand-alone front cover and the end page a stand-alone
   // back cover; inner pages pair up into spreads, so pad to an even count.

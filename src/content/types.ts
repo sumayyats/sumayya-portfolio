@@ -15,12 +15,27 @@ export type CaseStudySection = {
   body: string;
 };
 
+/** One phone screen in a strip figure. */
+export type CaseStudyFrame = {
+  src: string;
+  /** Small label under the screen (e.g. "Before" / "After"). */
+  label?: string;
+};
+
 export type CaseStudyVisual = {
   id: string;
   src: string;
   alt: string;
   caption: string;
   sectionId: string;
+  /**
+   * Intrinsic size of `src`. Set once the export lands; while undefined the
+   * figure renders a clearly-marked placeholder.
+   */
+  width?: number;
+  height?: number;
+  /** A row of phone screens instead of a single image (`src` is the first). */
+  frames?: CaseStudyFrame[];
 };
 
 export type CaseStudyPrototype = {
@@ -50,7 +65,13 @@ export type CaseStudy = {
   link?: { label: string; href: string };
   palette: Palette;
   /** `hasExport` flips to true once the real cover PNG is dropped in /public/images/<slug>/. */
-  cover: { image: string; kicker?: string; hasExport?: boolean };
+  cover: {
+    image: string;
+    kicker?: string;
+    hasExport?: boolean;
+    /** Transparent product mockup for the book's cover page. */
+    mockup?: string;
+  };
   sections: CaseStudySection[];
   visuals: CaseStudyVisual[];
   prototype?: CaseStudyPrototype;

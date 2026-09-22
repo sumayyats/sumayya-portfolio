@@ -216,7 +216,11 @@ export function ReaderFlip({
           <BookPage
             page={pages[i]}
             study={study}
-            pageNumber={pages[i]?.kind === "section" ? i : undefined}
+            pageNumber={
+              pages[i] && ["section", "figure", "prototype"].includes(pages[i].kind)
+                ? i
+                : undefined
+            }
           />,
           host,
           `${study.slug}-${i}`

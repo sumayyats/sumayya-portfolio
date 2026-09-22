@@ -1,8 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { CaseStudy } from "@/content/types";
 import { caseStudies } from "@/content/case-studies";
 import { Blocks } from "@/components/Markdown";
 import { StudyLink } from "@/components/StudyLink";
+import { useSound } from "@/lib/sound";
+import { Figure } from "./Figure";
 import type { Page } from "./paginate";
 
 /**
@@ -34,6 +37,8 @@ export function PageView({
             <Blocks blocks={page.blocks} />
           </div>
         )}
+        {page.kind === "figure" && <FigurePage page={page} />}
+        {page.kind === "prototype" && <PrototypePage study={study} />}
         {page.kind === "end" && <EndPage study={study} />}
       </div>
       {page.kind !== "blank" && pageNumber !== undefined && (
@@ -64,8 +69,20 @@ function TitlePage({ study }: { study: CaseStudy }) {
         {study.subtitle}
       </p>
       <div className="mt-4 h-px w-full bg-[color-mix(in_srgb,var(--ink)_22%,transparent)]" />
-      {/* TODO: cover mockup goes here */}
-      <div className="min-h-0 flex-1" />
+      {study.cover.mockup ? (
+        <div className="relative mt-[4%] min-h-0 flex-1">
+          <Image
+            src={study.cover.mockup}
+            alt=""
+            fill
+            sizes="(min-width: 640px) 50vw, 100vw"
+            className="object-contain object-bottom"
+            priority
+          />
+        </div>
+      ) : (
+        <div className="min-h-0 flex-1" />
+      )}
     </div>
   );
 }
@@ -73,6 +90,56 @@ function TitlePage({ study }: { study: CaseStudy }) {
 /** The study link (store / live site / prototype) at the top of the Overview page. */
 function MetaBlock({ study }: { study: CaseStudy }) {
   return <StudyLink study={study} className="book-small mb-[1.4em]" />;
+}
+
+/** A figure on a page of its own: the strip or image, then its caption. */
+function FigurePage({ page }: { page: Extract<Page, { kind: "figure" }> }) {
+  return (
+    <div className="flex h-full flex-col justify-center">
+      <p className="book-small mb-[1.2em] font-mono uppercase tracking-[0.18em] text-ink-soft">
+        Figure
+      </p>
+      <Figure visual={page.visual} compact />
+    </div>
+  );
+}
+
+/** The book's pointer to the interactive prototype (embedded in Scroll view). */
+function PrototypePage({ study }: { study: CaseStudy }) {
+  const { click } = useSound();
+  const url = study.prototype?.url ?? "#";
+  return (
+    <div className="flex h-full flex-col items-center justify-center text-center">
+      <p className="book-small font-mono uppercase tracking-[0.18em] text-ink-soft">
+        Try the prototype
+      </p>
+      <div
+        className="relative mt-[1.5em] w-[38%] overflow-hidden rounded-[9%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] shadow-[0_18px_36px_-24px_rgba(0,0,0,0.5)]"
+        style={{ aspectRatio: "393 / 852" }}
+      >
+        <Image
+          src="/images/gut-skin/splash.png"
+          alt=""
+          fill
+          sizes="30vw"
+          className="object-cover"
+        />
+      </div>
+      <p className="book-meta mt-[1.5em] max-w-[34ch] leading-snug text-ink-soft">
+        Open the clickable Figma prototype, or switch to Scroll view to try it
+        on the page.
+      </p>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={click}
+        className="book-small mt-[1.5em] inline-flex items-center gap-1.5 rounded-full border border-edge px-[1.4em] py-[0.7em] font-mono uppercase tracking-[0.14em] text-ink hover:bg-[color-mix(in_srgb,var(--ink)_6%,transparent)]"
+      >
+        Open in Figma <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  );
 }
 
 function EndPage({ study }: { study: CaseStudy }) {
