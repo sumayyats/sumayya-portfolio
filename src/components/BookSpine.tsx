@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { forwardRef } from "react";
+import type { CaseStudy } from "@/content/types";
 import type { ShelfItem } from "./shelf-data";
+import { BookCover } from "./BookCover";
 import { Book3D } from "./Book3D";
-import { bookGeometry, projectedWidth } from "./book-geometry";
+import { bookGeometry, projectedWidth, type BookGeometry } from "./book-geometry";
 
 type Props = {
   item: ShelfItem;
@@ -61,8 +63,9 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
               <span
                 className="min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-2 text-center font-mono uppercase leading-none tracking-[0.14em]"
                 style={{
+                  // vertical-rl on its own reads top-to-bottom, the way a
+                  // spine is lettered here
                   writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
                   fontSize: Math.max(9, Math.round(geo.spineW * 0.25)),
                 }}
               >
@@ -109,14 +112,13 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         spine={
           <div className="absolute inset-0 flex flex-col items-center justify-between py-5">
             <span
-              className="h-4 w-[3px] rounded-full"
+              className="relative h-4 w-[3px] rounded-full"
               style={{ background: p.accent }}
             />
             <span
-              className="min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-3 text-center font-display leading-none tracking-tight"
+              className="relative min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-3 text-center font-display leading-none tracking-tight"
               style={{
                 writingMode: "vertical-rl",
-                transform: "rotate(180deg)",
                 color: light,
                 fontSize: Math.round(geo.spineW * 0.28),
               }}
@@ -126,7 +128,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             {study.mark ? (
               <span
                 aria-hidden="true"
-                className="shrink-0"
+                className="relative shrink-0"
                 style={{
                   width: Math.round(geo.spineW * 0.46),
                   height: Math.round(geo.spineW * 0.46),
@@ -151,25 +153,36 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             )}
           </div>
         }
-        cover={
-          <div
-            className="absolute inset-[3px] flex flex-col justify-start p-1.5"
-            style={{ color: `color-mix(in srgb, ${light} 45%, transparent)` }}
-          >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-[1px]"
-              style={{ boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${light} 16%, transparent)` }}
-            />
-            <span className="font-mono text-[6px] uppercase tracking-[0.16em]">
-              {study.year}
-            </span>
-          </div>
-        }
+        cover={<CoverFace study={study} geo={geo} />}
       />
     </motion.button>
   );
 });
+
+// BookCover sizes its type from the viewport, so it has to be laid out at a
+// real cover width and then scaled down onto the face — otherwise the title
+// would come out wildly out of proportion at book size.
+const JACKET_W = 480;
+const JACKET_H = 640;
+
+/**
+ * The real cover, printed on the book's front-cover face. The book is turned
+ * nearly spine-out, so the 3D transform foreshortens it to a sliver — the way
+ * it would on a shelf — and it opens up as the book turns.
+ */
+function CoverFace({ study, geo }: { study: CaseStudy; geo: BookGeometry }) {
+  const scale = geo.height / JACKET_H;
+  return (
+    <span aria-hidden="true" className="absolute inset-0 overflow-hidden">
+      <span
+        className="absolute left-0 top-0 block origin-top-left"
+        style={{ width: JACKET_W, height: JACKET_H, transform: `scale(${scale})` }}
+      >
+        <BookCover study={study} />
+      </span>
+    </span>
+  );
+}
 
 /** Readable label that fades in above the book on hover / focus. */
 function HoverLabel({

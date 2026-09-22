@@ -43,19 +43,23 @@ export function bookGeometry(
   const r4 = frac(index * 24.113 + 5.17);
 
   if (kind === "featured") {
+    const height = Math.round((452 + r2 * 68) * scale); // 452–520
     return {
       spineW: Math.round((60 + r1 * 16) * scale), // 60–76 (chunky)
-      depth: Math.round((70 + r4 * 18) * scale), // 70–88
-      height: Math.round((452 + r2 * 68) * scale), // 452–520 (fills the screen)
+      // A real book is about three-quarters as wide as it is tall, and the
+      // front cover is printed on this face — so it has to be cover-shaped.
+      depth: Math.round(height * (0.72 + r4 * 0.05)),
+      height, // fills the screen
       lean: round2((r3 - 0.5) * 3.2), // ~ -1.6 .. +1.6
       angleY: round2(15 + r1 * 5), // 15–20 (spine-forward, slim cover sliver)
       angleX: round2(5 + r4 * 2.5), // 5–7.5
     };
   }
+  const height = Math.round((356 + r2 * 78) * scale); // 356–434
   return {
     spineW: Math.round((42 + r1 * 14) * scale), // 42–56
-    depth: Math.round((54 + r4 * 14) * scale), // 54–68
-    height: Math.round((356 + r2 * 78) * scale), // 356–434
+    depth: Math.round(height * (0.7 + r4 * 0.05)),
+    height,
     lean: round2((r3 - 0.5) * 4.4), // ~ -2.2 .. +2.2
     angleY: round2(13 + r1 * 5), // 13–18
     angleX: round2(4 + r4 * 2.5), // 4–6.5
