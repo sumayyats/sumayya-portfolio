@@ -15,12 +15,12 @@ import { PageView } from "./PageView";
 
 // Base page proportions (the engine stretches to fit, keeping this ratio).
 const PAGE_W = 500;
-const PAGE_H = 690;
-const MAX_PAGE_W = 520;
+const PAGE_H = 650;
+const MAX_PAGE_W = 720;
 // Smallest page the engine will draw as a two-page spread; below twice this
 // (phones) it falls back to one page at a time.
 const MIN_PAGE_W = 240;
-const CHROME = 200; // header + nav row + gutters, in px
+const CHROME = 160; // header + nav row + gutters, in px
 
 /**
  * Flip reading view. The page curl, corner drag, swipe and shadows come from
@@ -202,7 +202,7 @@ export function ReaderFlip({
   const innerCount = Math.max(1, pages.length - 2);
 
   return (
-    <div className="flex flex-col items-center px-[max(1rem,4vw)]">
+    <div className="flex flex-col items-center px-4">
       {/* the book */}
       <div
         ref={mountRef}
@@ -229,7 +229,7 @@ export function ReaderFlip({
       </p>
 
       {/* nav + progress + TOC */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
         <NavButton
           label="Previous page"
           disabled={!canPrev}

@@ -23,7 +23,10 @@ export type Page =
  */
 export function paginate(study: CaseStudy, scale: number): Page[] {
   // Larger text → fewer lines and fewer characters per line on a page.
-  const budget = 19.7 / scale; // line-units per page (small margin for font hinting at phone sizes)
+  // Body text is 3.4% of the page width at line-height 1.65 (globals.css) on
+  // a 500×650 page with 8% padding; both figures carry a small margin for
+  // font hinting at phone sizes.
+  const budget = 18.3 / scale; // line-units per page
   const cpl = 44 / scale; // characters per line
 
   const pages: Page[] = [{ kind: "title" }];
