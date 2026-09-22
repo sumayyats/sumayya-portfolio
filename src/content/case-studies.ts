@@ -158,7 +158,11 @@ For many families, this site is their first real contact with the school. Every 
       darkInk: "#E7ECF5",
       darkAccent: "#8FB0E6",
     },
-    cover: { image: "/images/binapani/cover.png", kicker: "symbols over text" },
+    cover: {
+      image: "/images/binapani/cover.png",
+      kicker: "symbols over text",
+      mockup: "/images/binapani/cover-mockup.png",
+    },
     sections: [
       {
         id: "overview",
@@ -226,6 +230,18 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       },
     ],
     visuals: [
+      {
+        id: "bina-mockup",
+        title: "Kyros on iPhone",
+        src: "/images/binapani/app-mockup.png",
+        sectionId: "insight-to-design",
+        alt: "The Home screen and the Your Activities screen on two iPhones.",
+        caption: "Home, with what is on now and next, and the activities library.",
+        shape: "wide",
+        frames: [
+          { src: "/images/binapani/app-mockup.png", width: 934, height: 1083 },
+        ],
+      },
       { id: "bina-onboarding", title: "Onboarding directions", src: "/images/binapani/onboarding.png", sectionId: "insight-to-design", alt: "Onboarding screens in blue and light directions.", caption: "Onboarding, explored in blue and light directions. (TODO: export)" },
       { id: "bina-registration", title: "Registration and empty state", src: "/images/binapani/registration-empty.png", sectionId: "insight-to-design", alt: "Registration and the first-activity empty state.", caption: "Registration and the first-activity empty state. (TODO: export)" },
       { id: "bina-activities-mobile", title: "Activities flow, mobile", src: "/images/binapani/activities-mobile.png", sectionId: "insight-to-design", alt: "The activities flow on mobile.", caption: "Activities flow, mobile: cards led by a large icon. (TODO: export)" },

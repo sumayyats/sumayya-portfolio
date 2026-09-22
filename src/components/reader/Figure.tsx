@@ -222,6 +222,8 @@ export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
   const wide = visual.shape === "wide";
   const count = visual.video ? items.length - 1 : items.length;
   const noun = wide ? "image" : "screen";
+  // nothing exported yet: show the marked placeholder rather than a broken image
+  const ready = Boolean(visual.frames || visual.width || visual.video);
 
   const show = () => {
     click();
@@ -232,7 +234,9 @@ export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
     <figure
       className={`flex flex-col ${wide ? "sm:col-span-2" : ""}`}
     >
-      {visual.video ? (
+      {!ready ? (
+        <Placeholder alt={visual.alt} />
+      ) : visual.video ? (
         <div className="overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] p-3">
           <VideoFigure visual={visual} />
         </div>
