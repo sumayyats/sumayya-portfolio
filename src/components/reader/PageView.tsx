@@ -1,7 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import type { CaseStudy } from "@/content/types";
 import { caseStudies } from "@/content/case-studies";
+import { BookCover } from "@/components/BookCover";
 import { Blocks } from "@/components/Markdown";
 import { StudyLink } from "@/components/StudyLink";
 import { useSound } from "@/lib/sound";
@@ -50,39 +54,43 @@ export function PageView({
   );
 }
 
+/** How far the cover leans away from the cursor, in degrees. */
+const TILT = 7;
+
+/**
+ * The front cover: the same jacket the book wears on the shelf, which leans
+ * towards the cursor as you move over it. Purely decorative — the tilt is
+ * dropped for anyone who asks for reduced motion, and released on press so it
+ * never fights a drag to turn the page.
+ */
 function TitlePage({ study }: { study: CaseStudy }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const follow = (e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5; // -0.5 … 0.5
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    setTilt({ x: -py * TILT * 2, y: px * TILT * 2 });
+  };
+  const rest = () => setTilt({ x: 0, y: 0 });
+
   return (
-    <div className="flex h-full flex-col">
-      <p className="book-small font-mono uppercase tracking-[0.18em] text-ink-soft">
-        {study.cover.kicker}
-      </p>
-      <h1 className="book-h1 mt-[0.4em] font-display leading-[1.03] tracking-tight text-ink">
-        {study.title}
-      </h1>
-      <p
-        className="book-sub mt-[0.5em] leading-snug"
-        style={{
-          color: "color-mix(in srgb, var(--ink) 55%, transparent)",
-          fontFamily: '"Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif',
-        }}
+    <div className="h-full" style={{ perspective: "1000px" }}>
+      <div
+        ref={ref}
+        onPointerMove={follow}
+        onPointerLeave={rest}
+        onPointerDown={rest}
+        className="h-full transition-transform duration-200 ease-out will-change-transform"
+        style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
       >
-        {study.subtitle}
-      </p>
-      <div className="mt-4 h-px w-full bg-[color-mix(in_srgb,var(--ink)_22%,transparent)]" />
-      {study.cover.mockup ? (
-        <div className="relative mt-[4%] min-h-0 flex-1">
-          <Image
-            src={study.cover.mockup}
-            alt=""
-            fill
-            sizes="(min-width: 640px) 50vw, 100vw"
-            className="object-contain object-center"
-            priority
-          />
-        </div>
-      ) : (
-        <div className="min-h-0 flex-1" />
-      )}
+        <BookCover study={study} />
+      </div>
     </div>
   );
 }
