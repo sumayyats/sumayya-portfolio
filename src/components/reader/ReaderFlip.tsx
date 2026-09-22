@@ -35,6 +35,7 @@ export function ReaderFlip({
   scale: number;
 }) {
   const reduce = useReducedMotion();
+  const phone = usePhone();
   const sound = useSound();
   const soundRef = useRef(sound);
   useEffect(() => {
@@ -106,7 +107,8 @@ export function ReaderFlip({
       minHeight: Math.round(MIN_PAGE_W * (PAGE_H / PAGE_W)),
       maxHeight: Math.round(MAX_PAGE_W * (PAGE_H / PAGE_W)),
       showCover: true,
-      usePortrait: true,
+      // phones read one page at a time; everything wider gets the spread
+      usePortrait: phone,
       drawShadow: !reduce,
       maxShadowOpacity: 0.35,
       flippingTime: reduce ? 1 : 850,
@@ -141,7 +143,7 @@ export function ReaderFlip({
       flip.destroy();
       flipRef.current = null;
     };
-  }, [pages, pageOf, reduce]);
+  }, [pages, pageOf, reduce, phone]);
 
   // The engine only re-measures on window resize; nudge it when the mount's
   // width cap changes so the spread is sized to the real container.
@@ -251,7 +253,7 @@ export function ReaderFlip({
           Contents
         </button>
         <span className="tabular-nums">{pageLabel}</span>
-        <span className="relative h-[3px] w-32 overflow-hidden rounded-full bg-edge sm:w-40">
+        <span className="relative h-[3px] w-14 overflow-hidden rounded-full bg-edge sm:w-40">
           <span
             className="absolute inset-y-0 left-0 rounded-full bg-ink-soft transition-[width] duration-300"
             style={{
@@ -287,6 +289,19 @@ export function ReaderFlip({
       )}
     </div>
   );
+}
+
+/** True below the phone breakpoint (matches Tailwind's `sm`). */
+function usePhone() {
+  const [phone, setPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = () => setPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return phone;
 }
 
 function NavButton({

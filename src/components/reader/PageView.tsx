@@ -30,6 +30,7 @@ export function PageView({
                 {page.title}
               </h2>
             )}
+            {page.showMeta && <MetaBlock study={study} />}
             <Blocks blocks={page.blocks} />
           </div>
         )}
@@ -63,21 +64,29 @@ function TitlePage({ study }: { study: CaseStudy }) {
         {study.subtitle}
       </p>
       <div className="mt-4 h-px w-full bg-[color-mix(in_srgb,var(--ink)_22%,transparent)]" />
-      <StudyLink study={study} className="book-small mt-4 self-start" />
+      {/* TODO: cover mockup goes here */}
+      <div className="min-h-0 flex-1" />
+    </div>
+  );
+}
 
-      <dl className="mt-auto grid grid-cols-1 gap-3 pt-6">
-        {(
-          [
-            ["Role", study.role],
-            ["Team", study.team],
-            ["Scope", study.scope],
-          ] as [string, string][]
-        ).map(([k, v]) => (
+/** Role / Team / Scope and the study link, at the top of the Overview page. */
+function MetaBlock({ study }: { study: CaseStudy }) {
+  const rows: [string, string][] = [
+    ["Role", study.role],
+    ["Team", study.team],
+    ["Scope", study.scope],
+  ];
+  return (
+    <div className="mb-[1.2em] border-b border-[color-mix(in_srgb,var(--ink)_14%,transparent)] pb-[1.2em]">
+      <StudyLink study={study} className="book-small mb-[1em]" />
+      <dl className="grid grid-cols-1 gap-[0.7em]">
+        {rows.map(([k, v]) => (
           <div key={k}>
             <dt className="book-small font-mono uppercase tracking-[0.14em] text-ink-soft">
               {k}
             </dt>
-            <dd className="book-meta mt-0.5 leading-snug text-ink">{v}</dd>
+            <dd className="book-meta mt-[0.15em] leading-snug text-ink">{v}</dd>
           </div>
         ))}
       </dl>

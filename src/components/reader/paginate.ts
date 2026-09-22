@@ -8,6 +8,8 @@ export type Page =
       sectionId: string;
       title: string;
       showTitle: boolean;
+      /** Role / Team / Scope and the study link (first page of the book's first section). */
+      showMeta: boolean;
       blocks: Block[];
     }
   | { kind: "end" }
@@ -21,15 +23,16 @@ export type Page =
  */
 export function paginate(study: CaseStudy, scale: number): Page[] {
   // Larger text → fewer lines and fewer characters per line on a page.
-  const budget = 20 / scale; // line-units per page
+  const budget = 19.7 / scale; // line-units per page (small margin for font hinting at phone sizes)
   const cpl = 44 / scale; // characters per line
 
   const pages: Page[] = [{ kind: "title" }];
 
-  for (const section of study.sections) {
+  study.sections.forEach((section, si) => {
     const blocks = parseMarkdown(section.body);
     let current: Block[] = [];
     let cost = 2.6; // heading
+    if (si === 0) cost += metaCost(study, cpl);
     let first = true;
 
     const flush = () => {
@@ -38,6 +41,7 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
         sectionId: section.id,
         title: section.title,
         showTitle: first,
+        showMeta: si === 0 && first,
         blocks: current,
       });
       first = false;
@@ -56,13 +60,28 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
       }
     }
     flush();
-  }
+  });
 
   // The title page is a stand-alone front cover and the end page a stand-alone
   // back cover; inner pages pair up into spreads, so pad to an even count.
   if ((pages.length - 1) % 2 === 1) pages.push({ kind: "blank" });
   pages.push({ kind: "end" });
   return pages;
+}
+
+/**
+ * Line cost of the meta block (link + Role / Team / Scope) drawn at the
+ * smaller `book-meta` size, so it wraps at ~1.3× the body's characters per
+ * line and each line is ~0.8 of a body line.
+ */
+function metaCost(study: CaseStudy, cpl: number): number {
+  const metaCpl = cpl * 1.3;
+  const rows = [study.role, study.team, study.scope];
+  const lines = rows.reduce(
+    (n, t) => n + 0.7 + Math.ceil(t.length / metaCpl) * 0.8 + 0.3,
+    0
+  );
+  return lines + (study.link ? 1.0 : 0) + 1.6; // + rule and bottom margin
 }
 
 /**
