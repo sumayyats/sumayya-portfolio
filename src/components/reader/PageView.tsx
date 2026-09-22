@@ -113,8 +113,13 @@ function PrototypePage({ study }: { study: CaseStudy }) {
       <p className="book-small font-mono uppercase tracking-[0.18em] text-ink-soft">
         Try the prototype
       </p>
-      <div
-        className="relative mt-[1.5em] flex w-full items-center justify-center overflow-hidden rounded-[6%] bg-cover bg-center py-[6%]"
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={click}
+        aria-label="Open the prototype in Figma"
+        className="group relative mt-[1.5em] flex w-full items-center justify-center overflow-hidden rounded-[6%] bg-cover bg-center py-[6%]"
         style={{
           aspectRatio: "16 / 11",
           backgroundImage: study.prototype?.background
@@ -125,7 +130,7 @@ function PrototypePage({ study }: { study: CaseStudy }) {
       >
         {study.prototype?.poster && (
           <div
-            className="relative h-full overflow-hidden rounded-[9%] shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)]"
+            className="relative h-full overflow-hidden rounded-[9%] shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)] transition-transform duration-200 group-hover:-translate-y-0.5"
             style={{ aspectRatio: "393 / 852" }}
           >
             <Image
@@ -137,7 +142,7 @@ function PrototypePage({ study }: { study: CaseStudy }) {
             />
           </div>
         )}
-      </div>
+      </a>
       <p className="book-meta mt-[1.5em] max-w-[34ch] leading-snug text-ink-soft">
         Open the clickable Figma prototype, or switch to Scroll view to try it
         on the page.

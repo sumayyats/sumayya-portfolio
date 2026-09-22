@@ -15,11 +15,14 @@ export type CaseStudySection = {
   body: string;
 };
 
-/** One phone screen in a strip figure. */
+/** One image in a multi-part figure. */
 export type CaseStudyFrame = {
   src: string;
-  /** Small label under the screen (e.g. "Before" / "After"). */
+  /** Small label under the image (e.g. "Before" / "After"). */
   label?: string;
+  /** Intrinsic size; needed for `shape: "wide"` (natural-ratio) figures. */
+  width?: number;
+  height?: number;
 };
 
 export type CaseStudyVisual = {
@@ -34,8 +37,14 @@ export type CaseStudyVisual = {
    */
   width?: number;
   height?: number;
-  /** A row of phone screens instead of a single image (`src` is the first). */
+  /** Several images instead of one (`src` is the first). */
   frames?: CaseStudyFrame[];
+  /**
+   * How the frames are laid out.
+   * `phone` (default) crops each to a phone screen; `pairs` stacks before over
+   * after with an arrow between; `wide` keeps each image's natural ratio.
+   */
+  shape?: "phone" | "pairs" | "wide";
 };
 
 export type CaseStudyPrototype = {

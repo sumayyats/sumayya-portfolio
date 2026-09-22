@@ -7,6 +7,17 @@ import { useSound } from "@/lib/sound";
 
 // Phone screens share the iPhone 15 canvas ratio (393 × 852).
 const PHONE_RATIO = "393 / 852";
+const PHONE_TALL = 852 / 393;
+
+/**
+ * On a book page, height is the scarce dimension: cap a figure's width so its
+ * images fit. 1cqw = 1% of the page width (see .book-page in globals.css); the
+ * content box is ~114cqw tall, and the "Figure" label, the caption (up to two
+ * lines) and the page number take the rest.
+ */
+const BOOK_BUDGET = 82;
+const bookMaxWidth = (heightPerWidth: number, extra: number) =>
+  `min(100%, ${Math.floor((BOOK_BUDGET - extra) / heightPerWidth)}cqw)`;
 
 /** Lightbox items for a visual: one per frame, or the single image. */
 export function lightboxItems(visual: CaseStudyVisual): LightboxItem[] {
@@ -47,7 +58,13 @@ export function Figure({
   return (
     <figure className={compact ? "my-0" : "my-2"}>
       {visual.frames ? (
-        <ScreenStrip visual={visual} onOpen={show} compact={compact} />
+        visual.shape === "pairs" ? (
+          <PairGrid visual={visual} onOpen={show} compact={compact} />
+        ) : visual.shape === "wide" ? (
+          <WideStack visual={visual} onOpen={show} compact={compact} />
+        ) : (
+          <ScreenStrip visual={visual} onOpen={show} compact={compact} />
+        )
       ) : ready ? (
         <button
           type="button"
@@ -93,11 +110,8 @@ function ScreenStrip({
   // screen stays legible in a narrow column
   const cols = n <= 4 ? n : Math.ceil(n / 2);
   const rows = Math.ceil(n / cols);
-  // On a book page the strip must also fit the page height: cap its width
-  // so `rows` screens (852/393 tall each) use at most ~80% of the page width
-  // in height. 1cqw = 1% of the page (see .book-page in globals.css).
   const maxWidth = compact
-    ? `min(100%, ${Math.round((cols * (80 / rows)) / 2.168)}cqw)`
+    ? bookMaxWidth((rows * PHONE_TALL) / cols, rows * 3)
     : undefined;
   return (
     <div
@@ -133,6 +147,163 @@ function ScreenStrip({
         </div>
       ))}
     </div>
+  );
+}
+
+
+/** Before over after, one pair per column, with an arrow between the rows. */
+function PairGrid({
+  visual,
+  onOpen,
+  compact,
+}: {
+  visual: CaseStudyVisual;
+  onOpen: (i: number) => void;
+  compact: boolean;
+}) {
+  const frames = visual.frames!;
+  const pairs: [number, number][] = [];
+  for (let i = 0; i + 1 < frames.length; i += 2) pairs.push([i, i + 1]);
+  // each column is two screens tall, plus the arrow and two labels
+  const maxWidth = compact
+    ? bookMaxWidth((2 * PHONE_TALL) / pairs.length, 9)
+    : undefined;
+  return (
+    <div
+      className="mx-auto grid items-start gap-x-3 gap-y-1"
+      style={{
+        gridTemplateColumns: `repeat(${pairs.length}, minmax(0, 1fr))`,
+        maxWidth,
+      }}
+    >
+      {pairs.map(([a, b]) => (
+        <div key={frames[a].src} className="flex min-w-0 flex-col items-center">
+          <Screen
+            frame={frames[a]}
+            index={a}
+            total={frames.length}
+            alt={a === 0 ? visual.alt : ""}
+            cols={pairs.length}
+            compact={compact}
+            onOpen={onOpen}
+          />
+          <span
+            aria-hidden="true"
+            className="my-0.5 leading-none text-ink-soft"
+            style={{ fontSize: compact ? "3cqw" : "13px" }}
+          >
+            ↓
+          </span>
+          <Screen
+            frame={frames[b]}
+            index={b}
+            total={frames.length}
+            alt=""
+            cols={pairs.length}
+            compact={compact}
+            onOpen={onOpen}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Diagrams and boards: each image at its natural ratio, stacked. */
+function WideStack({
+  visual,
+  onOpen,
+  compact,
+}: {
+  visual: CaseStudyVisual;
+  onOpen: (i: number) => void;
+  compact: boolean;
+}) {
+  const frames = visual.frames!;
+  // stacked at their natural ratios, so the tallest they can be is the sum
+  const tall = frames.reduce(
+    (n, f) => n + (f.height ?? 1200) / (f.width ?? 1800),
+    0
+  );
+  const labels = frames.filter((f) => f.label).length * 3;
+  return (
+    <div
+      className="mx-auto flex flex-col gap-2"
+      style={{ maxWidth: compact ? bookMaxWidth(tall, labels) : undefined }}
+    >
+      {frames.map((f, i) => (
+        <div key={f.src}>
+          <button
+            type="button"
+            onClick={() => onOpen(i)}
+            aria-label={`Enlarge image ${i + 1} of ${frames.length}${f.label ? `: ${f.label}` : ""}`}
+            className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] shadow-[0_14px_28px_-22px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+          >
+            <Image
+              src={f.src}
+              alt={i === 0 ? visual.alt : ""}
+              width={f.width ?? 1800}
+              height={f.height ?? 1200}
+              sizes="(min-width: 1280px) 340px, (min-width: 640px) 50vw, 100vw"
+              className="block h-auto w-full"
+            />
+          </button>
+          {f.label && <FrameLabel label={f.label} compact={compact} />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** One phone screen, cropped to the device canvas. */
+function Screen({
+  frame,
+  index,
+  total,
+  alt,
+  cols,
+  compact,
+  onOpen,
+}: {
+  frame: { src: string; label?: string };
+  index: number;
+  total: number;
+  alt: string;
+  cols: number;
+  compact: boolean;
+  onOpen: (i: number) => void;
+}) {
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => onOpen(index)}
+        aria-label={`Enlarge screen ${index + 1} of ${total}${frame.label ? `: ${frame.label}` : ""}`}
+        className="relative block w-full cursor-zoom-in overflow-hidden rounded-[9%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+        style={{ aspectRatio: PHONE_RATIO }}
+      >
+        <Image
+          src={frame.src}
+          alt={alt}
+          fill
+          sizes={`(min-width: 1280px) ${Math.round(340 / cols)}px, (min-width: 640px) ${Math.round(50 / cols)}vw, ${Math.round(100 / cols)}vw`}
+          className="object-cover object-top"
+        />
+      </button>
+      {frame.label && <FrameLabel label={frame.label} compact={compact} />}
+    </>
+  );
+}
+
+function FrameLabel({ label, compact }: { label: string; compact: boolean }) {
+  return (
+    <p
+      className={`mt-1 w-full truncate text-center font-mono uppercase tracking-[0.12em] text-ink-soft ${
+        compact ? "book-small" : "text-[9px]"
+      }`}
+    >
+      {label}
+    </p>
   );
 }
 
