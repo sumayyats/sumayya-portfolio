@@ -327,7 +327,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         title: "Design system",
         src: "/images/binapani/system/colours.png",
         sectionId: "insight-to-design",
-        alt: "The design system: colour and shadow scales, typography, buttons, fields, icons and the logo.",
+        alt: "The design system: colour and shadow scales, typography, buttons, fields and icons.",
         caption: "The design system: colours, typography, buttons, fields and icons.",
         shape: "wide",
         frames: [
@@ -336,7 +336,6 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
           { src: "/images/binapani/system/buttons.png", width: 1408, height: 1232, label: "Buttons" },
           { src: "/images/binapani/system/fields.png", width: 1422, height: 1522, label: "Fields" },
           { src: "/images/binapani/system/icons.png", width: 461, height: 1333, label: "Icons" },
-          { src: "/images/binapani/system/logo.png", width: 505, height: 1138, label: "Logo" },
         ],
       },
       {
