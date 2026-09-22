@@ -73,6 +73,8 @@ function TitlePage({ study }: { study: CaseStudy }) {
       return;
     }
     const r = el.getBoundingClientRect();
+    // page-flip keeps off-screen pages mounted at zero size
+    if (!r.width || !r.height) return;
     const px = (e.clientX - r.left) / r.width - 0.5; // -0.5 … 0.5
     const py = (e.clientY - r.top) / r.height - 0.5;
     setTilt({ x: -py * TILT * 2, y: px * TILT * 2 });

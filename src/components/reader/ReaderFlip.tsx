@@ -356,7 +356,9 @@ function BookPage({
       }}
     >
       <div className="relative h-full">
-        <div className="h-full px-[8%] py-[8%]">
+        {/* the cover is the page: it runs to the edges, where text pages
+            keep their margins */}
+        <div className={page?.kind === "title" ? "h-full" : "h-full px-[8%] py-[8%]"}>
           {page && page.kind !== "blank" ? (
             <PageView page={page} study={study} pageNumber={pageNumber} />
           ) : null}
