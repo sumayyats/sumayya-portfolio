@@ -1,6 +1,8 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import type { CaseStudyVisual } from "@/content/types";
 import { useLightbox, type LightboxItem } from "@/components/Lightbox";
 import { useSound } from "@/lib/sound";
@@ -118,25 +120,64 @@ export function Figure({
   );
 }
 
-/** The screen recording, with its own controls. Never autoplays. */
+/**
+ * The screen recording. Plays once it scrolls into view (muted, looping) and
+ * pauses when it leaves; `prefers-reduced-motion` keeps it still until played.
+ * `crop` trims the capture's own backdrop.
+ */
 function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
   const v = visual.video!;
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || reduce) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) void el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [reduce]);
+
+  const c = v.crop ?? { top: 0, right: 0, bottom: 0, left: 0 };
+  const scaleX = 100 / (100 - c.left - c.right);
+  const scaleY = 100 / (100 - c.top - c.bottom);
+
   return (
     <div
-      className="mx-auto overflow-hidden rounded-[9%/4%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
-      style={{ maxWidth: 300 }}
+      className="relative mx-auto overflow-hidden rounded-[9%/4%] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
+      style={{
+        maxWidth: 300,
+        width: "100%",
+        aspectRatio: `${v.width * (1 - (c.left + c.right) / 100)} / ${
+          v.height * (1 - (c.top + c.bottom) / 100)
+        }`,
+      }}
     >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
+        ref={ref}
         src={v.src}
         poster={v.poster}
-        width={v.width}
-        height={v.height}
         controls
-        preload="none"
+        muted
+        loop
         playsInline
+        preload="metadata"
         aria-label={visual.alt}
-        className="block h-auto w-full"
+        // max-w-none: preflight caps video at 100%, which would undo the crop
+        className="absolute max-w-none"
+        style={{
+          width: `${scaleX * 100}%`,
+          height: `${scaleY * 100}%`,
+          left: `${-c.left * scaleX}%`,
+          top: `${-c.top * scaleY}%`,
+        }}
       />
     </div>
   );
