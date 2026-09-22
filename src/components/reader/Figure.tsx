@@ -159,7 +159,6 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
         }`,
       }}
     >
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         ref={ref}
         src={v.src}
@@ -204,6 +203,123 @@ function PlayButton({
       </svg>
       Play the flow
     </button>
+  );
+}
+
+
+/* ── figure gallery (reading view) ───────────────────────────────── */
+
+/**
+ * One figure as a card: a preview, a title and its caption. Clicking opens the
+ * full set in the lightbox, so a section reads as a short, scannable list
+ * instead of a run of loose screens.
+ */
+export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
+  const { open } = useLightbox();
+  const { click } = useSound();
+  const items = lightboxItems(visual);
+  const frames = visual.frames ?? [];
+  const wide = visual.shape === "wide";
+  const count = visual.video ? items.length - 1 : items.length;
+  const noun = wide ? "image" : "screen";
+
+  const show = () => {
+    click();
+    open(items, 0);
+  };
+
+  return (
+    <figure
+      className={`flex flex-col ${wide ? "sm:col-span-2" : ""}`}
+    >
+      {visual.video ? (
+        <div className="overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] p-3">
+          <VideoFigure visual={visual} />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={show}
+          aria-label={`${visual.title ?? visual.alt} — open ${count} ${noun}${count > 1 ? "s" : ""}`}
+          className="group relative block w-full cursor-zoom-in overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] shadow-[0_14px_28px_-24px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5"
+          style={{ aspectRatio: wide ? "16 / 9" : "4 / 3" }}
+        >
+          {wide ? (
+            <Image
+              src={frames[0]?.src ?? visual.src}
+              alt=""
+              fill
+              sizes="(min-width: 1280px) 340px, (min-width: 640px) 60vw, 100vw"
+              className="object-contain p-3"
+            />
+          ) : (
+            <span className="flex h-full items-center justify-center gap-2 p-4">
+              {(frames.length ? frames : [{ src: visual.src }])
+                .slice(0, 3)
+                .map((f) => (
+                  <span
+                    key={f.src}
+                    className="relative block h-full overflow-hidden rounded-[10%] border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_10px_20px_-16px_rgba(0,0,0,0.5)]"
+                    style={{ aspectRatio: PHONE_RATIO }}
+                  >
+                    <Image
+                      src={f.src}
+                      alt=""
+                      fill
+                      sizes="140px"
+                      className="object-cover object-top"
+                    />
+                  </span>
+                ))}
+            </span>
+          )}
+          {count > 1 && (
+            <span className="absolute bottom-2 right-2 rounded-full bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft backdrop-blur-sm">
+              {count} {noun}s
+            </span>
+          )}
+        </button>
+      )}
+
+      <figcaption className="mt-3">
+        {visual.title && (
+          <p className="text-[14px] font-semibold leading-snug text-ink">
+            {visual.title}
+          </p>
+        )}
+        <p className="mt-0.5 text-[13px] leading-relaxed text-ink-soft">
+          {visual.caption}
+        </p>
+      </figcaption>
+    </figure>
+  );
+}
+
+/** The section's figures, grouped under one heading. */
+export function FigureGallery({
+  visuals,
+  compactColumns = false,
+}: {
+  visuals: CaseStudyVisual[];
+  /** Single column (the xl side rail). */
+  compactColumns?: boolean;
+}) {
+  if (visuals.length === 0) return null;
+  return (
+    <section className="mt-10 border-t border-[color-mix(in_srgb,var(--ink)_10%,transparent)] pt-6">
+      <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
+        Figures
+      </p>
+      <div
+        className={`grid gap-x-5 gap-y-8 ${
+          compactColumns ? "grid-cols-1" : "sm:grid-cols-2"
+        }`}
+      >
+        {visuals.map((v) => (
+          <FigureCard key={v.id} visual={v} />
+        ))}
+      </div>
+    </section>
   );
 }
 

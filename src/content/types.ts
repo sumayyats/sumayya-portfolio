@@ -29,6 +29,8 @@ export type CaseStudyVisual = {
   id: string;
   src: string;
   alt: string;
+  /** Short label for the figure card (names the artefact). */
+  title?: string;
   caption: string;
   sectionId: string;
   /**

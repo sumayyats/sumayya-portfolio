@@ -128,7 +128,6 @@ function LightboxDialog({
       <figure className="relative z-10 flex max-h-full max-w-full flex-col items-center">
         <div className="relative max-h-[78vh] max-w-full overflow-hidden rounded-xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.7)]">
           {item.video ? (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
               key={item.video}
               src={item.video}

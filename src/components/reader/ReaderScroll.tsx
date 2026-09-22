@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CaseStudy } from "@/content/types";
 import { Markdown } from "@/components/Markdown";
 import { StudyLink } from "@/components/StudyLink";
-import { Figure } from "./Figure";
+import { FigureGallery } from "./Figure";
 import { SectionNav } from "./SectionNav";
 import { NextOnShelf } from "./NextOnShelf";
 import { PrototypeEmbed } from "./PrototypeEmbed";
@@ -89,15 +89,10 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
               </h2>
               <Markdown source={s.body} />
 
-              {/* inline visuals below xl: one centred column, each figure
-                  capping its own width */}
-              {visuals.length > 0 && (
-                <div className="mt-8 flex flex-col items-center gap-8 xl:hidden">
-                  {visuals.map((v) => (
-                    <Figure key={v.id} visual={v} />
-                  ))}
-                </div>
-              )}
+              {/* figures below xl; the side rail carries them at xl */}
+              <div className="xl:hidden">
+                <FigureGallery visuals={visuals} />
+              </div>
             </section>
           );
         })}
@@ -118,7 +113,7 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
             className="flex flex-col gap-6"
           >
             {activeVisuals.length > 0 ? (
-              activeVisuals.map((v) => <Figure key={v.id} visual={v} />)
+              <FigureGallery visuals={activeVisuals} compactColumns />
             ) : (
               <p className="font-mono text-[11px] uppercase tracking-widest text-ink-soft">
                 {study.sections.find((s) => s.id === activeId)?.title}

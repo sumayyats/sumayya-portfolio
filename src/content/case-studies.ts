@@ -365,6 +365,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
     visuals: [
       {
         id: "gs-axis",
+        title: "The gut-skin axis",
         src: "/images/gut-skin/gut-skin-axis-2.png",
         sectionId: "challenge",
         alt: "A diagram of the gut-skin axis and how AI works in the app.",
@@ -377,6 +378,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-competitors",
+        title: "Competitor matrix",
         src: "/images/gut-skin/competitor-matrix.png",
         sectionId: "challenge",
         alt: "A competitor matrix scoring 17 apps across five dimensions.",
@@ -388,6 +390,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-workshop",
+        title: "Co-creation workshop",
         src: "/images/gut-skin/workshop-card-sort.png",
         sectionId: "process",
         alt: "Workshop artefacts: card sort and prioritisation matrix.",
@@ -396,10 +399,12 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
         frames: [
           { src: "/images/gut-skin/workshop-card-sort.png", width: 1800, height: 1258, label: "Card sort" },
           { src: "/images/gut-skin/workshop-prioritisation.png", width: 1800, height: 886, label: "Prioritisation" },
+          { src: "/images/gut-skin/workshop-miro.png", width: 1800, height: 1307, label: "Dot voting in Miro" },
         ],
       },
       {
         id: "gs-persona",
+        title: "Persona and journey map",
         src: "/images/gut-skin/persona.png",
         sectionId: "process",
         alt: "Persona and current-state journey map.",
@@ -412,6 +417,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-ia",
+        title: "Information architecture",
         src: "/images/gut-skin/information-architecture.png",
         sectionId: "process",
         alt: "The app's information architecture.",
@@ -423,6 +429,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-lofi-midfi",
+        title: "Low-fi and mid-fi screens",
         src: "/images/gut-skin/lofi.png",
         sectionId: "process",
         alt: "Low-fidelity and mid-fidelity screens.",
@@ -435,6 +442,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-hifi",
+        title: "Hi-fi main features",
         src: "/images/gut-skin/screens/home.png",
         sectionId: "process",
         alt: "Hi-fidelity main feature screens: home, insights, scan, community and profile.",
@@ -448,7 +456,20 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
         ],
       },
       {
+        id: "gs-design-system",
+        title: "Design system",
+        src: "/images/gut-skin/design-system.png",
+        sectionId: "process",
+        alt: "The design system: app icon, components, colour and shadow scales, and typography.",
+        caption: "The design system behind the screens.",
+        shape: "wide",
+        frames: [
+          { src: "/images/gut-skin/design-system.png", width: 1800, height: 873 },
+        ],
+      },
+      {
         id: "gs-insights",
+        title: "AI Insights story cards",
         src: "/images/gut-skin/screens/story-1.png",
         sectionId: "process",
         alt: "AI Insights as story cards, one idea per slide, followed by a recommendation page.",
@@ -471,6 +492,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-before-after",
+        title: "Before and after",
         src: "/images/gut-skin/screens/insight-before.png",
         sectionId: "process",
         alt: "Before and after the round 3 refinements: the insight page, history, and the scan result.",
@@ -487,6 +509,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
       {
         id: "gs-accessibility",
+        title: "Accessibility and dark mode",
         src: "/images/gut-skin/screens/dark-home-2.png",
         sectionId: "ai",
         alt: "Dark mode: home, AI assistant, insights feed, scan, communities and profile.",
