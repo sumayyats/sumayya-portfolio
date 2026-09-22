@@ -210,12 +210,14 @@ export function Shelf() {
           onPointerLeave={endDrag}
           onScroll={onScroll}
           aria-label="Bookshelf of case studies"
-          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,4vw)] pb-6 pt-14 outline-none [scrollbar-width:none]"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto px-[max(1rem,4vw)] pb-16 pt-14 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           <div
             role="list"
-            className="mx-auto flex w-max items-end gap-[2px]"
+            // shelved tight: the books touch, and only the one you point at
+            // makes room for itself
+            className="mx-auto flex w-max items-end gap-0"
           >
             {shelfItems.map((item, i) => {
               const isActive = item.slug === activeSlug;
