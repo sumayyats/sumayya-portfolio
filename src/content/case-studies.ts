@@ -336,8 +336,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         shape: "wide",
         frames: [
           { src: "/images/binapani/system/colours.png", width: 2132, height: 951, label: "Colours and shadows" },
-          { src: "/images/binapani/system/typography.png", width: 422, height: 1358, label: "Typography" },
-          { src: "/images/binapani/system/buttons.png", width: 1408, height: 1232, label: "Buttons" },
+          { src: "/images/binapani/system/typography-2.png", width: 823, height: 2000, label: "Typography" },
+          { src: "/images/binapani/system/buttons-2.png", width: 2000, height: 1700, label: "Buttons" },
           { src: "/images/binapani/system/fields.png", width: 1422, height: 1522, label: "Fields" },
           { src: "/images/binapani/system/icons.png", width: 461, height: 1333, label: "Icons" },
         ],
