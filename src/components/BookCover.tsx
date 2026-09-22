@@ -70,6 +70,7 @@ export function BookCover({ study }: { study: CaseStudy }) {
         <div className="flex flex-1 items-center justify-center py-4">
           <MockupPair
             slug={study.slug}
+            mockup={study.cover.mockup}
             hasExport={study.cover.hasExport ?? false}
             accent={accent}
             ink={ink}
@@ -91,29 +92,28 @@ export function BookCover({ study }: { study: CaseStudy }) {
 }
 
 /**
- * Two phone mockups. Uses a real cover export when present; otherwise a
- * clearly-marked placeholder frame (swapped automatically once the PNG lands
- * in /public/images/<slug>/).
+ * Two phone mockups. Uses the product mockup (or a full cover export) when
+ * present; otherwise a clearly-marked placeholder frame.
  */
 function MockupPair({
   slug,
+  mockup,
   hasExport,
   accent,
   ink,
   paper,
 }: {
   slug: string;
+  mockup?: string;
   hasExport: boolean;
   accent: string;
   ink: string;
   paper: string;
 }) {
   const [failed, setFailed] = useState(false);
-  const src = `/images/${slug}/cover.png`;
+  const src = mockup ?? `/images/${slug}/cover.png`;
 
-  // Once the real export exists (cover.hasExport → true), render it; otherwise
-  // show the clearly-marked placeholder without hitting the network.
-  if (hasExport && !failed) {
+  if ((mockup || hasExport) && !failed) {
     return (
       <div className="relative h-full w-full">
         <Image
