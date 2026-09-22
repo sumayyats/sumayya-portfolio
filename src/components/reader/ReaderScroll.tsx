@@ -89,9 +89,10 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
               </h2>
               <Markdown source={s.body} />
 
-              {/* inline visuals below xl */}
+              {/* inline visuals below xl: one centred column, each figure
+                  capping its own width */}
               {visuals.length > 0 && (
-                <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:hidden">
+                <div className="mt-8 flex flex-col items-center gap-8 xl:hidden">
                   {visuals.map((v) => (
                     <Figure key={v.id} visual={v} />
                   ))}

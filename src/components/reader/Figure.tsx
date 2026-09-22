@@ -56,7 +56,7 @@ export function Figure({
   const ready = Boolean(visual.frames || visual.width);
 
   return (
-    <figure className={compact ? "my-0" : "my-2"}>
+    <figure className={compact ? "my-0 w-full" : "my-2 w-full"}>
       {visual.frames ? (
         visual.shape === "pairs" ? (
           <PairGrid visual={visual} onOpen={show} compact={compact} />
@@ -70,7 +70,7 @@ export function Figure({
           type="button"
           onClick={() => show(0)}
           aria-label={`Enlarge: ${visual.alt}`}
-          className="group block w-full cursor-zoom-in overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_18px_36px_-24px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+          className="group mx-auto block w-full max-w-[760px] cursor-zoom-in overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_18px_36px_-24px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
         >
           <Image
             src={visual.src}
@@ -112,7 +112,7 @@ function ScreenStrip({
   const rows = Math.ceil(n / cols);
   const maxWidth = compact
     ? bookMaxWidth((rows * PHONE_TALL) / cols, rows * 3)
-    : undefined;
+    : `min(100%, ${cols * 190}px)`;
   return (
     <div
       className="mx-auto grid gap-2"
@@ -167,7 +167,7 @@ function PairGrid({
   // each column is two screens tall, plus the arrow and two labels
   const maxWidth = compact
     ? bookMaxWidth((2 * PHONE_TALL) / pairs.length, 9)
-    : undefined;
+    : `min(100%, ${pairs.length * 190}px)`;
   return (
     <div
       className="mx-auto grid items-start gap-x-3 gap-y-1"
@@ -229,7 +229,9 @@ function WideStack({
   return (
     <div
       className="mx-auto flex flex-col gap-2"
-      style={{ maxWidth: compact ? bookMaxWidth(tall, labels) : undefined }}
+      style={{
+        maxWidth: compact ? bookMaxWidth(tall, labels) : "min(100%, 760px)",
+      }}
     >
       {frames.map((f, i) => (
         <div key={f.src}>
