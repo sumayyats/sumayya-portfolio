@@ -84,6 +84,9 @@ export type CaseStudy = {
   featured: boolean;
   /** Behance (non-featured) link for spine-only books. */
   externalUrl?: string;
+  /** The product's own logo, and a white knock-out of it for the book spine. */
+  logo?: string;
+  mark?: string;
   /** Where the work lives (store listing, live site, prototype). Shown on the shelf detail card. */
   link?: { label: string; href: string };
   palette: Palette;

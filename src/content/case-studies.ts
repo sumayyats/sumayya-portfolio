@@ -14,6 +14,8 @@ export const caseStudies: CaseStudy[] = [
   // ─────────────────────────────────────────────────────────────── ASTA ──
   {
     slug: "asta",
+    logo: "/images/asta/logo.png",
+    mark: "/images/asta/mark.png",
     title: "ASTA",
     subtitle: "Redesigning a school's online registration",
     year: "2023",
@@ -134,6 +136,8 @@ For many families, this site is their first real contact with the school. Every 
   // ─────────────────────────────────────────────────────────── BINAPANI ──
   {
     slug: "binapani",
+    logo: "/images/binapani/logo.png",
+    mark: "/images/binapani/mark.png",
     title: "Kyros by Binapani",
     subtitle: "A visual scheduling app for autistic children",
     year: "2025–26",
@@ -357,6 +361,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
   // ─────────────────────────────────────────────────────────── GUT-SKIN ──
   {
     slug: "gut-skin",
+    logo: "/images/gut-skin/logo.png",
+    mark: "/images/gut-skin/mark.png",
     title: "Gut-Skin",
     subtitle: "A holistic companion for skin and gut health",
     year: "2026",

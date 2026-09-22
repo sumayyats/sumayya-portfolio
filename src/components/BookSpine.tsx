@@ -94,7 +94,12 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       style={{ width: projW, height: geo.height + 12, perspective: PERSPECTIVE }}
       transition={{ type: "spring", stiffness: 260, damping: 30 }}
     >
-      <HoverLabel title={study.title} meta={study.year} accent />
+      <HoverLabel
+        title={study.title}
+        meta={study.year}
+        teaser={study.teaser}
+        accent
+      />
       <CastShadow />
       <Book3D
         geo={geo}
@@ -118,12 +123,32 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
             >
               {study.title}
             </span>
-            <span
-              className="font-mono text-[9px] tracking-widest"
-              style={{ color: `color-mix(in srgb, ${light} 74%, transparent)` }}
-            >
-              {study.year}
-            </span>
+            {study.mark ? (
+              <span
+                aria-hidden="true"
+                className="shrink-0"
+                style={{
+                  width: Math.round(geo.spineW * 0.46),
+                  height: Math.round(geo.spineW * 0.46),
+                  background: `color-mix(in srgb, ${light} 92%, transparent)`,
+                  WebkitMaskImage: `url(${study.mark})`,
+                  maskImage: `url(${study.mark})`,
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
+                }}
+              />
+            ) : (
+              <span
+                className="font-mono text-[9px] tracking-widest"
+                style={{ color: `color-mix(in srgb, ${light} 74%, transparent)` }}
+              >
+                {study.year}
+              </span>
+            )}
           </div>
         }
         cover={
@@ -150,27 +175,38 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
 function HoverLabel({
   title,
   meta,
+  teaser,
   accent = false,
 }: {
   title: string;
   meta: string;
+  teaser?: string;
   accent?: boolean;
 }) {
   return (
     <span
       aria-hidden="true"
-      className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full border border-edge bg-paper px-4 py-1.5 opacity-0 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
+      className={`pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-2xl border border-edge bg-paper px-4 opacity-0 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${
+        teaser ? "py-2" : "py-1.5"
+      }`}
     >
-      <span className="font-display text-[13px] leading-none tracking-tight text-ink">
-        {title}
+      <span className="flex items-baseline gap-2">
+        <span className="font-display text-[13px] leading-none tracking-tight text-ink">
+          {title}
+        </span>
+        <span
+          className={`font-mono text-[10px] uppercase tracking-wide ${
+            accent ? "text-accent" : "text-ink-soft"
+          }`}
+        >
+          {meta}
+        </span>
       </span>
-      <span
-        className={`ml-2 font-mono text-[10px] uppercase tracking-wide ${
-          accent ? "text-accent" : "text-ink-soft"
-        }`}
-      >
-        {meta}
-      </span>
+      {teaser && (
+        <span className="mt-1 block text-[12px] leading-snug text-ink-soft">
+          {teaser}
+        </span>
+      )}
     </span>
   );
 }
