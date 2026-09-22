@@ -52,10 +52,11 @@ export type CaseStudyVisual = {
   };
   /**
    * How the frames are laid out.
-   * `phone` (default) crops each to a phone screen; `pairs` stacks before over
-   * after with an arrow between; `wide` keeps each image's natural ratio.
+   * `phone` (default) crops each to a phone screen; `tablet` to a tablet one;
+   * `pairs` stacks before over after with an arrow between; `wide` keeps each
+   * image's natural ratio.
    */
-  shape?: "phone" | "pairs" | "wide";
+  shape?: "phone" | "tablet" | "pairs" | "wide";
 };
 
 export type CaseStudyPrototype = {

@@ -7,9 +7,15 @@ import type { CaseStudyVisual } from "@/content/types";
 import { useLightbox, type LightboxItem } from "@/components/Lightbox";
 import { useSound } from "@/lib/sound";
 
-// Phone screens share the iPhone 15 canvas ratio (393 × 852).
+// Screens share their device's canvas ratio (iPhone 15 / iPad).
 const PHONE_RATIO = "393 / 852";
 const PHONE_TALL = 852 / 393;
+const TABLET_RATIO = "834 / 1194";
+const TABLET_TALL = 1194 / 834;
+const ratioOf = (shape?: string) =>
+  shape === "tablet" ? TABLET_RATIO : PHONE_RATIO;
+const tallOf = (shape?: string) =>
+  shape === "tablet" ? TABLET_TALL : PHONE_TALL;
 
 /**
  * On a book page, height is the scarce dimension: cap a figure's width so its
@@ -264,7 +270,7 @@ export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
                   <span
                     key={f.src}
                     className="relative block h-full overflow-hidden rounded-[10%] border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_10px_20px_-16px_rgba(0,0,0,0.5)]"
-                    style={{ aspectRatio: PHONE_RATIO }}
+                    style={{ aspectRatio: ratioOf(visual.shape) }}
                   >
                     <Image
                       src={f.src}
@@ -342,9 +348,10 @@ function ScreenStrip({
   // screen stays legible in a narrow column
   const cols = n <= 4 ? n : Math.ceil(n / 2);
   const rows = Math.ceil(n / cols);
+  const tall = tallOf(visual.shape);
   const maxWidth = compact
-    ? bookMaxWidth((rows * PHONE_TALL) / cols, rows * 3)
-    : `min(100%, ${cols * 190}px)`;
+    ? bookMaxWidth((rows * tall) / cols, rows * 3)
+    : `min(100%, ${cols * (visual.shape === "tablet" ? 230 : 190)}px)`;
   return (
     <div
       className="mx-auto grid gap-2"
@@ -498,6 +505,7 @@ function Screen({
   cols,
   compact,
   onOpen,
+  ratio = PHONE_RATIO,
 }: {
   frame: { src: string; label?: string };
   index: number;
@@ -506,6 +514,7 @@ function Screen({
   cols: number;
   compact: boolean;
   onOpen: (i: number) => void;
+  ratio?: string;
 }) {
   return (
     <>
@@ -514,7 +523,7 @@ function Screen({
         onClick={() => onOpen(index)}
         aria-label={`Enlarge screen ${index + 1} of ${total}${frame.label ? `: ${frame.label}` : ""}`}
         className="relative block w-full cursor-zoom-in overflow-hidden rounded-[9%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
-        style={{ aspectRatio: PHONE_RATIO }}
+        style={{ aspectRatio: ratio }}
       >
         <Image
           src={frame.src}
