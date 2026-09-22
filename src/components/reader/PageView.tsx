@@ -76,7 +76,7 @@ function TitlePage({ study }: { study: CaseStudy }) {
             alt=""
             fill
             sizes="(min-width: 640px) 50vw, 100vw"
-            className="object-contain object-bottom"
+            className="object-contain object-center"
             priority
           />
         </div>

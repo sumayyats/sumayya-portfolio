@@ -271,7 +271,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
     cover: {
       image: "/images/gut-skin/cover.png",
       kicker: "three rounds of testing",
-      mockup: "/images/gut-skin/cover-mockup.png",
+      mockup: "/images/gut-skin/cover-mockup-2.png",
     },
     sections: [
       {
@@ -365,13 +365,13 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
     visuals: [
       {
         id: "gs-axis",
-        src: "/images/gut-skin/gut-skin-axis.png",
+        src: "/images/gut-skin/gut-skin-axis-2.png",
         sectionId: "challenge",
         alt: "A diagram of the gut-skin axis and how AI works in the app.",
         caption: "The gut-skin axis, and how the AI works.",
         shape: "wide",
         frames: [
-          { src: "/images/gut-skin/gut-skin-axis.png", width: 1800, height: 1308, label: "The gut-skin axis" },
+          { src: "/images/gut-skin/gut-skin-axis-2.png", width: 1800, height: 740, label: "The gut-skin axis" },
           { src: "/images/gut-skin/how-ai-works.png", width: 1800, height: 646, label: "How the AI works" },
         ],
       },
