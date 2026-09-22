@@ -23,7 +23,14 @@ export function figmaEmbedUrl(url: string): string {
  * Shows a skeleton while loading and falls back to a plain link if the frame
  * never loads (blocked embeds, offline) — it must never break the layout.
  */
-export function PrototypeEmbed({ study }: { study: CaseStudy }) {
+export function PrototypeEmbed({
+  study,
+  bare = false,
+}: {
+  study: CaseStudy;
+  /** Rendered as its own pane: no divider or top margin. */
+  bare?: boolean;
+}) {
   const proto = study.prototype;
   const { click } = useSound();
   const ref = useRef<HTMLDivElement>(null);
@@ -59,11 +66,21 @@ export function PrototypeEmbed({ study }: { study: CaseStudy }) {
     <section
       ref={ref}
       id="prototype"
-      className="mt-16 border-t border-[color-mix(in_srgb,var(--ink)_10%,transparent)] pt-10"
+      className={
+        bare
+          ? ""
+          : "mt-16 border-t border-[color-mix(in_srgb,var(--ink)_10%,transparent)] pt-10"
+      }
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
-        Try the prototype
-      </p>
+      {bare ? (
+        <h2 className="mb-2 font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight tracking-tight text-ink">
+          Try the prototype
+        </h2>
+      ) : (
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+          Try the prototype
+        </p>
+      )}
       <p className="mt-2 max-w-[52ch] text-[15px] leading-relaxed text-ink-soft">
         Tap through the clickable Figma prototype here, or open it in Figma.
       </p>

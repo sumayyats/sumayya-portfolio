@@ -108,7 +108,7 @@ export function Reader({ study }: { study: CaseStudy }) {
           </div>
         </header>
 
-        <main className={view === "flip" ? "pt-3 pb-4" : "pt-8"}>
+        <main className={view === "flip" ? "pt-3 pb-4" : ""}>
           {view === "scroll" ? (
             <ReaderScroll study={study} />
           ) : (
