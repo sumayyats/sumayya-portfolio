@@ -516,15 +516,15 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       {
         id: "gs-workshop",
         title: "Co-creation workshop",
-        src: "/images/gut-skin/workshop-card-sort.png",
+        src: "/images/gut-skin/workshop-miro.png",
         sectionId: "process",
         alt: "Workshop artefacts: card sort and prioritisation matrix.",
         caption: "Workshop: card sorting and a prioritisation matrix.",
         shape: "wide",
         frames: [
+          { src: "/images/gut-skin/workshop-miro.png", width: 1800, height: 1307, label: "Dot voting in Miro" },
           { src: "/images/gut-skin/workshop-card-sort.png", width: 1800, height: 1258, label: "Card sort" },
           { src: "/images/gut-skin/workshop-prioritisation.png", width: 1800, height: 886, label: "Prioritisation" },
-          { src: "/images/gut-skin/workshop-miro.png", width: 1800, height: 1307, label: "Dot voting in Miro" },
         ],
       },
       {
