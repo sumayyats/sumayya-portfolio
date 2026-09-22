@@ -128,12 +128,9 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
   );
 }
 
+/* Year, title, subtitle and the study link. Role / Team / Scope are not
+   repeated here: the Overview section already states them. */
 function RailMeta({ study }: { study: CaseStudy }) {
-  const rows: [string, string][] = [
-    ["Role", study.role],
-    ["Team", study.team],
-    ["Scope", study.scope],
-  ];
   return (
     <div>
       <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
@@ -144,17 +141,6 @@ function RailMeta({ study }: { study: CaseStudy }) {
       </h1>
       <p className="mt-1 text-[15px] text-ink-soft">{study.subtitle}</p>
       <StudyLink study={study} className="mt-3 text-[11px]" />
-
-      <dl className="mt-5 flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--ink)_12%,transparent)] pt-4">
-        {rows.map(([k, v]) => (
-          <div key={k}>
-            <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
-              {k}
-            </dt>
-            <dd className="mt-0.5 text-[13px] leading-snug text-ink">{v}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
   );
 }
