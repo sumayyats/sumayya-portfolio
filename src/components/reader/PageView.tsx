@@ -70,28 +70,9 @@ function TitlePage({ study }: { study: CaseStudy }) {
   );
 }
 
-/** Role / Team / Scope and the study link, at the top of the Overview page. */
+/** The study link (store / live site / prototype) at the top of the Overview page. */
 function MetaBlock({ study }: { study: CaseStudy }) {
-  const rows: [string, string][] = [
-    ["Role", study.role],
-    ["Team", study.team],
-    ["Scope", study.scope],
-  ];
-  return (
-    <div className="mb-[1.2em] border-b border-[color-mix(in_srgb,var(--ink)_14%,transparent)] pb-[1.2em]">
-      <StudyLink study={study} className="book-small mb-[1em]" />
-      <dl className="grid grid-cols-1 gap-[0.7em]">
-        {rows.map(([k, v]) => (
-          <div key={k}>
-            <dt className="book-small font-mono uppercase tracking-[0.14em] text-ink-soft">
-              {k}
-            </dt>
-            <dd className="book-meta mt-[0.15em] leading-snug text-ink">{v}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  );
+  return <StudyLink study={study} className="book-small mb-[1.4em]" />;
 }
 
 function EndPage({ study }: { study: CaseStudy }) {

@@ -8,7 +8,7 @@ export type Page =
       sectionId: string;
       title: string;
       showTitle: boolean;
-      /** Role / Team / Scope and the study link (first page of the book's first section). */
+      /** The study link (first page of the book's first section). */
       showMeta: boolean;
       blocks: Block[];
     }
@@ -27,7 +27,7 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
   // a 500×650 page with 8% padding; both figures carry a small margin for
   // font hinting at phone sizes.
   const budget = 18.3 / scale; // line-units per page
-  const cpl = 44 / scale; // characters per line
+  const cpl = 46 / scale; // characters per line
 
   const pages: Page[] = [{ kind: "title" }];
 
@@ -35,7 +35,7 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
     const blocks = parseMarkdown(section.body);
     let current: Block[] = [];
     let cost = 2.6; // heading
-    if (si === 0) cost += metaCost(study, cpl);
+    if (si === 0) cost += metaCost(study);
     let first = true;
 
     const flush = () => {
@@ -72,19 +72,9 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
   return pages;
 }
 
-/**
- * Line cost of the meta block (link + Role / Team / Scope) drawn at the
- * smaller `book-meta` size, so it wraps at ~1.3× the body's characters per
- * line and each line is ~0.8 of a body line.
- */
-function metaCost(study: CaseStudy, cpl: number): number {
-  const metaCpl = cpl * 1.3;
-  const rows = [study.role, study.team, study.scope];
-  const lines = rows.reduce(
-    (n, t) => n + 0.7 + Math.ceil(t.length / metaCpl) * 0.8 + 0.3,
-    0
-  );
-  return lines + (study.link ? 1.0 : 0) + 1.6; // + rule and bottom margin
+/** Line cost of the study link row at the top of the Overview page. */
+function metaCost(study: CaseStudy): number {
+  return study.link ? 1.6 : 0;
 }
 
 /**
