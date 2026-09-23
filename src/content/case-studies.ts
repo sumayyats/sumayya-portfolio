@@ -791,11 +791,25 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
  * Behance case study in a new tab. No case study page on this site.
  */
 export const externalBooks: ExternalBook[] = [
-  { slug: "halodoc", title: "Halodoc: Health Tech App", year: "2021", externalUrl: "https://www.behance.net/gallery/131979515/Halodoc-Health-Tech-App-UXUI-Case-Study" },
+  {
+    slug: "halodoc",
+    title: "Halodoc: Health Tech App",
+    year: "2021",
+    externalUrl:
+      "https://medium.com/design-bootcamp/redesign-halodocs-booking-appointment-flow-eaa0c3b425e2?sharedUserId=sumayyatsabitah",
+    note: "Publication on Bootcamp Medium",
+  },
   { slug: "garmin-heuristic", title: "Heuristic Evaluation: Garmin Connect", year: "2025", externalUrl: "https://www.behance.net/gallery/245237533/Heuristic-Evaluation-Garmin-Connect" },
   { slug: "tiket-forum", title: "Tiket.com Travel App: Forum Feature", year: "2023", externalUrl: "https://www.behance.net/gallery/236923431/Tiketcom-Travel-App-Forum-Feature" },
   { slug: "cctv-dashboard", title: "AI Face Recognition CCTV Dashboard", year: "2022", externalUrl: "https://www.behance.net/gallery/236918417/AI-Face-Recognition-CCTV-Dashboard" },
-  { slug: "grab-concept", title: "Grab Improvement Concept", year: "2022", externalUrl: "https://www.behance.net/gallery/142122325/Grab-Improvement-Concept-UX-Case-Study" },
+  {
+    slug: "grab-concept",
+    title: "Grab Improvement Concept",
+    year: "2022",
+    externalUrl:
+      "https://medium.com/design-bootcamp/case-study-improvement-on-grab-booking-experience-1be8310c4c20?sharedUserId=sumayyatsabitah",
+    note: "Publication on Bootcamp Medium",
+  },
   { slug: "lion-air", title: "Lion Air: Flight Booking", year: "2021", externalUrl: "https://www.behance.net/gallery/131938349/Lion-Air-Flight-Booking-Ticket-Mobile-App" },
   { slug: "e-township", title: "E-Township S Residence", year: "2022", externalUrl: "https://www.behance.net/gallery/151959117/E-Township-S-Residence-Design-Concept" },
   { slug: "death-of-democracy", title: "Death of Democracy Poster", year: "2025", externalUrl: "https://www.behance.net/gallery/236076629/Death-of-Democracy-Poster" },

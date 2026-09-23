@@ -9,7 +9,15 @@ export type ShelfItem =
       year?: string;
       study: CaseStudy;
     }
-  | { kind: "external"; slug: string; title: string; url: string; year?: string };
+  | {
+      kind: "external";
+      slug: string;
+      title: string;
+      url: string;
+      year?: string;
+      /** Where it lives, when it isn't Behance. */
+      note?: string;
+    };
 
 /**
  * Sort key from a year label: the year the work finished, then the year it
@@ -59,6 +67,7 @@ export const shelfItems: ShelfItem[] = [
         title: b.title,
         url: b.externalUrl,
         year: b.year,
+        note: b.note,
       })
     )
     .sort(newestFirst),

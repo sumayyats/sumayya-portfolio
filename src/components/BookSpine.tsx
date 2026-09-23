@@ -68,7 +68,9 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           label.place();
         }}
         {...watch}
-        aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens the case study on Behance in a new tab`}
+        aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens ${
+          item.note ? "the publication" : "the case study on Behance"
+        } in a new tab`}
         className="group relative z-0 mx-0 flex shrink-0 snap-center items-end justify-start self-end outline-none transition-[margin] duration-200 ease-out [--lift:0px] hover:z-20 hover:mx-2 hover:[--lift:-9px] focus-visible:z-20 focus-visible:mx-2 focus-visible:[--lift:-9px]"
         style={{ width: projW, height: geo.height + 10, perspective: PERSPECTIVE }}
       >
@@ -76,6 +78,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           at={label.at}
           title={item.title}
           meta={item.year ? `Optional read ↗ · ${item.year}` : "Optional read ↗"}
+          teaser={item.note}
         />
         <CastShadow />
         <Book3D
