@@ -79,6 +79,8 @@ export type CaseStudy = {
   roleDetail?: string[];
   team: string;
   scope: string;
+  /** What the scope covered, revealed the same way as `roleDetail`. */
+  scopeDetail?: string[];
   /** Short metadata line (bia/farisazhar style), verbatim from the markdown. */
   meta: string;
   /** 2–3 sentences, shown when the book is opened on the shelf. */

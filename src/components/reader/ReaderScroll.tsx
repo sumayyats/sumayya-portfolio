@@ -199,7 +199,7 @@ function Orientation({ study }: { study: CaseStudy }) {
   const rows: { k: string; v: string; detail?: string[] }[] = [
     { k: "Role", v: study.role, detail: study.roleDetail },
     { k: "Team", v: study.team },
-    { k: "Scope", v: study.scope },
+    { k: "Scope", v: study.scope, detail: study.scopeDetail },
   ];
   return (
     <div className="mx-auto max-w-[36rem] lg:mx-0">
@@ -231,7 +231,7 @@ function Orientation({ study }: { study: CaseStudy }) {
               {k}
             </dt>
             <dd className="mt-0.5 text-[13px] leading-snug text-ink">
-              {detail ? <RoleDetail value={v} detail={detail} /> : v}
+              {detail ? <MetaDetail value={v} detail={detail} /> : v}
             </dd>
           </div>
         ))}
@@ -272,11 +272,11 @@ function Orientation({ study }: { study: CaseStudy }) {
 }
 
 /**
- * A short role line that opens into what it covered. Hover on a pointer,
- * focus on a keyboard, tap on a phone — a hover-only disclosure would hide
- * the detail from touch entirely.
+ * A short role or scope line that opens into what it covered. Hover on a
+ * pointer, focus on a keyboard, tap on a phone — a hover-only disclosure
+ * would hide the detail from touch entirely.
  */
-function RoleDetail({ value, detail }: { value: string; detail: string[] }) {
+function MetaDetail({ value, detail }: { value: string; detail: string[] }) {
   const [open, setOpen] = useState(false);
   return (
     <div
