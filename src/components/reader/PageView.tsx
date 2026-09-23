@@ -152,8 +152,9 @@ function PrototypePage({ study }: { study: CaseStudy }) {
         rel="noopener noreferrer"
         onClick={click}
         aria-label="Open the prototype in Figma"
-        className="group relative mt-[1.5em] flex w-full items-center justify-center overflow-hidden rounded-[6%] bg-cover bg-center py-[6%]"
+        className="group relative mt-[1.5em] flex w-full items-center justify-center overflow-hidden bg-cover bg-center py-[6%]"
         style={{
+          borderRadius: 6,
           aspectRatio: "16 / 11",
           backgroundImage: study.prototype?.background
             ? `url(${study.prototype.background})`
@@ -163,8 +164,8 @@ function PrototypePage({ study }: { study: CaseStudy }) {
       >
         {study.prototype?.poster && (
           <div
-            className="relative h-full overflow-hidden rounded-[9%] shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)] transition-transform duration-200 group-hover:-translate-y-0.5"
-            style={{ aspectRatio: "393 / 852" }}
+            className="relative h-full overflow-hidden shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)] transition-transform duration-200 group-hover:-translate-y-0.5"
+            style={{ borderRadius: 6, aspectRatio: "393 / 852" }}
           >
             <Image
               src={study.prototype.poster}
