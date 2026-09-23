@@ -137,6 +137,9 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         title={study.title}
         meta={study.year}
         teaser={study.teaser}
+        preview={study.cover.mockup}
+        // a mockup sits on transparency: fit it rather than crop the device
+        previewFit="contain"
         accent
       />
       <CastShadow />
@@ -270,6 +273,7 @@ function HoverLabel({
   meta,
   teaser,
   preview,
+  previewFit = "cover",
   accent = false,
 }: {
   at: { x: number; y: number } | null;
@@ -278,6 +282,8 @@ function HoverLabel({
   teaser?: string;
   /** Cover of the linked publication, so the click is not a leap of faith. */
   preview?: string;
+  /** `contain` for a mockup on transparency, `cover` for a flat screenshot. */
+  previewFit?: "cover" | "contain";
   accent?: boolean;
 }) {
   if (!at) return null;
@@ -303,7 +309,7 @@ function HoverLabel({
               alt=""
               fill
               sizes="56px"
-              className="object-cover"
+              className={previewFit === "contain" ? "object-contain p-1" : "object-cover"}
             />
           </span>
         )}
@@ -334,20 +340,20 @@ function HoverLabel({
 }
 
 /**
- * Soft grounding shadow on the shelf (aiwithremy-style): always present,
- * blurred and slightly forward, and it spreads as the book lifts on hover.
+ * Grounding shadow on the shelf. Hidden until the book is hovered or focused,
+ * so the row reads clean and the shadow marks the one you are pointing at.
  */
 function CastShadow() {
   return (
     <>
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-[7px] left-1/2 h-4 w-[118%] -translate-x-1/2 rounded-[50%] opacity-70 blur-[9px] transition-all duration-200 ease-out group-hover:h-5 group-hover:opacity-90 group-hover:blur-[12px]"
+        className="pointer-events-none absolute -bottom-[7px] left-1/2 h-5 w-[118%] -translate-x-1/2 rounded-[50%] opacity-0 blur-[12px] transition-opacity duration-200 ease-out group-hover:opacity-90 group-focus-visible:opacity-90"
         style={{ background: "rgba(24,20,15,0.28)" }}
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-[3px] left-1/2 h-2 w-[86%] -translate-x-1/2 rounded-[50%] opacity-80 blur-[3px] transition-all duration-200 ease-out group-hover:opacity-60"
+        className="pointer-events-none absolute -bottom-[3px] left-1/2 h-2 w-[86%] -translate-x-1/2 rounded-[50%] opacity-0 blur-[3px] transition-opacity duration-200 ease-out group-hover:opacity-60 group-focus-visible:opacity-60"
         style={{ background: "rgba(24,20,15,0.34)" }}
       />
     </>
