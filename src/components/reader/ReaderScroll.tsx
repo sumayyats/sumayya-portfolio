@@ -63,14 +63,18 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
   return (
     <div className="lg:grid lg:h-[calc(100dvh-3.5rem)] lg:grid-cols-[minmax(230px,290px)_minmax(190px,240px)_minmax(0,1fr)] lg:overflow-hidden">
       {/* ── 1 · orientation ── */}
-      <aside className="border-b border-edge px-[max(1.25rem,5vw)] py-8 lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-7 lg:py-9">
+      <aside
+        // no-scrollbar: the reading pane is the one that visibly scrolls, but
+        // a short window must not clip "Back to the shelf" off the bottom
+        className="no-scrollbar border-b border-edge px-[max(1.25rem,5vw)] py-8 lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-7 lg:py-9"
+      >
         <Orientation study={study} />
       </aside>
 
       {/* ── 2 · index ── */}
       <nav
         aria-label="Sections"
-        className="sticky top-14 z-20 border-b border-edge bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] backdrop-blur lg:static lg:overflow-y-auto lg:border-b-0 lg:border-r lg:bg-transparent lg:px-5 lg:py-9 lg:backdrop-blur-none"
+        className="sticky top-14 z-20 border-b border-edge bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] backdrop-blur lg:static lg:flex lg:flex-col lg:justify-end lg:overflow-hidden lg:border-b-0 lg:border-r lg:bg-transparent lg:px-5 lg:py-9 lg:backdrop-blur-none"
       >
         <p className="hidden px-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft lg:block">
           Contents

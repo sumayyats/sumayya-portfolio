@@ -196,8 +196,6 @@ For many families, this site is their first real contact with the school. Every 
           poster: "/images/asta/homepage-walkthrough-poster.png",
           width: 960,
           height: 560,
-          // heavy desktop capture: it loads when the viewer presses play
-          autoplay: false,
         },
       },
       {
@@ -224,8 +222,6 @@ For many families, this site is their first real contact with the school. Every 
           poster: "/images/asta/programme-walkthrough-poster.png",
           width: 960,
           height: 560,
-          // heavy desktop capture: it loads when the viewer presses play
-          autoplay: false,
         },
       },
       {
