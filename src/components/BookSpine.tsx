@@ -152,7 +152,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           <div className="absolute inset-0 flex flex-col items-center justify-between py-5">
             <span
               className="relative h-4 w-[3px] rounded-full"
-              style={{ background: p.accent }}
+              style={{ background: p.spineTick ?? p.accent }}
             />
             <span
               className="relative min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-3 text-center font-display leading-none tracking-tight"

@@ -548,6 +548,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       paper: "#F3EFE7",
       ink: "#2A2A22",
       accent: "#8A5A3C",
+      // the accent is a brown on a brown spine: the tick vanished
+      spineTick: "#A3BE8C",
       darkPaper: "#14130E",
       darkInk: "#ECE6DA",
       darkAccent: "#C08A63",

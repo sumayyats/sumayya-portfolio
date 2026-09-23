@@ -3,6 +3,11 @@ export type Palette = {
   paper: string;
   ink: string;
   accent: string;
+  /**
+   * The tick at the head of the spine. Defaults to `accent`; set it when the
+   * accent sits too close to the cloth colour to be seen against it.
+   */
+  spineTick?: string;
   darkPaper: string;
   darkInk: string;
   darkAccent: string;
