@@ -14,7 +14,6 @@ export default function Home() {
           Sumayya&apos;s case studies: selected works
         </h1>
         <p className="mx-auto mt-1 max-w-[min(92vw,52ch)] font-body text-[15px] text-ink-soft">
-          {/* TODO: one-line positioning statement. */}
           A shelf of UX case studies: pick one up to read.
         </p>
       </header>

@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sumayya's case studies
 
-## Getting Started
+A UX portfolio built as a bookshelf. Each case study is a book: pick one off
+the shelf and read it either as a page-turning book or as a scrolling article.
 
-First, run the development server:
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · Framer Motion.
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What it is |
+| --- | --- |
+| `src/content/case-studies.ts` | Every case study: copy, palette, figures, links. The only place content lives. |
+| `src/content/types.ts` | The shape of a case study, documented field by field. |
+| `src/components/Shelf.tsx` | The shelf: scrolling, keyboard, the pull-forward animation. |
+| `src/components/BookSpine.tsx` · `Book3D.tsx` · `book-geometry.ts` | One book as a CSS 3D cuboid, and the per-index geometry that varies them. |
+| `src/components/BookCover.tsx` | The jacket, used on the shelf, on the detail card and as the book's first page. |
+| `src/components/reader/` | The reader: `ReaderFlip` (page-turning), `ReaderScroll` (article), `Figure`, `PageView`, `paginate`. |
+| `public/images/<slug>/` | That study's exports. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Two things worth knowing before you edit
 
-## Learn More
+**Content is the author's own words.** Copy in `summary`, `sections[].body`,
+`role`, `team`, `scope`, `alt` and `caption` comes from the source markdown.
+Don't rephrase it, and don't invent metrics, dates or names.
 
-To learn more about Next.js, take a look at the following resources:
+**The book's pagination is deterministic.** `reader/paginate.ts` decides page
+breaks from an abstract line-cost model, never from measuring the DOM, so the
+same content always produces the same spreads. If you add a block type, give it
+a cost there too — otherwise pages silently overflow. After changing anything
+that affects page height, walk every page and check that no `.min-h-0` has
+`scrollHeight > clientHeight`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Figures are sized in `cqw` against a budget (`BOOK_BUDGET` in `Figure.tsx`) for
+the same reason: a figure has to fit the page at any book size.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Assets
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Screen recordings live in `public/images/asta/`. They are large (26MB and
+38MB); if the repository gets heavy, move them to a CDN and point the `video`
+fields at the URLs.

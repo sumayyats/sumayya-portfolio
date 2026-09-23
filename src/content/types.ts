@@ -119,7 +119,7 @@ export type ExternalBook = {
   slug: string;
   title: string;
   externalUrl: string;
-  /** Optional publication year, shown in the hover label. TODO: supply. */
+  /** Publication year, shown in the hover label. */
   year?: string;
   /** Where it lives, when it isn't Behance — shown on hover. */
   note?: string;

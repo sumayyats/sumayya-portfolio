@@ -36,22 +36,23 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
 ) {
   const geo = bookGeometry(index, item.kind, scale);
   const projW = projectedWidth(geo);
-  const label = useShelfLabel();
+  const host = useRef<HTMLElement | null>(null);
+  const { at, place, clear } = useShelfLabel(host);
 
   // keep the caller's ref working while we hold one of our own to measure
   const attach = useCallback(
     (el: HTMLElement | null) => {
-      label.host.current = el;
+      host.current = el;
       if (typeof ref === "function") ref(el);
       else if (ref) (ref as React.RefObject<HTMLElement | null>).current = el;
     },
-    [label.host, ref]
+    [host, ref]
   );
   const watch = {
-    onPointerEnter: label.place,
-    onPointerMove: label.place,
-    onPointerLeave: label.clear,
-    onBlur: label.clear,
+    onPointerEnter: place,
+    onPointerMove: place,
+    onPointerLeave: clear,
+    onBlur: clear,
   };
 
   if (item.kind === "external") {
@@ -66,7 +67,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         data-index={index}
         onFocus={() => {
           onFocusItem(index);
-          label.place();
+          place();
         }}
         {...watch}
         aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens ${
@@ -76,7 +77,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         style={{ width: projW, height: geo.height + 10, perspective: PERSPECTIVE }}
       >
         <HoverLabel
-          at={label.at}
+          at={at}
           title={item.title}
           meta={item.year ? `Optional read ↗ · ${item.year}` : "Optional read ↗"}
           teaser={item.note}
@@ -123,7 +124,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       data-index={index}
       onFocus={() => {
         onFocusItem(index);
-        label.place();
+        place();
       }}
       {...watch}
       onClick={() => onOpen(study.slug)}
@@ -133,7 +134,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
       transition={{ type: "spring", stiffness: 260, damping: 30 }}
     >
       <HoverLabel
-        at={label.at}
+        at={at}
         title={study.title}
         meta={study.year}
         teaser={study.teaser}
@@ -226,9 +227,12 @@ function CoverFace({ study, geo }: { study: CaseStudy; geo: BookGeometry }) {
 /** The widest the label is allowed to get, so it can be kept on screen. */
 const LABEL_MAX = 280;
 
-/** Tracks where a book is on screen, so its label can be drawn over the page. */
-function useShelfLabel() {
-  const host = useRef<HTMLElement | null>(null);
+/**
+ * Tracks where a book is on screen, so its label can be drawn over the page.
+ * The caller owns the ref: the component writes to it from a callback ref, and
+ * a ref created here would look to the compiler like a captured local.
+ */
+function useShelfLabel(host: React.RefObject<HTMLElement | null>) {
   const [at, setAt] = useState<{ x: number; y: number } | null>(null);
   const place = useCallback(() => {
     const r = host.current?.getBoundingClientRect();
@@ -241,7 +245,7 @@ function useShelfLabel() {
         ? prev
         : next
     );
-  }, []);
+  }, [host]);
   const clear = useCallback(() => setAt(null), []);
 
   // the shelf can scroll under a resting cursor (wheel, snap, a neighbour
@@ -258,7 +262,7 @@ function useShelfLabel() {
     };
   }, [shown, place]);
 
-  return { host, at, place, clear };
+  return { at, place, clear };
 }
 
 /**

@@ -5,9 +5,8 @@ import type { CaseStudy, ExternalBook } from "./types";
  * and `caption` fields is taken verbatim (or assembled only from the author's
  * own phrases) from portfolio-case-studies.md. Do not rephrase or invent copy.
  *
- * Image `src` paths point at /public/images/<slug>/ and are placeholders until
- * the real Figma exports land. Each is marked with a TODO in the caption data
- * below where the export is still pending.
+ * Image `src` paths point at /public/images/<slug>/. A figure with no `width`
+ * or `frames` has no export yet and renders as a marked placeholder.
  */
 
 export const caseStudies: CaseStudy[] = [
