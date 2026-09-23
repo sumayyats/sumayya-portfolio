@@ -762,9 +762,9 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
           poster: "/images/gut-skin/story-poster.png",
           width: 472,
           height: 960,
-          // measured off the frame: the capture is the phone edge to edge,
-          // with a brown sliver down the right
-          crop: { top: 0, right: 1.4, bottom: 0, left: 0 },
+          // measured off a frame: brown backdrop shows as a 9px sliver down
+          // the left and 5px along the foot; the phone is flush right
+          crop: { top: 0.2, right: 0.2, bottom: 0.6, left: 2 },
         },
         frames: [
           { src: "/images/gut-skin/screens/story-1.png" },

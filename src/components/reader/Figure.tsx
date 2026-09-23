@@ -181,10 +181,14 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
     <div
       className="relative mx-auto overflow-hidden shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
       style={{
-        // A phone capture is cropped to the device itself, so the frame is the
-        // phone: its corner is 7.1% of the phone's width, which on this
-        // aspect is 3.25% of its height — a circle, not an ellipse.
-        borderRadius: wide ? SHOT_RADIUS : "7.1% / 3.25%",
+        // A phone capture is cropped to the device, so the frame is the phone
+        // and its corner has to match the device's. That corner is a squircle;
+        // a CSS radius is an ellipse, so it cannot trace one exactly. 18/9 is
+        // the tightest ellipse that still clips every pixel of the capture's
+        // backdrop out of the corners — measured against the frame, not
+        // guessed. Trimming a sliver of black bezel is invisible; falling
+        // short leaves brown showing.
+        borderRadius: wide ? SHOT_RADIUS : "18% / 9%",
         maxWidth: wide ? "100%" : 300,
         width: "100%",
         aspectRatio: `${v.width * (1 - (c.left + c.right) / 100)} / ${
