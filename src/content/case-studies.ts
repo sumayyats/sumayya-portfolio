@@ -798,10 +798,11 @@ export const externalBooks: ExternalBook[] = [
     externalUrl:
       "https://medium.com/design-bootcamp/redesign-halodocs-booking-appointment-flow-eaa0c3b425e2?sharedUserId=sumayyatsabitah",
     note: "Publication on Bootcamp Medium",
+    preview: "/images/external/halodoc.png",
   },
-  { slug: "garmin-heuristic", title: "Heuristic Evaluation: Garmin Connect", year: "2025", externalUrl: "https://www.behance.net/gallery/245237533/Heuristic-Evaluation-Garmin-Connect" },
-  { slug: "tiket-forum", title: "Tiket.com Travel App: Forum Feature", year: "2023", externalUrl: "https://www.behance.net/gallery/236923431/Tiketcom-Travel-App-Forum-Feature" },
-  { slug: "cctv-dashboard", title: "AI Face Recognition CCTV Dashboard", year: "2022", externalUrl: "https://www.behance.net/gallery/236918417/AI-Face-Recognition-CCTV-Dashboard" },
+  { slug: "garmin-heuristic", title: "Heuristic Evaluation: Garmin Connect", year: "2025", externalUrl: "https://www.behance.net/gallery/245237533/Heuristic-Evaluation-Garmin-Connect", preview: "/images/external/garmin-heuristic.png" },
+  { slug: "tiket-forum", title: "Tiket.com Travel App: Forum Feature", year: "2023", externalUrl: "https://www.behance.net/gallery/236923431/Tiketcom-Travel-App-Forum-Feature", preview: "/images/external/tiket-forum.png" },
+  { slug: "cctv-dashboard", title: "AI Face Recognition CCTV Dashboard", year: "2022", externalUrl: "https://www.behance.net/gallery/236918417/AI-Face-Recognition-CCTV-Dashboard", preview: "/images/external/cctv-dashboard.png" },
   {
     slug: "grab-concept",
     title: "Grab Improvement Concept",
@@ -809,10 +810,11 @@ export const externalBooks: ExternalBook[] = [
     externalUrl:
       "https://medium.com/design-bootcamp/case-study-improvement-on-grab-booking-experience-1be8310c4c20?sharedUserId=sumayyatsabitah",
     note: "Publication on Bootcamp Medium",
+    preview: "/images/external/grab-concept.png",
   },
-  { slug: "lion-air", title: "Lion Air: Flight Booking", year: "2021", externalUrl: "https://www.behance.net/gallery/131938349/Lion-Air-Flight-Booking-Ticket-Mobile-App" },
-  { slug: "e-township", title: "E-Township S Residence", year: "2022", externalUrl: "https://www.behance.net/gallery/151959117/E-Township-S-Residence-Design-Concept" },
-  { slug: "death-of-democracy", title: "Death of Democracy Poster", year: "2025", externalUrl: "https://www.behance.net/gallery/236076629/Death-of-Democracy-Poster" },
+  { slug: "lion-air", title: "Lion Air: Flight Booking", year: "2021", externalUrl: "https://www.behance.net/gallery/131938349/Lion-Air-Flight-Booking-Ticket-Mobile-App", preview: "/images/external/lion-air.png" },
+  { slug: "e-township", title: "E-Township S Residence", year: "2022", externalUrl: "https://www.behance.net/gallery/151959117/E-Township-S-Residence-Design-Concept", preview: "/images/external/e-township.png" },
+  { slug: "death-of-democracy", title: "Death of Democracy Poster", year: "2025", externalUrl: "https://www.behance.net/gallery/236076629/Death-of-Democracy-Poster", preview: "/images/external/death-of-democracy.png" },
 ];
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {

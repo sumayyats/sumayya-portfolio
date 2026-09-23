@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CaseStudy } from "@/content/types";
@@ -79,6 +80,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           title={item.title}
           meta={item.year ? `Optional read ↗ · ${item.year}` : "Optional read ↗"}
           teaser={item.note}
+          preview={item.preview}
         />
         <CastShadow />
         <Book3D
@@ -267,12 +269,15 @@ function HoverLabel({
   title,
   meta,
   teaser,
+  preview,
   accent = false,
 }: {
   at: { x: number; y: number } | null;
   title: string;
   meta: string;
   teaser?: string;
+  /** Cover of the linked publication, so the click is not a leap of faith. */
+  preview?: string;
   accent?: boolean;
 }) {
   if (!at) return null;
@@ -290,24 +295,39 @@ function HoverLabel({
         paddingBlock: teaser ? "0.5rem" : "0.375rem",
       }}
     >
-      {/* meta sits above the title as a kicker, the way the detail card
-          reads: long Behance titles wrap onto two lines, and inline meta
-          would be left stranded beside them */}
-      <span
-        className={`block font-mono text-[10px] uppercase tracking-wide ${
-          accent ? "text-accent" : "text-ink-soft"
-        }`}
-      >
-        {meta}
-      </span>
-      <span className="mt-0.5 block font-display text-[13px] leading-snug tracking-tight text-ink">
-        {title}
-      </span>
-      {teaser && (
-        <span className="mt-1 block text-[12px] leading-snug text-ink-soft">
-          {teaser}
+      <span className={preview ? "flex items-start gap-3" : "block"}>
+        {preview && (
+          <span className="relative block h-14 w-14 shrink-0 overflow-hidden rounded-[6px] border border-edge bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))]">
+            <Image
+              src={preview}
+              alt=""
+              fill
+              sizes="56px"
+              className="object-cover"
+            />
+          </span>
+        )}
+        <span className="block min-w-0">
+          {/* meta sits above the title as a kicker, the way the detail card
+              reads: long Behance titles wrap onto two lines, and inline meta
+              would be left stranded beside them */}
+          <span
+            className={`block font-mono text-[10px] uppercase tracking-wide ${
+              accent ? "text-accent" : "text-ink-soft"
+            }`}
+          >
+            {meta}
+          </span>
+          <span className="mt-0.5 block font-display text-[13px] leading-snug tracking-tight text-ink">
+            {title}
+          </span>
+          {teaser && (
+            <span className="mt-1 block text-[12px] leading-snug text-ink-soft">
+              {teaser}
+            </span>
+          )}
         </span>
-      )}
+      </span>
     </span>,
     document.body
   );

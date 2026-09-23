@@ -114,4 +114,6 @@ export type ExternalBook = {
   year?: string;
   /** Where it lives, when it isn't Behance — shown on hover. */
   note?: string;
+  /** Cover image from the publication, previewed on hover. */
+  preview?: string;
 };

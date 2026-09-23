@@ -17,6 +17,8 @@ export type ShelfItem =
       year?: string;
       /** Where it lives, when it isn't Behance. */
       note?: string;
+      /** Cover image from the publication, previewed on hover. */
+      preview?: string;
     };
 
 /**
@@ -68,6 +70,7 @@ export const shelfItems: ShelfItem[] = [
         url: b.externalUrl,
         year: b.year,
         note: b.note,
+        preview: b.preview,
       })
     )
     .sort(newestFirst),
