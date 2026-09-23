@@ -23,9 +23,6 @@ export default function Home() {
         <Shelf />
       </div>
 
-      <footer className="px-[max(1rem,8vw)] py-6 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
-        Three featured case studies · eight more on Behance
-      </footer>
     </main>
   );
 }
