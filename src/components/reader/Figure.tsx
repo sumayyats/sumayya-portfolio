@@ -228,7 +228,14 @@ function PlayButton({
  * full set in the lightbox, so a section reads as a short, scannable list
  * instead of a run of loose screens.
  */
-export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
+export function FigureCard({
+  visual,
+  span = true,
+}: {
+  visual: CaseStudyVisual;
+  /** Off on the Artifacts page, where a wide figure keeps to one column. */
+  span?: boolean;
+}) {
   const { open } = useLightbox();
   const { click } = useSound();
   const items = lightboxItems(visual);
@@ -246,7 +253,7 @@ export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
 
   return (
     <figure
-      className={`flex flex-col ${wide ? "sm:col-span-2" : ""}`}
+      className={`flex flex-col ${wide && span ? "sm:col-span-2" : ""}`}
     >
       {!ready ? (
         <Placeholder alt={visual.alt} />
@@ -319,6 +326,7 @@ export function FigureGallery({
   compactColumns = false,
   label = "Figures",
   layout = "grid",
+  spanWide = true,
 }: {
   visuals: CaseStudyVisual[];
   /** Single column (the xl side rail). */
@@ -327,6 +335,8 @@ export function FigureGallery({
   label?: string;
   /** `list` swaps the cards for compact rows (the Artifacts page offers both). */
   layout?: "grid" | "list";
+  /** Off on the Artifacts page, so the grid stays two columns throughout. */
+  spanWide?: boolean;
 }) {
   if (visuals.length === 0) return null;
   return (
@@ -349,7 +359,7 @@ export function FigureGallery({
         }`}
       >
         {visuals.map((v) => (
-          <FigureCard key={v.id} visual={v} />
+          <FigureCard key={v.id} visual={v} span={spanWide} />
         ))}
       </div>
       )}

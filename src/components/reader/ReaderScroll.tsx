@@ -186,6 +186,7 @@ function Artifacts({ study }: { study: CaseStudy }) {
           visuals={g.visuals}
           label={g.title}
           layout={layout}
+          spanWide={false}
         />
       ))}
     </article>
