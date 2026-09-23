@@ -181,7 +181,10 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
     <div
       className="relative mx-auto overflow-hidden shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
       style={{
-        borderRadius: wide ? SHOT_RADIUS : PHONE_RADIUS,
+        // A phone capture is cropped to the device itself, so the frame is the
+        // phone: its corner is 7.1% of the phone's width, which on this
+        // aspect is 3.25% of its height — a circle, not an ellipse.
+        borderRadius: wide ? SHOT_RADIUS : "7.1% / 3.25%",
         maxWidth: wide ? "100%" : 300,
         width: "100%",
         aspectRatio: `${v.width * (1 - (c.left + c.right) / 100)} / ${
@@ -275,9 +278,7 @@ export function FigureCard({
       {!ready ? (
         <Placeholder alt={visual.alt} />
       ) : visual.video ? (
-        <div className="overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] p-3">
-          <VideoFigure visual={visual} />
-        </div>
+        <VideoFigure visual={visual} />
       ) : (
         <button
           type="button"

@@ -249,3 +249,43 @@ body {
     animation: none;
   }
 }
+
+/* ── Cursors ──────────────────────────────────────────────────────────────
+   A quill for reading, a pointing hand for anything you can act on. The
+   hotspots are measured from the artwork: the quill's nib is at its foot
+   (60, 126) and the hand's fingertip at its crown (27, 2), so the pointer
+   sits where the drawing points rather than at its top-left corner.
+
+   Both are 128x128 — the largest a browser will take — and each rule keeps a
+   standard keyword after it, for the pointer types that ignore images and for
+   anyone whose browser refuses the file. Coarse pointers have no cursor at
+   all, so the whole thing is skipped there. */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: url("/cursors/quill.png") 60 126, auto;
+  }
+
+  a,
+  button,
+  summary,
+  label,
+  select,
+  video,
+  [role="button"],
+  [role="tab"] {
+    cursor: url("/cursors/hand.png") 27 2, pointer;
+  }
+
+  /* a disabled control is not actionable: leave it the default arrow */
+  button:disabled,
+  a:not([href]) {
+    cursor: url("/cursors/quill.png") 60 126, default;
+  }
+
+  /* text entry keeps its caret — the hand would hide where you are typing */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+}
