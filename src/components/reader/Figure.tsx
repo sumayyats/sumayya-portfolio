@@ -136,9 +136,11 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLVideoElement>(null);
 
+  const autoplay = v.autoplay !== false;
+
   useEffect(() => {
     const el = ref.current;
-    if (!el || reduce) return;
+    if (!el || reduce || !autoplay) return;
     const obs = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) void el.play().catch(() => {});
@@ -148,17 +150,22 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [reduce]);
+  }, [reduce, autoplay]);
 
   const c = v.crop ?? { top: 0, right: 0, bottom: 0, left: 0 };
   const scaleX = 100 / (100 - c.left - c.right);
   const scaleY = 100 / (100 - c.top - c.bottom);
 
+  // a desktop capture fills the figure card; a phone one stays phone-sized
+  const wide = v.width > v.height;
+
   return (
     <div
-      className="relative mx-auto overflow-hidden rounded-[9%/4%] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
+      className={`relative mx-auto overflow-hidden shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)] ${
+        wide ? "rounded-lg" : "rounded-[9%/4%]"
+      }`}
       style={{
-        maxWidth: 300,
+        maxWidth: wide ? "100%" : 300,
         width: "100%",
         aspectRatio: `${v.width * (1 - (c.left + c.right) / 100)} / ${
           v.height * (1 - (c.top + c.bottom) / 100)
@@ -173,7 +180,8 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
         muted
         loop
         playsInline
-        preload="metadata"
+        // a heavy capture fetches nothing until the viewer asks for it
+        preload={autoplay ? "metadata" : "none"}
         aria-label={visual.alt}
         // max-w-none: preflight caps video at 100%, which would undo the crop
         className="absolute max-w-none"

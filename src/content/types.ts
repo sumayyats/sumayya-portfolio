@@ -49,6 +49,8 @@ export type CaseStudyVisual = {
     height: number;
     /** Trim the recording's own backdrop, as a % of each side. */
     crop?: { top: number; right: number; bottom: number; left: number };
+    /** Off for heavy desktop captures: they wait for a click before loading. */
+    autoplay?: boolean;
   };
   /**
    * How the frames are laid out.

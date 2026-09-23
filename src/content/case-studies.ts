@@ -37,7 +37,11 @@ export const caseStudies: CaseStudy[] = [
       darkInk: "#ECE8DD",
       darkAccent: "#8FC08A",
     },
-    cover: { image: "/images/asta/cover.png", kicker: "before // after" },
+    cover: {
+      image: "/images/asta/cover.png",
+      mockup: "/images/asta/cover-mockup.png",
+      kicker: "before // after",
+    },
     sections: [
       {
         id: "overview",
@@ -178,6 +182,23 @@ For many families, this site is their first real contact with the school. Every 
         shape: "wide",
       },
       {
+        id: "asta-homepage-video",
+        title: "The homepage in use",
+        src: "/images/asta/homepage-walkthrough-poster.png",
+        sectionId: "decisions",
+        alt: "Screen recording scrolling through the live homepage.",
+        caption: "Screen recording of the live site.",
+        shape: "wide",
+        video: {
+          src: "/images/asta/homepage-walkthrough.mp4",
+          poster: "/images/asta/homepage-walkthrough-poster.png",
+          width: 960,
+          height: 560,
+          // heavy desktop capture: it loads when the viewer presses play
+          autoplay: false,
+        },
+      },
+      {
         id: "asta-programme",
         title: "Programme detail page",
         src: "/images/asta/programme-detail.png",
@@ -187,6 +208,23 @@ For many families, this site is their first real contact with the school. Every 
         alt: "The programme detail page grouping requirements into scannable cards with icons.",
         caption: "Programme detail page: requirements grouped into scannable cards, each with its own icon.",
         shape: "wide",
+      },
+      {
+        id: "asta-programme-video",
+        title: "The programme page in use",
+        src: "/images/asta/programme-walkthrough-poster.png",
+        sectionId: "decisions",
+        alt: "Screen recording scrolling through a live programme page.",
+        caption: "Screen recording of the live site.",
+        shape: "wide",
+        video: {
+          src: "/images/asta/programme-walkthrough.mp4",
+          poster: "/images/asta/programme-walkthrough-poster.png",
+          width: 960,
+          height: 560,
+          // heavy desktop capture: it loads when the viewer presses play
+          autoplay: false,
+        },
       },
       {
         id: "asta-form-success",
