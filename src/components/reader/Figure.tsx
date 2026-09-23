@@ -24,6 +24,13 @@ const tallOf = (shape?: string) =>
  * lines) and the page number take the rest.
  */
 const BOOK_BUDGET = 82;
+
+// Corner radii in px. A percentage radius stretches into an ellipse on a tall
+// frame, which is why a phone screen looked nothing like a phone; these are
+// the real thing at each size a screen is drawn.
+const PHONE_RADIUS = 24; // a device screen at figure size (~170px wide)
+const PHONE_RADIUS_SMALL = 12; // the same screen on a book page or a card
+const SHOT_RADIUS = 6; // a website screenshot
 const bookMaxWidth = (heightPerWidth: number, extra: number) =>
   `min(100%, ${Math.floor((BOOK_BUDGET - extra) / heightPerWidth)}cqw)`;
 
@@ -161,10 +168,9 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
 
   return (
     <div
-      className={`relative mx-auto overflow-hidden shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)] ${
-        wide ? "rounded-lg" : "rounded-[9%/4%]"
-      }`}
+      className="relative mx-auto overflow-hidden shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
       style={{
+        borderRadius: wide ? SHOT_RADIUS : PHONE_RADIUS,
         maxWidth: wide ? "100%" : 300,
         width: "100%",
         aspectRatio: `${v.width * (1 - (c.left + c.right) / 100)} / ${
@@ -284,8 +290,11 @@ export function FigureCard({
                 .map((f) => (
                   <span
                     key={f.src}
-                    className="relative block h-full overflow-hidden rounded-[10%] border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_10px_20px_-16px_rgba(0,0,0,0.5)]"
-                    style={{ aspectRatio: ratioOf(visual.shape) }}
+                    className="relative block h-full overflow-hidden border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_10px_20px_-16px_rgba(0,0,0,0.5)]"
+                    style={{
+                      aspectRatio: ratioOf(visual.shape),
+                      borderRadius: PHONE_RADIUS_SMALL,
+                    }}
                   >
                     <Image
                       src={f.src}
@@ -447,8 +456,11 @@ function ScreenStrip({
             type="button"
             onClick={() => onOpen(i)}
             aria-label={`Enlarge screen ${i + 1} of ${n}${f.label ? `: ${f.label}` : ""}`}
-            className="relative block w-full cursor-zoom-in overflow-hidden rounded-[9%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
-            style={{ aspectRatio: PHONE_RATIO }}
+            className="relative block w-full cursor-zoom-in overflow-hidden border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+            style={{
+              aspectRatio: PHONE_RATIO,
+              borderRadius: compact ? PHONE_RADIUS_SMALL : PHONE_RADIUS,
+            }}
           >
             <Image
               src={f.src}
@@ -562,7 +574,8 @@ function WideStack({
             type="button"
             onClick={() => onOpen(i)}
             aria-label={`Enlarge image ${i + 1} of ${frames.length}${f.label ? `: ${f.label}` : ""}`}
-            className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] shadow-[0_14px_28px_-22px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+            className="block w-full cursor-zoom-in overflow-hidden border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))] shadow-[0_14px_28px_-22px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+            style={{ borderRadius: SHOT_RADIUS }}
           >
             <Image
               src={f.src}
@@ -606,8 +619,11 @@ function Screen({
         type="button"
         onClick={() => onOpen(index)}
         aria-label={`Enlarge screen ${index + 1} of ${total}${frame.label ? `: ${frame.label}` : ""}`}
-        className="relative block w-full cursor-zoom-in overflow-hidden rounded-[9%] border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
-        style={{ aspectRatio: ratio }}
+        className="relative block w-full cursor-zoom-in overflow-hidden border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+        style={{
+          aspectRatio: ratio,
+          borderRadius: compact ? PHONE_RADIUS_SMALL : PHONE_RADIUS,
+        }}
       >
         <Image
           src={frame.src}
