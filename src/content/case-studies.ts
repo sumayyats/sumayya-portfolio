@@ -129,9 +129,11 @@ For many families, this site is their first real contact with the school. Every 
         id: "asta-before",
         title: "The old homepage",
         src: "/images/asta/before-homepage.png",
+        width: 2000,
+        height: 1244,
         sectionId: "challenge",
         alt: "The old Asy-Syukriyyah admissions homepage before the redesign.",
-        caption: "Before: the old homepage explained the whole process in dense paragraphs. (TODO: export)",
+        caption: "Before: the old homepage explained the whole process in dense paragraphs.",
         shape: "wide",
       },
       {
