@@ -203,8 +203,10 @@ function VideoFigure({ visual }: { visual: CaseStudyVisual }) {
         // a heavy capture fetches nothing until the viewer asks for it
         preload={autoplay ? "metadata" : "none"}
         aria-label={visual.alt}
-        // max-w-none: preflight caps video at 100%, which would undo the crop
-        className="absolute max-w-none"
+        // object-cover: a video letterboxes inside its box by default, which
+        // would fit the frame rather than crop to it. max-w-none: preflight
+        // caps video at 100%, which would undo the crop.
+        className="absolute max-w-none object-cover"
         style={{
           width: `${scaleX * 100}%`,
           height: `${scaleY * 100}%`,
