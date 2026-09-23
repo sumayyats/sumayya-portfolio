@@ -108,7 +108,18 @@ export function Figure({
           type="button"
           onClick={() => show(0)}
           aria-label={`Enlarge: ${visual.alt}`}
-          className="group mx-auto block w-full max-w-[760px] cursor-zoom-in overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_18px_36px_-24px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+          className="group mx-auto block w-full cursor-zoom-in overflow-hidden border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] shadow-[0_18px_36px_-24px_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
+          style={{
+            borderRadius: visual.shape === "wide" ? SHOT_RADIUS : 12,
+            // On a book page a tall screenshot would run off the paper, so it
+            // is capped by its own height the way a stacked figure is.
+            maxWidth: compact
+              ? bookMaxWidth(
+                  (visual.height ?? 1200) / (visual.width ?? 1800),
+                  6
+                )
+              : 760,
+          }}
         >
           <Image
             src={visual.src}
@@ -443,7 +454,7 @@ function ScreenStrip({
   const rows = Math.ceil(n / cols);
   const tall = tallOf(visual.shape);
   const maxWidth = compact
-    ? bookMaxWidth((rows * tall) / cols, rows * 3)
+    ? bookMaxWidth((rows * tall) / cols, rows * 4)
     : `min(100%, ${cols * (visual.shape === "tablet" ? 230 : 190)}px)`;
   return (
     <div
@@ -458,7 +469,7 @@ function ScreenStrip({
             aria-label={`Enlarge screen ${i + 1} of ${n}${f.label ? `: ${f.label}` : ""}`}
             className="relative block w-full cursor-zoom-in overflow-hidden border border-[color-mix(in_srgb,var(--ink)_14%,transparent)] bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))] shadow-[0_14px_28px_-20px_rgba(0,0,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5 [&>*]:pointer-events-none"
             style={{
-              aspectRatio: PHONE_RATIO,
+              aspectRatio: ratioOf(visual.shape),
               borderRadius: compact ? PHONE_RADIUS_SMALL : PHONE_RADIUS,
             }}
           >

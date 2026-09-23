@@ -37,7 +37,7 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
     const blocks = parseMarkdown(section.body);
     let current: Block[] = [];
     let cost = 2.6; // heading
-    if (si === 0) cost += metaCost(study);
+    if (si === 0) cost += metaCost(study, cpl);
     let first = true;
 
     const flush = () => {
@@ -87,8 +87,17 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
 }
 
 /** Line cost of the study link row at the top of the Overview page. */
-function metaCost(study: CaseStudy): number {
-  return study.link ? 1.6 : 0;
+/**
+ * The Overview page's meta block: the study link, then role / team / scope as
+ * label + value rows. The label eats part of the line, so the value wraps at
+ * roughly three-quarters of a full line.
+ */
+function metaCost(study: CaseStudy, cpl: number): number {
+  let cost = study.link ? 1.6 : 0;
+  for (const v of [study.role, study.team, study.scope]) {
+    cost += Math.max(1, Math.ceil(v.length / (cpl * 0.75))) * 0.95 + 0.4;
+  }
+  return cost;
 }
 
 /**

@@ -260,12 +260,6 @@ function Orientation({ study }: { study: CaseStudy }) {
             </li>
           ))}
         </ul>
-        <Link
-          href="/"
-          className="mt-4 inline-block font-mono text-[11px] uppercase tracking-widest text-ink-soft hover:text-ink"
-        >
-          ← Back to the shelf
-        </Link>
       </div>
     </div>
   );

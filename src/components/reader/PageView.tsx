@@ -97,9 +97,32 @@ function TitlePage({ study }: { study: CaseStudy }) {
   );
 }
 
-/** The study link (store / live site / prototype) at the top of the Overview page. */
+/**
+ * Role, team and scope, plus the study link, at the top of the Overview page.
+ * The Scroll view carries these in its orientation rail; the book has no rail,
+ * so they live here instead of being repeated in the section copy.
+ */
 function MetaBlock({ study }: { study: CaseStudy }) {
-  return <StudyLink study={study} className="book-small mb-[1.4em]" />;
+  const rows: [string, string][] = [
+    ["Role", study.role],
+    ["Team", study.team],
+    ["Scope", study.scope],
+  ];
+  return (
+    <>
+      <StudyLink study={study} className="book-small mb-[1.2em]" />
+      <dl className="book-small mb-[1.4em] flex flex-col gap-[0.5em] text-ink-soft">
+        {rows.map(([k, v]) => (
+          <div key={k} className="flex gap-[0.8em]">
+            <dt className="shrink-0 font-mono uppercase tracking-[0.14em]">
+              {k}
+            </dt>
+            <dd className="min-w-0 text-ink">{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
 }
 
 /** A figure on a page of its own: the strip or image, then its caption. */

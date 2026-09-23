@@ -58,12 +58,7 @@ export const caseStudies: CaseStudy[] = [
         id: "overview",
         title: "Overview",
         body: `**What it is:** The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.
-
-**My role:** UX and UI designer. I owned the information architecture, sketches, design system and high-fidelity designs for the public site and the parent dashboard.
-
-**Team:** Delivered through **new line.lab**, my design studio. Maurits Hudaibi (developer).
-
-**Scope:** The whole website plus the registration flows (regular, internal and transfer students), and a new logged-in dashboard for parents.`,
+`,
       },
       {
         id: "impact",
@@ -327,10 +322,6 @@ For many families, this site is their first real contact with the school. Every 
         title: "Overview",
         body: `**What it is:** Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.
 
-**My role:** UI/UX designer. I owned the **onboarding** and **activities (categories)** flows, and built the **design system and icon library** for both the mobile and tablet versions.
-
-**Team:** Uduak Duru (UI/UX designer). Designs were handed to Binapani's developers.
-
 **Timeline:** November 2025 to January 2026 (3 months), alongside my Master's studies.`,
       },
       {
@@ -536,7 +527,6 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       "Synthesis",
       "Prototyping",
       "Three rounds of usability testing",
-      "Double Diamond, with Design Thinking techniques",
     ],
     meta: "MSc UX Design final project, Kingston University · 2026 · iOS app concept",
     summary:
@@ -572,8 +562,6 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         id: "overview",
         title: "Overview",
         body: `**What it is:** Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.
-
-**My role:** Sole designer and researcher, covering research, synthesis, workshop facilitation, information architecture, prototyping and usability testing.
 
 **Methods:** Double Diamond, with Design Thinking techniques in the Discover and Define stages.`,
       },
