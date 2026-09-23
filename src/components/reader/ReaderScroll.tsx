@@ -196,10 +196,10 @@ function Artifacts({ study }: { study: CaseStudy }) {
 /** Column 1: what this study is, and where to go next. */
 function Orientation({ study }: { study: CaseStudy }) {
   const others = caseStudies.filter((c) => c.slug !== study.slug);
-  const rows: [string, string][] = [
-    ["Role", study.role],
-    ["Team", study.team],
-    ["Scope", study.scope],
+  const rows: { k: string; v: string; detail?: string[] }[] = [
+    { k: "Role", v: study.role, detail: study.roleDetail },
+    { k: "Team", v: study.team },
+    { k: "Scope", v: study.scope },
   ];
   return (
     <div className="mx-auto max-w-[36rem] lg:mx-0">
@@ -225,12 +225,14 @@ function Orientation({ study }: { study: CaseStudy }) {
       <StudyLink study={study} className="mt-3 text-[11px]" />
 
       <dl className="mt-6 flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--ink)_12%,transparent)] pt-5">
-        {rows.map(([k, v]) => (
+        {rows.map(({ k, v, detail }) => (
           <div key={k}>
             <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
               {k}
             </dt>
-            <dd className="mt-0.5 text-[13px] leading-snug text-ink">{v}</dd>
+            <dd className="mt-0.5 text-[13px] leading-snug text-ink">
+              {detail ? <RoleDetail value={v} detail={detail} /> : v}
+            </dd>
           </div>
         ))}
       </dl>
@@ -265,6 +267,44 @@ function Orientation({ study }: { study: CaseStudy }) {
           ← Back to the shelf
         </Link>
       </div>
+    </div>
+  );
+}
+
+/**
+ * A short role line that opens into what it covered. Hover on a pointer,
+ * focus on a keyboard, tap on a phone — a hover-only disclosure would hide
+ * the detail from touch entirely.
+ */
+function RoleDetail({ value, detail }: { value: string; detail: string[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      onPointerEnter={() => setOpen(true)}
+      onPointerLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        className="text-left underline decoration-dotted decoration-[color-mix(in_srgb,var(--ink)_35%,transparent)] underline-offset-4 transition-colors hover:decoration-accent"
+      >
+        {value}
+      </button>
+      {open && (
+        <ul className="mt-2 flex flex-col gap-1">
+          {detail.map((d) => (
+            <li key={d} className="flex gap-2 text-[13px] leading-snug text-ink-soft">
+              <span aria-hidden="true" className="text-accent">
+                ·
+              </span>
+              {d}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

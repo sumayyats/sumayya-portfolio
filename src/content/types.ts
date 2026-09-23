@@ -75,6 +75,8 @@ export type CaseStudy = {
   subtitle: string;
   year: string;
   role: string;
+  /** What the role covered, revealed under the role line on hover or tap. */
+  roleDetail?: string[];
   team: string;
   scope: string;
   /** Short metadata line (bia/farisazhar style), verbatim from the markdown. */
