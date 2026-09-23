@@ -317,17 +317,32 @@ export function FigureCard({ visual }: { visual: CaseStudyVisual }) {
 export function FigureGallery({
   visuals,
   compactColumns = false,
+  label = "Figures",
+  layout = "grid",
 }: {
   visuals: CaseStudyVisual[];
   /** Single column (the xl side rail). */
   compactColumns?: boolean;
+  /** Names the group — the Artifacts page labels each one by its section. */
+  label?: string;
+  /** `list` swaps the cards for compact rows (the Artifacts page offers both). */
+  layout?: "grid" | "list";
 }) {
   if (visuals.length === 0) return null;
   return (
     <section className="mt-10 border-t border-[color-mix(in_srgb,var(--ink)_10%,transparent)] pt-6">
       <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
-        Figures
+        {label}
       </p>
+      {layout === "list" ? (
+        <ul className="flex flex-col divide-y divide-[color-mix(in_srgb,var(--ink)_10%,transparent)] border-y border-[color-mix(in_srgb,var(--ink)_10%,transparent)]">
+          {visuals.map((v) => (
+            <li key={v.id}>
+              <FigureRow visual={v} />
+            </li>
+          ))}
+        </ul>
+      ) : (
       <div
         className={`grid gap-x-5 gap-y-8 ${
           compactColumns ? "grid-cols-1" : "sm:grid-cols-2"
@@ -337,7 +352,58 @@ export function FigureGallery({
           <FigureCard key={v.id} visual={v} />
         ))}
       </div>
+      )}
     </section>
+  );
+}
+
+/**
+ * One figure as a row: a thumbnail, its title and caption. The compact half of
+ * the Artifacts page, for scanning a long set rather than browsing it.
+ */
+function FigureRow({ visual }: { visual: CaseStudyVisual }) {
+  const { open } = useLightbox();
+  const { click } = useSound();
+  const items = lightboxItems(visual);
+  const frames = visual.frames ?? [];
+  const count = visual.video ? items.length - 1 : items.length;
+  const noun = visual.shape === "wide" ? "image" : "screen";
+  const ready = Boolean(visual.frames || visual.width || visual.video);
+  const thumb = frames[0]?.src ?? visual.video?.poster ?? visual.src;
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        click();
+        open(items, 0);
+      }}
+      aria-label={`${visual.title ?? visual.alt} — open ${count} ${noun}${count > 1 ? "s" : ""}`}
+      className="group flex w-full cursor-zoom-in items-center gap-4 py-3 text-left"
+    >
+      <span className="relative block h-14 w-20 shrink-0 overflow-hidden rounded-md border border-[color-mix(in_srgb,var(--ink)_12%,transparent)] bg-[color-mix(in_srgb,var(--ink)_3%,var(--paper))]">
+        {ready && (
+          <Image
+            src={thumb}
+            alt=""
+            fill
+            sizes="80px"
+            className="object-cover object-top"
+          />
+        )}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[14px] font-semibold leading-snug text-ink group-hover:text-accent">
+          {visual.title ?? visual.alt}
+        </span>
+        <span className="mt-0.5 block text-[13px] leading-snug text-ink-soft">
+          {visual.caption}
+        </span>
+      </span>
+      <span className="shrink-0 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
+        {visual.video ? "video" : `${count} ${noun}${count > 1 ? "s" : ""}`}
+      </span>
+    </button>
   );
 }
 

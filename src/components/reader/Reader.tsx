@@ -120,7 +120,8 @@ export function Reader({ study }: { study: CaseStudy }) {
   );
 }
 
-function Segmented({
+/** Shared pill toggle: view mode in the reader, layout on the Artifacts page. */
+export function Segmented({
   label,
   options,
   value,

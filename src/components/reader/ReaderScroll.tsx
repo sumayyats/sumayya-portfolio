@@ -9,9 +9,11 @@ import { Markdown } from "@/components/Markdown";
 import { StudyLink } from "@/components/StudyLink";
 import { useSound } from "@/lib/sound";
 import { FigureGallery } from "./Figure";
+import { Segmented } from "./Reader";
 import { PrototypeEmbed } from "./PrototypeEmbed";
 
 const PROTOTYPE_ID = "prototype";
+const ARTIFACTS_ID = "artifacts";
 
 /**
  * Three surfaces: orientation (the study itself), an index of its sections,
@@ -26,6 +28,7 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
   );
   const items = [
     ...study.sections.map((s) => ({ id: s.id, title: s.title })),
+    ...(study.visuals.length ? [{ id: ARTIFACTS_ID, title: "Artifacts" }] : []),
     ...(hasPrototype
       ? [{ id: PROTOTYPE_ID, title: "Try the prototype" }]
       : []),
@@ -123,6 +126,8 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
         <div className="mx-auto max-w-[68ch] lg:mx-0">
           {activeId === PROTOTYPE_ID ? (
             <PrototypeEmbed study={study} bare />
+          ) : activeId === ARTIFACTS_ID ? (
+            <Artifacts study={study} />
           ) : section ? (
             <article key={section.id}>
               <h2 className="mb-5 font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight tracking-tight text-ink">
@@ -137,6 +142,53 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Every figure in the study, on one page, grouped under the section it came
+ * from — so a reader who wants the work rather than the write-up can find it
+ * without walking the whole case study.
+ */
+function Artifacts({ study }: { study: CaseStudy }) {
+  const [layout, setLayout] = useState<"grid" | "list">("grid");
+  const groups = study.sections
+    .map((s) => ({
+      title: s.title,
+      visuals: study.visuals.filter((v) => v.sectionId === s.id),
+    }))
+    .filter((g) => g.visuals.length > 0);
+
+  return (
+    <article>
+      <h2 className="mb-2 font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight tracking-tight text-ink">
+        Artifacts
+      </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-[46ch] text-[15px] leading-relaxed text-ink-soft">
+          Every figure from this case study in one place. Tap any of them to
+          open the full set.
+        </p>
+        <Segmented
+          label="Artifact layout"
+          compact
+          value={layout}
+          onChange={(v) => setLayout(v as "grid" | "list")}
+          options={[
+            { value: "grid", label: "Grid" },
+            { value: "list", label: "List" },
+          ]}
+        />
+      </div>
+      {groups.map((g) => (
+        <FigureGallery
+          key={g.title}
+          visuals={g.visuals}
+          label={g.title}
+          layout={layout}
+        />
+      ))}
+    </article>
   );
 }
 
