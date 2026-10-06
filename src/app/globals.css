@@ -399,7 +399,7 @@ body {
 }
 .flip-back-text { margin: 0; font-size: calc(0.95rem * var(--reading-scale)); line-height: 1.55; color: var(--ink); }
 .flip-card.is-static { cursor: default; }
-.flip-card.is-static .flip-face { min-height: 0; background: var(--paper); border: 1px solid var(--edge); }
+.flip-card.is-static .flip-lead { font-size: calc(1.05rem * var(--reading-scale)); }
 @media (prefers-reduced-motion: reduce) {
   /* no swing and no lift: the cover fades away instead */
   .flip-card { transform: none !important; }

@@ -55,7 +55,14 @@ const tiltHandlers = {
 /** Splits "**Lead.** rest" into the front and back of a card. */
 export function splitLead(item: string): { lead: string; back: string } | null {
   const m = item.match(/^\*\*([\s\S]+?)\*\*\s*([\s\S]*)$/);
-  if (!m) return null;
+  if (!m) {
+    // bold mid-sentence ("A **time filter** on History…"): the bold phrase
+    // is the front, the whole sentence the back
+    const mid = item.match(/\*\*([\s\S]+?)\*\*/);
+    if (!mid) return null;
+    const t = mid[1].trim().replace(/[.:]$/, "");
+    return { lead: t.charAt(0).toUpperCase() + t.slice(1), back: item };
+  }
   const [, rawLead, rest] = m;
   if (!rest.trim()) return null;
   // "Lead." / "Lead:" ends a thought, so the back is just what follows; a
@@ -74,11 +81,14 @@ function FlipCard({ item, index, render }: { item: string; index: number; render
 
   if (!parts) {
     return (
+      // nothing to reveal: the same cover, without the turn
       <div className="flip-card is-static" {...tiltHandlers}>
-        <div className="flip-face">
-          <span className="flip-num">{num}</span>
-          <p className="flip-back-text">{render(item)}</p>
-        </div>
+        <span className="flip-inner">
+          <span className="flip-face flip-front">
+            <span className="flip-num">{num}</span>
+            <span className="flip-lead">{render(item)}</span>
+          </span>
+        </span>
       </div>
     );
   }
