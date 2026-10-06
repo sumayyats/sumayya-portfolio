@@ -11,10 +11,15 @@ import {
 } from "react";
 
 /**
- * Site-wide sound: a page-turn "swish" for the flip reader and a soft tick
- * for buttons. Both are synthesised with the Web Audio API so no audio files
- * are shipped, and nothing plays until the reader switches sound on.
+ * Site-wide sound: a page turn for the flip reader and a soft tick for
+ * buttons. The page turn is a real recording (PAGE_TURN_SRC), loaded the
+ * first time sound is used; until it has loaded, or if it's missing, a
+ * synthesised swish stands in. Nothing plays until the reader switches
+ * sound on.
  */
+
+/** A recording of a real page being turned. */
+const PAGE_TURN_SRC = "/audio/page-turn.mp3";
 
 type SoundContextValue = {
   on: boolean;
@@ -45,6 +50,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [on, setOn] = useState(false);
   const ctxRef = useRef<AudioContext | null>(null);
   const noiseRef = useRef<AudioBuffer | null>(null);
+  const turnRef = useRef<AudioBuffer | null | "loading" | "missing">(null);
 
   useEffect(() => {
     try {
@@ -84,11 +90,19 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     return noiseRef.current;
   }, []);
 
-  /** Paper swish: band-passed noise sweeping up, then a soft settle. */
-  const flip = useCallback(() => {
-    if (!on) return;
-    const ctx = audio();
-    if (!ctx) return;
+  // Fetch and decode the recording once, in the background.
+  const loadTurn = useCallback((ctx: AudioContext) => {
+    if (turnRef.current !== null) return;
+    turnRef.current = "loading";
+    fetch(PAGE_TURN_SRC)
+      .then((res) => (res.ok ? res.arrayBuffer() : Promise.reject(res.status)))
+      .then((data) => ctx.decodeAudioData(data))
+      .then((buf) => (turnRef.current = buf))
+      .catch(() => (turnRef.current = "missing"));
+  }, []);
+
+  /** Fallback paper swish: band-passed noise sweeping up, then a soft settle. */
+  const swish = useCallback((ctx: AudioContext) => {
     const t = ctx.currentTime;
 
     const src = ctx.createBufferSource();
@@ -118,7 +132,29 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     osc.connect(g2).connect(ctx.destination);
     osc.start(t + 0.34);
     osc.stop(t + 0.52);
-  }, [on, audio, noise]);
+  }, [noise]);
+
+  /** A page turning: the recording, or the synthesised swish meanwhile. */
+  const flip = useCallback(() => {
+    if (!on) return;
+    const ctx = audio();
+    if (!ctx) return;
+    loadTurn(ctx);
+    const rec = turnRef.current;
+    if (rec instanceof AudioBuffer) {
+      const src = ctx.createBufferSource();
+      src.buffer = rec;
+      // a touch of variation, so turning page after page never sounds looped
+      src.playbackRate.value = 0.94 + Math.random() * 0.12;
+      const gain = ctx.createGain();
+      gain.gain.value = 0.8;
+      src.connect(gain).connect(ctx.destination);
+      src.start();
+      return;
+    }
+    swish(ctx);
+  }, [on, audio, loadTurn, swish]);
+
 
   /** Button tick: a short, damped click. */
   const click = useCallback(() => {
@@ -134,13 +170,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem(STORAGE_KEY, next ? "on" : "off");
       } catch {}
       if (next) {
-        // audible confirmation that sound is now on
+        // audible confirmation that sound is now on; start fetching the turn
         const ctx = audio();
-        if (ctx) tick(ctx);
+        if (ctx) {
+          tick(ctx);
+          loadTurn(ctx);
+        }
       }
       return next;
     });
-  }, [audio]);
+  }, [audio, loadTurn]);
 
   const value = useMemo(
     () => ({ on, toggle, flip, click }),
