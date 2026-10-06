@@ -27,6 +27,9 @@ const CHROME = 160; // header + nav row + gutters, in px
  * the page-flip engine (vendored in src/vendor). React renders each page's
  * content through a portal into a host element the engine owns and moves.
  */
+/** Shortest time between two of the same page sound, in ms. */
+const SOUND_GAP = 300;
+
 export function ReaderFlip({
   study,
   scale,
@@ -123,14 +126,33 @@ export function ReaderFlip({
       setIndex(e.data.page);
       setOrientation(e.data.mode);
     });
+    // The engine reports a fold in more cases than a real grab (and can repeat
+    // a state), so the sounds are gated: a pickup needs a pointer actually
+    // held on the book, and neither sound repeats within SOUND_GAP ms.
+    let pressed = false;
+    const down = () => (pressed = true);
+    const up = () => (pressed = false);
+    block.addEventListener("pointerdown", down);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    const last = { pickup: 0, flip: 0 };
+    const once = (kind: "pickup" | "flip") => {
+      const now = performance.now();
+      if (now - last[kind] < SOUND_GAP) return;
+      last[kind] = now;
+      soundRef.current[kind]();
+    };
+
     flip.on("flip", (e) => {
       indexRef.current = e.data;
       setIndex(e.data);
       // a dragged corner that was let go: the sound plays as it lands
-      if (lastState.current === "user_fold") soundRef.current.flip();
+      if (lastState.current === "user_fold") once("flip");
     });
     flip.on("changeState", (e) => {
-      if (e.data === "flipping") soundRef.current.flip();
+      // fingers under the corner: the page is picked up before it turns
+      if (e.data === "user_fold" && lastState.current !== "user_fold" && pressed) once("pickup");
+      if (e.data === "flipping") once("flip");
       lastState.current = e.data;
     });
     flip.on("changeOrientation", (e) => setOrientation(e.data));
@@ -140,6 +162,9 @@ export function ReaderFlip({
     setHosts(els);
 
     return () => {
+      block.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
       flip.destroy();
       flipRef.current = null;
     };

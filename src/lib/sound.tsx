@@ -11,20 +11,26 @@ import {
 } from "react";
 
 /**
- * Site-wide sound: a page turn for the flip reader and a soft tick for
- * buttons. The page turn is a real recording (PAGE_TURN_SRC), loaded the
- * first time sound is used; until it has loaded, or if it's missing, a
- * synthesised swish stands in. Nothing plays until the reader switches
- * sound on.
+ * Site-wide sound: for the flip reader, a page being picked up and a page
+ * turning, and a soft tick for buttons. The page sounds are real recordings
+ * (RECORDINGS), loaded the first time sound is used; until the turn has
+ * loaded, or if it's missing, a synthesised swish stands in. Nothing plays
+ * until the reader switches sound on.
  */
 
-/** A recording of a real page being turned. */
-const PAGE_TURN_SRC = "/audio/page-turn.m4a";
+/** Real recordings, cut from the author's own voice memos. */
+const RECORDINGS = {
+  turn: "/audio/page-turn.m4a",
+  pickup: "/audio/page-pickup.m4a",
+} as const;
+type Recording = keyof typeof RECORDINGS;
 
 type SoundContextValue = {
   on: boolean;
   toggle: () => void;
   flip: () => void;
+  /** A page lifted at the corner, before it turns. */
+  pickup: () => void;
   click: () => void;
 };
 
@@ -50,7 +56,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [on, setOn] = useState(false);
   const ctxRef = useRef<AudioContext | null>(null);
   const noiseRef = useRef<AudioBuffer | null>(null);
-  const turnRef = useRef<AudioBuffer | null | "loading" | "missing">(null);
+  const recRef = useRef<Partial<Record<Recording, AudioBuffer | "loading" | "missing">>>({});
 
   useEffect(() => {
     try {
@@ -90,15 +96,52 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     return noiseRef.current;
   }, []);
 
-  // Fetch and decode the recording once, in the background.
-  const loadTurn = useCallback((ctx: AudioContext) => {
-    if (turnRef.current !== null) return;
-    turnRef.current = "loading";
-    fetch(PAGE_TURN_SRC)
-      .then((res) => (res.ok ? res.arrayBuffer() : Promise.reject(res.status)))
-      .then((data) => ctx.decodeAudioData(data))
-      .then((buf) => (turnRef.current = buf))
-      .catch(() => (turnRef.current = "missing"));
+  // Fetch and decode the recordings once, in the background.
+  const loadRecordings = useCallback((ctx: AudioContext) => {
+    for (const key of Object.keys(RECORDINGS) as Recording[]) {
+      if (recRef.current[key]) continue;
+      recRef.current[key] = "loading";
+      fetch(RECORDINGS[key])
+        .then((res) => (res.ok ? res.arrayBuffer() : Promise.reject(res.status)))
+        .then((data) => ctx.decodeAudioData(data))
+        .then((buf) => (recRef.current[key] = buf))
+        .catch(() => (recRef.current[key] = "missing"));
+    }
+  }, []);
+
+  // With sound already on (from a previous visit), load the recordings on
+  // the first sign of a reader — a pointer move or key comes well before a
+  // page can be grabbed, so the first pickup isn't lost to loading.
+  useEffect(() => {
+    if (!on) return;
+    const warm = () => {
+      const ctx = audio();
+      if (ctx) loadRecordings(ctx);
+    };
+    const opts = { once: true, passive: true } as const;
+    window.addEventListener("pointermove", warm, opts);
+    window.addEventListener("pointerdown", warm, opts);
+    window.addEventListener("keydown", warm, opts);
+    return () => {
+      window.removeEventListener("pointermove", warm);
+      window.removeEventListener("pointerdown", warm);
+      window.removeEventListener("keydown", warm);
+    };
+  }, [on, audio, loadRecordings]);
+
+  /** Plays a recording if it has loaded; false if it hasn't (yet). */
+  const play = useCallback((ctx: AudioContext, key: Recording, level: number) => {
+    const rec = recRef.current[key];
+    if (!(rec instanceof AudioBuffer)) return false;
+    const src = ctx.createBufferSource();
+    src.buffer = rec;
+    // a touch of variation, so page after page never sounds looped
+    src.playbackRate.value = 0.94 + Math.random() * 0.12;
+    const gain = ctx.createGain();
+    gain.gain.value = level;
+    src.connect(gain).connect(ctx.destination);
+    src.start();
+    return true;
   }, []);
 
   /** Fallback paper swish: band-passed noise sweeping up, then a soft settle. */
@@ -139,21 +182,19 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     if (!on) return;
     const ctx = audio();
     if (!ctx) return;
-    loadTurn(ctx);
-    const rec = turnRef.current;
-    if (rec instanceof AudioBuffer) {
-      const src = ctx.createBufferSource();
-      src.buffer = rec;
-      // a touch of variation, so turning page after page never sounds looped
-      src.playbackRate.value = 0.94 + Math.random() * 0.12;
-      const gain = ctx.createGain();
-      gain.gain.value = 0.8;
-      src.connect(gain).connect(ctx.destination);
-      src.start();
-      return;
-    }
+    loadRecordings(ctx);
+    if (play(ctx, "turn", 0.8)) return;
     swish(ctx);
-  }, [on, audio, loadTurn, swish]);
+  }, [on, audio, loadRecordings, play, swish]);
+
+  /** A page picked up at the corner: quieter than the turn that follows. */
+  const pickup = useCallback(() => {
+    if (!on) return;
+    const ctx = audio();
+    if (!ctx) return;
+    loadRecordings(ctx);
+    play(ctx, "pickup", 0.55);
+  }, [on, audio, loadRecordings, play]);
 
 
   /** Button tick: a short, damped click. */
@@ -174,16 +215,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         const ctx = audio();
         if (ctx) {
           tick(ctx);
-          loadTurn(ctx);
+          loadRecordings(ctx);
         }
       }
       return next;
     });
-  }, [audio, loadTurn]);
+  }, [audio, loadRecordings]);
 
   const value = useMemo(
-    () => ({ on, toggle, flip, click }),
-    [on, toggle, flip, click]
+    () => ({ on, toggle, flip, pickup, click }),
+    [on, toggle, flip, pickup, click]
   );
 
   return (
