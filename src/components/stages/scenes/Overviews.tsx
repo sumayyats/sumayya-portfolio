@@ -80,7 +80,7 @@ export function SceneGutOverview() {
       </Phone>
       <Phone src="/images/gut-skin/screens/dark-home-3.png" style={{ left: "51cqw", top: "4.5cqw", width: "19.5cqw" }} k="dark">
         {GUT.slice(1).map((s, i) => (
-          <Screen key={s} src={`/images/gut-skin/screens/dark-${s}-3.png`} k={`d${i + 1}`} />
+          <Screen key={s} src={`/images/gut-skin/screens/dark-${s}-${s === "community" ? 4 : 3}.png`} k={`d${i + 1}`} />
         ))}
       </Phone>
     </div>

@@ -980,7 +980,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
           { src: "/images/gut-skin/screens/dark-assistant-2.png", label: "Assistant" },
           { src: "/images/gut-skin/screens/dark-insights-3.png", label: "Insights" },
           { src: "/images/gut-skin/screens/dark-scan-3.png", label: "Scan" },
-          { src: "/images/gut-skin/screens/dark-community-3.png", label: "Communities" },
+          { src: "/images/gut-skin/screens/dark-community-4.png", label: "Communities" },
           { src: "/images/gut-skin/screens/dark-profile-3.png", label: "Profile" },
         ],
       },
