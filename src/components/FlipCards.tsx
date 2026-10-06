@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type PointerEvent, type ReactNode } from "react";
 
 /**
  * A list as a grid of flash cards: the bold lead-in on the front, the
@@ -29,6 +29,29 @@ export function FlipCards({
   );
 }
 
+/** How far a card leans towards the cursor, in degrees (as the book's cover). */
+const TILT = 7;
+
+/**
+ * Leans the card under the pointer, like the front cover in the book view.
+ * Written straight to CSS variables, so moving the mouse never re-renders.
+ */
+const tiltHandlers = {
+  onPointerMove(e: PointerEvent<HTMLElement>) {
+    if (e.pointerType !== "mouse") return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5; // -0.5 … 0.5
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--rx", `${(-py * TILT * 2).toFixed(2)}deg`);
+    el.style.setProperty("--ry", `${(px * TILT * 2).toFixed(2)}deg`);
+  },
+  onPointerLeave(e: PointerEvent<HTMLElement>) {
+    e.currentTarget.style.setProperty("--rx", "0deg");
+    e.currentTarget.style.setProperty("--ry", "0deg");
+  },
+};
+
 /** Splits "**Lead.** rest" into the front and back of a card. */
 export function splitLead(item: string): { lead: string; back: string } | null {
   const m = item.match(/^\*\*([\s\S]+?)\*\*\s*([\s\S]*)$/);
@@ -51,7 +74,7 @@ function FlipCard({ item, index, render }: { item: string; index: number; render
 
   if (!parts) {
     return (
-      <div className="flip-card is-static">
+      <div className="flip-card is-static" {...tiltHandlers}>
         <div className="flip-face">
           <span className="flip-num">{num}</span>
           <p className="flip-back-text">{render(item)}</p>
@@ -66,6 +89,7 @@ function FlipCard({ item, index, render }: { item: string; index: number; render
       className={`flip-card ${flipped ? "is-flipped" : ""}`}
       aria-expanded={flipped}
       onClick={() => setFlipped((f) => !f)}
+      {...tiltHandlers}
     >
       <span className="flip-inner">
         <span className="flip-face flip-front" aria-hidden={flipped}>

@@ -302,7 +302,7 @@ body {
   padding: 6px 6px 10px 0;
   list-style: none;
 }
-.prose-body .flip-grid > li { margin: 0; padding: 0; }
+.prose-body .flip-grid > li { margin: 0; padding: 0; perspective: 1000px; }
 .prose-body .flip-grid > li::marker { content: none; }
 .flip-card {
   position: relative;
@@ -317,10 +317,13 @@ body {
   text-align: left;
   cursor: pointer;
   perspective: 1400px;
-  transition: transform 0.2s ease-out; /* the shelf's hover lift */
+  /* leans towards the cursor, like the book's front cover (see tiltHandlers) */
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.2s ease-out;
+  will-change: transform;
 }
-.flip-card:not(.is-static):hover,
-.flip-card:not(.is-static):focus-visible { transform: translateY(-8px); }
 .flip-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px 14px 14px 6px; }
 /* grounding shadow, as under a lifted book */
 .flip-card::after {
@@ -338,8 +341,8 @@ body {
   pointer-events: none;
   z-index: -1;
 }
-.flip-card:not(.is-static):hover::after,
-.flip-card:not(.is-static):focus-visible::after { opacity: 0.55; }
+.flip-card:hover::after,
+.flip-card:focus-visible::after { opacity: 0.55; }
 .flip-inner {
   position: relative;
   display: grid;
@@ -399,7 +402,7 @@ body {
 .flip-card.is-static .flip-face { min-height: 0; background: var(--paper); border: 1px solid var(--edge); }
 @media (prefers-reduced-motion: reduce) {
   /* no swing and no lift: the cover fades away instead */
-  .flip-card, .flip-card:hover, .flip-card:focus-visible { transform: none; }
+  .flip-card { transform: none !important; }
   .flip-front { transition: opacity 0.2s ease; }
   .flip-card.is-flipped .flip-front { transform: none; opacity: 0; }
 }
