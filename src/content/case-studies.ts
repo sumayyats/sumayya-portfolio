@@ -608,7 +608,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         id: "kyros-design",
         sectionId: "insight-to-design",
         atTop: true,
-        title: "Adding an activity, and removing one calmly",
+        title: "From insight to design, screen by screen",
         stillAlt:
           "The first-activity empty state on a phone, beside the insight it answers.",
         summary:
