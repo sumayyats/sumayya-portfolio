@@ -290,18 +290,22 @@ body {
   }
 }
 
-/* ── Flip cards: lists in the scroll view ────────────────────────────── */
+/* ── Flip cards: lists in the scroll view ────────────────────────────────
+   Each card is a small book: the front is a cover (spine strip on the left,
+   page-stack edge on the right) that lifts on hover like the books on the
+   shelf, and opens on its spine hinge to show the page underneath. */
 .prose-body .flip-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
-  gap: 12px;
+  gap: 18px 16px;
   margin: 0;
-  padding: 0;
+  padding: 6px 6px 10px 0;
   list-style: none;
 }
 .prose-body .flip-grid > li { margin: 0; padding: 0; }
 .prose-body .flip-grid > li::marker { content: none; }
 .flip-card {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
@@ -311,37 +315,69 @@ body {
   font: inherit;
   color: inherit;
   text-align: left;
-  perspective: 1000px;
   cursor: pointer;
-  border-radius: 14px;
+  perspective: 1400px;
+  transition: transform 0.2s ease-out; /* the shelf's hover lift */
 }
-.flip-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.flip-card:not(.is-static):hover,
+.flip-card:not(.is-static):focus-visible { transform: translateY(-8px); }
+.flip-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px 14px 14px 6px; }
+/* grounding shadow, as under a lifted book */
+.flip-card::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -14px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  pointer-events: none;
+  z-index: -1;
+}
+.flip-card:not(.is-static):hover::after,
+.flip-card:not(.is-static):focus-visible::after { opacity: 0.55; }
 .flip-inner {
+  position: relative;
   display: grid;
   height: 100%;
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   transform-style: preserve-3d;
 }
-.flip-card.is-flipped .flip-inner { transform: rotateY(180deg); }
 .flip-face {
   grid-area: 1 / 1; /* both faces share the cell: the card takes the taller one */
   display: flex;
   flex-direction: column;
   gap: 10px;
   min-height: 9.5rem;
-  padding: 18px 18px 16px;
-  border-radius: 14px;
+  padding: 18px 18px 16px 24px;
+  border-radius: 6px 14px 14px 6px;
+}
+/* the page underneath */
+.flip-back {
+  background: var(--paper);
   border: 1px solid var(--edge);
-  background: color-mix(in srgb, var(--ink) 4%, var(--paper));
+}
+/* the cover: spine strip, page-stack edge, drop shadow to the right */
+.flip-front {
+  z-index: 1;
+  background: color-mix(in srgb, var(--accent) 10%, var(--paper));
+  box-shadow:
+    inset 7px 0 0 var(--accent),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+    2px 2px 0 -1px var(--paper),
+    2px 2px 0 0 var(--edge),
+    4px 4px 0 -1px var(--paper),
+    4px 4px 0 0 var(--edge),
+    10px 14px 24px -16px rgba(0, 0, 0, 0.45);
+  transform-origin: 0 50%; /* hinged on the spine */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition: transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1); /* the shelf's spring, eased */
 }
-.flip-back {
-  transform: rotateY(180deg);
-  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-}
-.flip-card:hover .flip-front { border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+.flip-card.is-flipped .flip-front { transform: rotateY(-180deg); }
 .flip-num { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.16em; color: var(--ink-soft); }
 .flip-lead {
   flex: 1;
@@ -359,12 +395,11 @@ body {
   color: var(--ink-soft);
 }
 .flip-back-text { margin: 0; font-size: calc(0.95rem * var(--reading-scale)); line-height: 1.55; color: var(--ink); }
-.flip-card.is-static .flip-face { min-height: 0; }
+.flip-card.is-static { cursor: default; }
+.flip-card.is-static .flip-face { min-height: 0; background: var(--paper); border: 1px solid var(--edge); }
 @media (prefers-reduced-motion: reduce) {
-  /* no turn: the faces swap with a fade */
-  .flip-inner { transition: none; transform: none !important; }
-  .flip-face { transition: opacity 0.2s ease; }
-  .flip-back { transform: none; opacity: 0; }
-  .flip-card.is-flipped .flip-back { opacity: 1; }
-  .flip-card.is-flipped .flip-front { opacity: 0; }
+  /* no swing and no lift: the cover fades away instead */
+  .flip-card, .flip-card:hover, .flip-card:focus-visible { transform: none; }
+  .flip-front { transition: opacity 0.2s ease; }
+  .flip-card.is-flipped .flip-front { transform: none; opacity: 0; }
 }
