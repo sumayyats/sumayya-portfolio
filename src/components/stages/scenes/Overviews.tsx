@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Browser, Phone, Screen } from "./Frames";
+import { Phone, Screen } from "./Frames";
 import { EASE_CALM, EASE_CAMERA, type SceneDef } from "../timeline";
 
 /**
@@ -9,41 +8,26 @@ import { EASE_CALM, EASE_CAMERA, type SceneDef } from "../timeline";
 
 type Track = SceneDef["tracks"][number];
 
-// ── ASTA: the new homepage, scrolled through slowly ────────────────────────
-// homepage.png is 512 × 2000; the browser page is 1513:1080, so the image is
-// 3.906 widths tall and the window shows 0.714 of a width: the last scroll
-// stop is (3.906 − 0.714) / 3.906 ≈ 81.7% of the image's own height.
-const STOPS = [0, 19, 38, 57, 81.7];
-
+// ── ASTA: the live homepage, as recorded ────────────────────────────────
+// The recording carries its own device frame and backdrop, so it fills the card.
 export function SceneAstaOverview() {
   return (
     <div className="sc-ov">
-      <Browser url="ppdb.asy-syukriyyah.sch.id" style={{ left: "18cqw", top: "4.5cqw", width: "64cqw" }}>
-        <div className="sc-ov__scroll" data-k="page">
-          <Image src="/images/asta/homepage.png" alt="" width={512} height={2000} sizes="(min-width: 1024px) 760px, 64vw" />
-        </div>
-      </Browser>
+      <video
+        className="sc-ov__film"
+        src="/images/asta/homepage-walkthrough.mp4"
+        poster="/images/asta/homepage-walkthrough-poster.png"
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
     </div>
   );
 }
 
-export const astaOverview: SceneDef = {
-  duration: 11000,
-  finalAt: 9000,
-  tracks: [
-    {
-      k: "page",
-      ease: EASE_CAMERA,
-      at: STOPS.flatMap((p, i): [number, Keyframe][] => {
-        const t = 800 + i * 2100;
-        return [
-          [t, { transform: `translateY(-${p}%)` }],
-          [t + 1100, { transform: `translateY(-${p}%)` }],
-        ];
-      }),
-    },
-  ],
-};
+// The footage runs on its own clock; the stage only plays, pauses and seeks it.
+export const astaOverview: SceneDef = { duration: 33500, finalAt: 16000, tracks: [] };
 
 // ── Kyros: three screens, floating gently ─────────────────────────────────
 const KYROS = [

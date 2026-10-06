@@ -111,6 +111,9 @@ export function buildTimeline(root: HTMLElement, def: SceneDef): Timeline {
     el: root.querySelector<HTMLElement>(`[data-k="${t.k}"]`),
   }));
 
+  // Real footage inside a scene follows the same play / pause / seek.
+  const videos = Array.from(root.querySelectorAll("video"));
+
   let clock = 0; // fallback when a scene has no tracks
   const time = () => {
     const ct = anims[0]?.currentTime;
@@ -138,11 +141,21 @@ export function buildTimeline(root: HTMLElement, def: SceneDef): Timeline {
   sync();
 
   return {
-    play: () => anims.forEach((a) => a.play()),
-    pause: () => anims.forEach((a) => a.pause()),
+    play: () => {
+      anims.forEach((a) => a.play());
+      // autoplay can be refused (data saver, low power): the poster stays
+      videos.forEach((v) => v.play().catch(() => {}));
+    },
+    pause: () => {
+      anims.forEach((a) => a.pause());
+      videos.forEach((v) => v.pause());
+    },
     seek: (ms) => {
       clock = ms;
       anims.forEach((a) => (a.currentTime = ms));
+      videos.forEach((v) => {
+        if (Number.isFinite(v.duration)) v.currentTime = (ms / 1000) % v.duration;
+      });
       sync();
     },
     time,

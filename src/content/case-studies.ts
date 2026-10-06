@@ -310,8 +310,8 @@ For many families, this site is their first real contact with the school. Every 
         id: "asta-overview",
         sectionId: "overview",
         title: "The new homepage",
-        stillAlt: "The redesigned admissions homepage in a browser window.",
-        summary: "A slow scroll down the full redesigned homepage.",
+        stillAlt: "The live admissions homepage on a laptop screen, showing the programme cards.",
+        summary: "A screen recording scrolling through the live homepage.",
         durationMs: 10000,
       },
       {

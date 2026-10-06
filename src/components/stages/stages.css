@@ -145,5 +145,4 @@
 
 /* ─────────── Overview stages ─────────── */
 .sc-ov .sf-phone { box-shadow: 0 2.4cqw 5cqw -2cqw rgba(0, 0, 0, 0.35); }
-.sc-ov__scroll { position: relative; }
-.sc-ov__scroll img { display: block; width: 100%; height: auto; }
+.sc-ov__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
