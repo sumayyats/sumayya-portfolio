@@ -1,186 +1,134 @@
-import { Cursor } from "./Cursor";
+import { Browser, Screen } from "./Frames";
 import { EASE_CAMERA, type SceneDef } from "../timeline";
 
 /**
- * ASTA · impact — "UI story" (reference 1): the parent dashboard's 8-step
- * checklist fills, then the frame pulls back to the two reported figures.
- * Coordinates are in cqw of a 16:9 canvas (100 × 56.25).
+ * ASTA · impact. The parent's journey through the real dashboard screens
+ * (login → overview → profile → payment → downloads), a push-in on the
+ * registration checklist, then the window steps back for the two figures the
+ * school reported. Coordinates are in cqw of a 16:9 canvas (100 × 56.25).
  */
-const STEPS = 8;
-const STEP_T0 = 1300; // first tick
-const STEP_GAP = 380;
+
+const SCREENS = [
+  { k: "s0", src: "/images/asta/login.png", label: "Login" },
+  { k: "s1", src: "/images/asta/dashboard.png", label: "Overview" },
+  { k: "s2", src: "/images/asta/profile.png", label: "Profile" },
+  { k: "s3", src: "/images/asta/payment.png", label: "Payment information" },
+  { k: "s4", src: "/images/asta/downloads.png", label: "Document downloads" },
+];
+const IN = [0, 800, 4000, 4700, 5300]; // when each screen arrives
 
 export function SceneAstaImpact() {
   return (
     <div className="sc-asta">
-      <div className="sc-asta__win" data-k="win">
-        <div className="sc-asta__chrome">
-          <i /><i /><i />
-          <span className="sc-asta__url">ppdb.asy-syukriyyah.sch.id</span>
+      <Browser url="ppdb.asy-syukriyyah.sch.id" k="win" style={{ left: "17cqw", top: "3.4cqw", width: "66cqw" }}>
+        {/* the overview gets its own wrapper so the camera can push in on it */}
+        {SCREENS.map((s, i) =>
+          i === 1 ? (
+            <div key={s.k} className="sf-layer" data-k={s.k}>
+              <div className="sf-layer sc-asta__zoom" data-k="zoom">
+                <Screen src={s.src} sizes="(min-width: 1024px) 900px, 70vw" />
+              </div>
+            </div>
+          ) : (
+            <Screen key={s.k} k={s.k} src={s.src} sizes="(min-width: 1024px) 900px, 70vw" />
+          )
+        )}
+      </Browser>
+
+      <div className="sc-asta__labels">
+        {SCREENS.map((s) => (
+          <span key={s.k} data-k={`l${s.k}`}>{s.label}</span>
+        ))}
+      </div>
+
+      <div className="sc-asta__figs">
+        <div data-k="f0">
+          <span className="sc-asta__num" data-k="n1">~0</span>
+          <span className="sc-asta__lab">families registered through the new site in the last intake</span>
         </div>
-        <div className="sc-asta__body">
-          <nav className="sc-asta__side">
-            <span className="sc-asta__logo" />
-            {["Overview", "Profile", "Payment information", "Document downloads"].map((l, i) => (
-              <span key={l} className={i === 0 ? "is-on" : ""}>{l}</span>
-            ))}
-          </nav>
-          <div className="sc-asta__main">
-            <p className="sc-asta__h">Overview</p>
-            <span className="sc-asta__cta" data-k="cta">Complete your personal data now</span>
-            <div className="sc-asta__bar"><span data-k="fill" /></div>
-            <ol className="sc-asta__steps">
-              {Array.from({ length: STEPS }, (_, i) => (
-                <li key={i}>
-                  <span className="sc-asta__dot">
-                    <span data-k="tick">
-                      <svg viewBox="0 0 12 12"><path d="M2.5 6.4 5 8.8l4.6-5.4" /></svg>
-                    </span>
-                  </span>
-                  <span className="sc-asta__step">Step {i + 1}</span>
-                  <span className="sc-asta__pill" style={{ width: `${[38, 30, 44, 26, 36, 40, 28, 34][i]}%` }} data-k="pill" />
-                </li>
-              ))}
-            </ol>
-          </div>
+        <div data-k="f1">
+          <span className="sc-asta__num" data-k="n2">~0%</span>
+          <span className="sc-asta__lab">of them completed registration without help from school staff</span>
         </div>
       </div>
 
-      {/* the two figures grow out of small bars, load, then resolve */}
-      {[
-        { k: "n1", label: "families registered through the new site in the last intake" },
-        { k: "n2", label: "of them completed registration without help from school staff" },
-      ].map((c, i) => (
-        <div key={c.k} className="sc-asta__card" style={{ top: `${9 + i * 18}cqw` }} data-k={`card${i}`}>
-          <div className="sc-asta__sk" data-k={`sk${i}`}>
-            <i style={{ width: "34%" }} /><i style={{ width: "82%" }} /><i style={{ width: "60%" }} />
-          </div>
-          <div className="sc-asta__fig" data-k={`fig${i}`}>
-            <span className="sc-asta__num" data-k={c.k}>~0</span>
-            <span className="sc-asta__lab">{c.label}</span>
-          </div>
-        </div>
-      ))}
-
       <p className="sc-asta__src">Figures reported by the school&apos;s IT team.</p>
-      <Cursor k="cur" />
     </div>
   );
 }
 
-const card = (i: number): SceneDef["tracks"] => {
-  const t = 5000 + i * 350;
-  return [
-    {
-      k: `card${i}`,
-      at: [
-        [0, { opacity: 0, transform: "scale(0.18, 0.08)" }],
-        [t, { opacity: 0, transform: "scale(0.18, 0.08)" }],
-        [t + 200, { opacity: 1, transform: "scale(0.18, 0.08)" }],
-        [t + 550, { opacity: 1, transform: "scale(1, 0.08)" }],
-        [t + 950, { opacity: 1, transform: "scale(1, 1)" }],
-        [7350, { opacity: 1, transform: "scale(1, 1)" }],
-        [7750, { opacity: 0, transform: "scale(1, 1)" }],
-      ],
-    },
-    {
-      k: `sk${i}`,
-      at: [
-        [0, { opacity: 0 }],
-        [t + 950, { opacity: 0 }],
-        [t + 1150, { opacity: 1 }],
-        [t + 1450, { opacity: 1 }],
-        [t + 1650, { opacity: 0 }],
-      ],
-    },
-    {
-      k: `fig${i}`,
-      at: [
-        [0, { opacity: 0, transform: "translateY(0.6cqw)" }],
-        [t + 1500, { opacity: 0, transform: "translateY(0.6cqw)" }],
-        [t + 1900, { opacity: 1, transform: "translateY(0)" }],
-      ],
-    },
-  ];
+const screenTrack = (k: string, t: number): SceneDef["tracks"][number] =>
+  t === 0
+    ? { k, at: [[0, { opacity: 1 }]] }
+    : {
+        k,
+        at: [
+          [0, { opacity: 0, transform: "translateX(1.5cqw)" }],
+          [t, { opacity: 0, transform: "translateX(1.5cqw)" }],
+          [t + 450, { opacity: 1, transform: "translateX(0)" }],
+        ],
+      };
+
+const labelTrack = (i: number): SceneDef["tracks"][number] => {
+  const t = IN[i];
+  const next = IN[i + 1] ?? 5900;
+  return {
+    k: `ls${i}`,
+    at: [
+      [0, { opacity: i === 0 ? 1 : 0 }],
+      [t, { opacity: i === 0 ? 1 : 0 }],
+      [t + 300, { opacity: 1 }],
+      [next, { opacity: 1 }],
+      [next + 250, { opacity: 0 }],
+    ],
+  };
+};
+
+const fig = (i: number): SceneDef["tracks"][number] => {
+  const t = 6200 + i * 300;
+  return {
+    k: `f${i}`,
+    at: [
+      [0, { opacity: 0, transform: "translateY(1.2cqw)" }],
+      [t, { opacity: 0, transform: "translateY(1.2cqw)" }],
+      [t + 600, { opacity: 1, transform: "translateY(0)" }],
+    ],
+  };
 };
 
 export const astaImpact: SceneDef = {
   duration: 8000,
-  finalAt: 7300,
+  finalAt: 7350,
   tracks: [
-    // cursor: drift to the call to action, press, then rest out of the way
+    ...SCREENS.map((s, i) => screenTrack(s.k, IN[i])),
+    ...SCREENS.map((_, i) => labelTrack(i)),
+    // push in on "Progres pendaftaran", the 8-step checklist, and back out
     {
-      k: "cur",
+      k: "zoom",
       ease: EASE_CAMERA,
       at: [
-        [0, { opacity: 0, transform: "translate(72cqw, 44cqw) scale(1)" }],
-        [200, { opacity: 1, transform: "translate(72cqw, 44cqw) scale(1)" }],
-        [850, { opacity: 1, transform: "translate(37cqw, 15.6cqw) scale(1)" }],
-        [980, { opacity: 1, transform: "translate(37cqw, 15.6cqw) scale(0.82)" }],
-        [1120, { opacity: 1, transform: "translate(37cqw, 15.6cqw) scale(1)" }],
-        [1900, { opacity: 1, transform: "translate(70cqw, 30cqw) scale(1)" }],
-        [4200, { opacity: 1, transform: "translate(70cqw, 30cqw) scale(1)" }],
-        [4500, { opacity: 0, transform: "translate(70cqw, 30cqw) scale(1)" }],
-      ],
-    },
-    {
-      k: "cta",
-      at: [
         [0, { transform: "scale(1)" }],
-        [980, { transform: "scale(1)" }],
-        [1080, { transform: "scale(0.96)" }],
-        [1250, { transform: "scale(1)" }],
+        [1500, { transform: "scale(1)" }],
+        [2600, { transform: "scale(1.75)" }],
+        [3300, { transform: "scale(1.75)" }],
+        [4000, { transform: "scale(1)" }],
       ],
     },
-    // one tick per step, one step every STEP_GAP
-    {
-      k: "tick",
-      at: (i) => {
-        const t = STEP_T0 + i * STEP_GAP;
-        return [
-          [0, { transform: "scale(0)" }],
-          [t, { transform: "scale(0)" }],
-          [t + 320, { transform: "scale(1)" }],
-        ];
-      },
-    },
-    {
-      k: "pill",
-      at: (i) => {
-        const t = STEP_T0 + i * STEP_GAP;
-        return [
-          [0, { opacity: 0.35 }],
-          [t, { opacity: 0.35 }],
-          [t + 320, { opacity: 1 }],
-        ];
-      },
-    },
-    // the progress bar runs in step with the checklist
-    {
-      k: "fill",
-      ease: "linear",
-      at: [
-        [0, { transform: "scaleX(0)" }],
-        [STEP_T0, { transform: "scaleX(0)" }],
-        [STEP_T0 + STEPS * STEP_GAP, { transform: "scaleX(1)" }],
-      ],
-    },
-    // camera: pull back so the window recedes beside the figures
+    // the window steps back for the figures
     {
       k: "win",
       ease: EASE_CAMERA,
       at: [
-        [0, { opacity: 1, transform: "translate(0, 0) scale(1)" }],
-        [4500, { opacity: 1, transform: "translate(0, 0) scale(1)" }],
-        [5400, { opacity: 0.7, transform: "translate(-23cqw, -1cqw) scale(0.5)" }],
-        [7300, { opacity: 0.7, transform: "translate(-23cqw, -1cqw) scale(0.5)" }],
+        [0, { transform: "translate(0, 0) scale(1)" }],
+        [5800, { transform: "translate(0, 0) scale(1)" }],
+        [6700, { transform: "translate(-16cqw, 0) scale(0.6)" }],
       ],
     },
-    ...card(0),
-    ...card(1),
+    fig(0),
+    fig(1),
   ],
   counters: [
-    { k: "n1", from: 0, to: 700, start: 6550, end: 7250, format: (n) => `~${n}` },
-    { k: "n2", from: 0, to: 97, start: 6900, end: 7300, format: (n) => `~${n}%` },
+    { k: "n1", from: 0, to: 700, start: 6400, end: 7200, format: (n) => `~${n}` },
+    { k: "n2", from: 0, to: 97, start: 6700, end: 7350, format: (n) => `~${n}%` },
   ],
 };

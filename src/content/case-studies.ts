@@ -330,9 +330,10 @@ For many families, this site is their first real contact with the school. Every 
         sectionId: "impact",
         atTop: true,
         title: "~700 families · ~97% without help",
-        stillAlt: "The parent dashboard with an empty 8-step progress checklist.",
+        stillAlt:
+          "The admissions site's login screen in a browser window.",
         summary:
-          "The checklist fills one step at a time as a progress bar runs, then the view pulls back to two figures: about 700 families registered in the last intake, and about 97% completed registration without help. Figures reported by the school's IT team.",
+          "The parent's journey through the real dashboard screens (login, overview, profile, payment information, document downloads), with a closer look at the 8-step registration checklist; then the window steps back for the two figures: about 700 families registered in the last intake, and about 97% completed registration without help. Figures reported by the school's IT team.",
         durationMs: 8000,
       },
     ],
@@ -608,9 +609,10 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         sectionId: "insight-to-design",
         atTop: true,
         title: "Adding an activity, and removing one calmly",
-        stillAlt: "The empty state: \"No activities yet\" with an \"Add activity\" button.",
+        stillAlt:
+          "The first-activity empty state on a phone, beside the insight it answers.",
         summary:
-          "A slow pan across pastel activity cards while an activity is added (a name typed, an icon and a colour picked, saved) and a category list is browsed. New cards settle into the grid, then edit mode removes one through a calm confirmation step.",
+          "Five screens from the activities flow (empty state, add activity, icon picker, colour picker, edit mode) appear one at a time, each paired with the insight it answers and what was designed.",
         durationMs: 11000,
       },
       {
@@ -981,9 +983,10 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
         sectionId: "process",
         after: "**Develop: three rounds of testing.**",
         title: "Three rounds, and what each revealed",
-        stillAlt: "Three empty columns labelled Round 1 · Low-fi, Round 2 · Mid-fi and Round 3 · Hi-fi.",
+        stillAlt:
+          "Three dimmed columns, Round 1 · Low-fi, Round 2 · Mid-fi and Round 3 · Hi-fi, each with its screens.",
         summary:
-          "Lines draw in and converge across the three rounds as each one's task success and confusion moments appear (69.0% and 46, 68.6% and 42, 100% and 26) with what testing revealed, then the two separate history screens merge into one screen with filters.",
+          "Each round arrives with its screens, its task success and confusion moments (69.0% and 46, 68.6% and 42, 100% and 26) and what testing revealed; then a wipe across the History screen shows it before and after the refinements.",
         durationMs: 12000,
       },
       {
