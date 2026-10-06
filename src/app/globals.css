@@ -252,34 +252,40 @@ body {
 
 /* ── Cursors ──────────────────────────────────────────────────────────────
    A quill for reading, a pointing hand for anything you can act on. The
-   hotspots are measured from the artwork: the quill's nib is at its foot
-   (22, 44) and the hand's fingertip at its crown (10, 0), so the pointer
-   sits where the drawing points rather than at its top-left corner.
+   hotspots are measured from the artwork: the quill's nib is at its top-left
+   (6, 0) and the glove's fingertip at its crown (19, 0), so the pointer sits
+   where the drawing points rather than at its top-left corner.
 
-   Both are 46x46 — a cursor wants to be small enough to point with. Each
+   Both are 46x46 — a cursor wants to be small enough to point with — with a
+   92px @2x for sharp screens, offered through image-set (browsers that don't
+   support it keep the plain url on the line before). Each
    rule keeps a standard keyword after it, for the pointer types that ignore
    images and for anyone whose browser refuses the file. Coarse pointers have
    no cursor at all, so the whole thing is skipped there. */
 @media (hover: hover) and (pointer: fine) {
   body {
-    cursor: url("/cursors/quill.png") 22 44, auto;
+    cursor: url("/cursors/quill.png") 6 0, auto;
+    cursor: image-set(url("/cursors/quill.png") 1x, url("/cursors/quill@2x.png") 2x) 6 0, auto;
   }
 
   a,
   button,
+  .cursor-pointer,
   summary,
   label,
   select,
   video,
   [role="button"],
   [role="tab"] {
-    cursor: url("/cursors/hand.png") 10 0, pointer;
+    cursor: url("/cursors/hand.png") 19 0, pointer;
+    cursor: image-set(url("/cursors/hand.png") 1x, url("/cursors/hand@2x.png") 2x) 19 0, pointer;
   }
 
   /* a disabled control is not actionable: leave it the default arrow */
   button:disabled,
   a:not([href]) {
-    cursor: url("/cursors/quill.png") 22 44, default;
+    cursor: url("/cursors/quill.png") 6 0, default;
+    cursor: image-set(url("/cursors/quill.png") 1x, url("/cursors/quill@2x.png") 2x) 6 0, default;
   }
 
   /* text entry keeps its caret — the hand would hide where you are typing */
@@ -315,7 +321,6 @@ body {
   font: inherit;
   color: inherit;
   text-align: left;
-  cursor: pointer;
   perspective: 1400px;
   /* leans towards the cursor, like the book's front cover (see tiltHandlers) */
   --rx: 0deg;
@@ -407,7 +412,6 @@ body {
   color: var(--ink-soft);
 }
 .flip-back-text { margin: 0; font-size: calc(0.95rem * var(--reading-scale)); line-height: 1.55; color: var(--ink); }
-.flip-card.is-static { cursor: default; }
 .flip-card.is-static .flip-lead { font-size: calc(1.05rem * var(--reading-scale)); }
 @media (prefers-reduced-motion: reduce) {
   /* no swing and no lift: the cover fades away instead */

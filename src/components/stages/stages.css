@@ -51,8 +51,6 @@
   .stage-chip__mouse { display: none; }
   .stage-chip__touch { display: inline; }
 }
-.stage-frame { cursor: default; }
-@media (hover: none) { .stage-frame { cursor: pointer; } }
 .stage-progress {
   position: absolute;
   inset: auto 0 0 0;
