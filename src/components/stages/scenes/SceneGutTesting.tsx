@@ -9,25 +9,22 @@ import { EASE_CAMERA, type SceneDef } from "../timeline";
  * Coordinates are in cqw of a 16:9 canvas (100 × 56.25).
  */
 
-// Figures and findings verbatim from the case study's tables.
+// Figures verbatim from the case study's tables.
 const ROUNDS = [
   {
     label: "Round 1 · Low-fi",
     success: "69.0%",
     confusion: "46",
-    revealed: "Participants didn't understand how content was grouped and labelled",
   },
   {
     label: "Round 2 · Mid-fi",
     success: "68.6%",
     confusion: "42",
-    revealed: "3 of 6 participants started a new scan when asked to find an old one, and nobody found scan history unaided.",
   },
   {
     label: "Round 3 · Hi-fi",
     success: "100%",
     confusion: "26",
-    revealed: "100% task success, and no one confused the two histories.",
   },
 ];
 
@@ -45,25 +42,21 @@ export function SceneGutTesting() {
           <div key={r.label} className="sc-gut__col" style={{ left: `${COL_X[i]}cqw` }} data-k={`c${i}`}>
             <span className="sc-gut__label">{r.label}</span>
             <div className="sc-gut__devices">
-              {i === 0 && <Phone src="/images/gut-skin/stage/round1-home.png" style={{ left: "6.5cqw", width: "11cqw" }} />}
+              {i === 0 && <Phone src="/images/gut-skin/stage/round1-home.png" style={{ left: "7.25cqw", width: "13.5cqw" }} />}
               {i === 1 && (
                 <>
                   {/* two histories in two places: the round's problem */}
-                  <Phone src="/images/gut-skin/stage/round2-log-history.png" style={{ left: "11.5cqw", width: "10cqw", top: "1.2cqw" }} />
-                  <Phone src="/images/gut-skin/stage/round2-scan-history.png" style={{ left: "2.5cqw", width: "10cqw" }} />
+                  <Phone src="/images/gut-skin/stage/round2-log-history.png" style={{ left: "13.5cqw", width: "12cqw", top: "1.4cqw" }} />
+                  <Phone src="/images/gut-skin/stage/round2-scan-history.png" style={{ left: "2.5cqw", width: "12cqw" }} />
                 </>
               )}
-              {i === 2 && <Phone src="/images/gut-skin/screens/history-after.png" style={{ left: "6.5cqw", width: "11cqw" }} />}
+              {i === 2 && <Phone src="/images/gut-skin/screens/history-after.png" style={{ left: "7.25cqw", width: "13.5cqw" }} />}
             </div>
             <div className={`sc-gut__fig ${i === 2 ? "is-accent" : ""}`} data-k={`f${i}`}>
               <div className="sc-gut__stats">
                 <span><b>{r.success}</b><em>task success</em></span>
                 <span><b>{r.confusion}</b><em>confusion moments</em></span>
               </div>
-              <p className="sc-gut__rev">
-                <span className="sc-gut__ghost">{r.revealed}</span>
-                <span className="sc-gut__type" data-k={`rev${i}`} />
-              </p>
             </div>
           </div>
         ))}
@@ -155,10 +148,4 @@ export const gutTesting: SceneDef = {
     },
     { k: "aftertag", ease: EASE_CAMERA, at: [[0, { opacity: 0 }], [BA_T + 1600, { opacity: 0 }], [BA_T + 2200, { opacity: 1 }]] },
   ],
-  typers: ROUNDS.map((r, i) => ({
-    k: `rev${i}`,
-    text: r.revealed,
-    start: ROUND_T[i] + 900,
-    end: ROUND_T[i] + 900 + r.revealed.length * 16,
-  })),
 };

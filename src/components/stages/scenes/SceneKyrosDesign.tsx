@@ -12,27 +12,22 @@ const STEPS = [
   {
     src: "/images/binapani/screens/first-activity.png",
     insight: "First-time users face an empty screen",
-    design: "A friendly empty state that invites carers to create their first activity, with a “do it later” option",
   },
   {
     src: "/images/binapani/screens/activity-add.png",
     insight: "Each child needs a personal schedule",
-    design: "An add-activity flow where carers pick an icon or upload their own image, choose a card colour, and add a name and description",
   },
   {
     src: "/images/binapani/screens/icon-picker.png",
     insight: "Symbols over text",
-    design: "Activity cards led by a large icon, with a short label underneath",
   },
   {
     src: "/images/binapani/screens/colour-picker.png",
     insight: "Colour-coded timeline boards are already familiar",
-    design: "Colour-coded cards with a soft pastel palette, plus a custom colour picker",
   },
   {
     src: "/images/binapani/screens/activities-edit.png",
     insight: "Routines change",
-    design: "An edit mode to remove or replace activities (with a confirmation step so nothing is deleted by accident), plus suggested activities for adding quickly",
   },
 ];
 
@@ -47,7 +42,7 @@ export function SceneKyrosDesign() {
   return (
     <div className="sc-kyros">
       <div className="sc-kyros__stage" data-k="drift">
-        <Phone src={STEPS[0].src} style={{ left: "15cqw", top: "3.6cqw", width: "22.6cqw" }}>
+        <Phone src={STEPS[0].src} style={{ left: "53cqw", top: "4.5cqw", width: "21.5cqw" }}>
           {STEPS.slice(1).map((s, i) => (
             <Screen key={s.src} src={s.src} k={`s${i + 1}`} />
           ))}
@@ -60,10 +55,7 @@ export function SceneKyrosDesign() {
             <span className="sc-kyros__idx">
               {String(i + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
             </span>
-            <span className="sc-kyros__k">Insight</span>
             <p className="sc-kyros__insight">{s.insight}</p>
-            <span className="sc-kyros__k">What I designed</span>
-            <p className="sc-kyros__design">{s.design}</p>
           </div>
         ))}
       </div>

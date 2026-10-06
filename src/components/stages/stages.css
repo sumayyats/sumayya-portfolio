@@ -4,12 +4,16 @@
    the project's palette in both page themes; the frame, chip and caption
    follow the page. */
 
+/* The card: a soft backdrop per book, the real screens on top (like a
+   product film on a photographed surface). */
 .stage-frame {
   aspect-ratio: 16 / 9;
+  border-radius: 14px;
   background: color-mix(in srgb, var(--ink) 6%, var(--paper));
-  box-shadow: 0 0 0 1px var(--edge), 0 24px 50px -36px rgba(0, 0, 0, 0.45);
-  will-change: transform;
 }
+.stage-frame--asta { background: radial-gradient(120% 95% at 18% 8%, #edf3e8 0%, #d9e6d3 48%, #c2d5bb 100%); }
+.stage-frame--kyros { background: radial-gradient(120% 95% at 82% 8%, #f1f5fc 0%, #dde6f5 50%, #c9d6ee 100%); }
+.stage-frame--gut { background: #5c4630 url("/images/gut-skin/prototype-bg-2.jpg") center / cover; }
 /* TODO(phase 6): a 4:5 composition per scene for phones; until then they
    keep 16:9 rather than float the canvas in empty bands. */
 .stage-scene {
@@ -83,7 +87,7 @@
 .sf-browser__page { position: relative; aspect-ratio: 1513 / 1080; overflow: hidden; background: #fafafa; }
 
 /* ─────────── ASTA · the parent's journey, on the book's paper ─────────── */
-.sc-asta { background: #f4f1e8; color: #20261d; }
+.sc-asta { color: #20261d; }
 .sc-asta__zoom { transform-origin: 44% 38%; }
 .sc-asta__labels { position: absolute; left: 17cqw; top: 53.3cqw; height: 1.4cqw; }
 .sc-asta__labels span {
@@ -100,41 +104,46 @@
 }
 
 /* ─────────── Kyros · calm, one screen and one insight at a time ─────────── */
-.sc-kyros { background: #eef1f6; color: #1b2233; }
+.sc-kyros { color: #1b2233; }
 .sc-kyros__stage { position: absolute; inset: 0; }
-.sc-kyros__notes { position: absolute; left: 46cqw; top: 12cqw; width: 40cqw; height: 32cqw; }
+.sc-kyros__notes { position: absolute; left: 12cqw; top: 21cqw; width: 34cqw; height: 14cqw; }
 .sc-kyros__note { position: absolute; inset: 0; opacity: 0; }
-.sc-kyros__idx { display: block; margin-bottom: 3cqw; font: 0.95cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.16em; color: #6e93d6; }
+.sc-kyros__idx { display: block; margin-bottom: 1.6cqw; font: 0.95cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.16em; color: #6e93d6; }
 .sc-kyros__k { display: block; margin-bottom: 0.8cqw; font: 0.85cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #6b7487; }
-.sc-kyros__insight { margin-bottom: 2.6cqw !important; font-family: var(--font-dico), "Libre Baskerville", Georgia, serif; font-size: 2.7cqw; line-height: 1.18; color: #1e2f5a; }
+.sc-kyros__insight { font-family: var(--font-dico), "Libre Baskerville", Georgia, serif; font-size: 3.4cqw; line-height: 1.15; color: #1e2f5a; }
 .sc-kyros__design { font-size: 1.45cqw; line-height: 1.5; color: #2c3550; max-width: 36cqw; }
-.sc-kyros__dots { position: absolute; left: 46cqw; top: 48cqw; display: flex; gap: 0.8cqw; }
+.sc-kyros__dots { position: absolute; left: 12cqw; top: 38cqw; display: flex; gap: 0.8cqw; }
 .sc-kyros__dots i { width: 2.6cqw; height: 0.25cqw; border-radius: 99px; background: #1e2f5a; opacity: 0.3; }
 
 /* ─────────── Gut-Skin · rounds of testing, dark editorial ─────────── */
-.sc-gut { background: #14130e; color: #ece6da; }
+.sc-gut { color: #f4ede1; }
 .sc-gut__rounds { position: absolute; inset: 0; transform-origin: 50% 40%; }
 .sc-gut__col { position: absolute; top: 0; bottom: 0; width: 28cqw; }
-.sc-gut__col + .sc-gut__col { border-left: 0.08cqw solid rgba(236, 230, 218, 0.1); }
-.sc-gut__label { position: absolute; left: 1.5cqw; top: 3.6cqw; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #a8a08f; }
-.sc-gut__devices { position: absolute; left: 0; right: 0; top: 6.6cqw; height: 25cqw; }
+.sc-gut__col + .sc-gut__col { border-left: 0.08cqw solid rgba(244, 237, 225, 0.16); }
+.sc-gut__label { position: absolute; left: 1.5cqw; top: 3.6cqw; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 237, 225, 0.75); }
+.sc-gut__devices { position: absolute; left: 0; right: 0; top: 7.6cqw; height: 30cqw; }
 .sc-gut__devices .sf-phone { top: 0; padding: 0.4cqw; border-radius: 2cqw; background: #000; }
 .sc-gut__devices .sf-phone__screen { border-radius: 1.65cqw; }
-.sc-gut__fig { position: absolute; left: 1.5cqw; right: 1cqw; top: 33.4cqw; opacity: 0; }
+.sc-gut__fig { position: absolute; left: 1.5cqw; right: 1cqw; top: 42cqw; opacity: 0; }
 .sc-gut__stats { display: flex; gap: 2.6cqw; }
 .sc-gut__stats span { display: flex; flex-direction: column; gap: 0.5cqw; }
 .sc-gut__stats b { font-family: var(--font-dico), "Libre Baskerville", Georgia, serif; font-size: 3.6cqw; line-height: 1; font-weight: 400; font-variant-numeric: tabular-nums; }
-.sc-gut__stats em { font: normal 0.8cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #8f8878; }
-.sc-gut__fig.is-accent b { color: #a3be8c; }
+.sc-gut__stats em { font: normal 0.8cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(244, 237, 225, 0.7); }
+.sc-gut__fig.is-accent b { color: #c9dcb4; }
 .sc-gut__rev { position: relative; margin-top: 1.6cqw !important; font-size: 1.15cqw; line-height: 1.45; color: #d6cfc0; }
 .sc-gut__ghost { visibility: hidden; }
 .sc-gut__type { position: absolute; inset: 0; }
 .sc-gut__ba { position: absolute; inset: 0; opacity: 0; }
-.sc-gut__bacap { position: absolute; left: 0; right: 0; top: 3.6cqw; text-align: center; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #a8a08f; }
+.sc-gut__bacap { position: absolute; left: 0; right: 0; top: 3.6cqw; text-align: center; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 237, 225, 0.75); }
 .sc-gut__baphone { left: 41cqw; top: 7cqw; width: 18cqw; height: 45cqw; aspect-ratio: auto; }
 .sc-gut__wipe { position: absolute; inset: 0; overflow: hidden; transform: translateX(100%); }
 .sc-gut__wipein { position: absolute; inset: 0; transform: translateX(-100%); }
 .sc-gut__line { position: absolute; left: 41cqw; top: 6cqw; width: 0.15cqw; height: 47cqw; background: #a3be8c; opacity: 0; }
-.sc-gut__tag { position: absolute; top: 27cqw; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #a8a08f; }
+.sc-gut__tag { position: absolute; top: 27cqw; font: 1cqw/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 237, 225, 0.75); }
 .sc-gut__tag.is-before { right: 62cqw; }
 .sc-gut__tag.is-after { left: 62cqw; color: #a3be8c; opacity: 0; }
+
+/* ─────────── Overview stages ─────────── */
+.sc-ov .sf-phone { box-shadow: 0 2.4cqw 5cqw -2cqw rgba(0, 0, 0, 0.35); }
+.sc-ov__scroll { position: relative; }
+.sc-ov__scroll img { display: block; width: 100%; height: auto; }

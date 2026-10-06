@@ -44,11 +44,11 @@ export function SceneAstaImpact() {
       <div className="sc-asta__figs">
         <div data-k="f0">
           <span className="sc-asta__num" data-k="n1">~0</span>
-          <span className="sc-asta__lab">families registered through the new site in the last intake</span>
+          <span className="sc-asta__lab">families registered</span>
         </div>
         <div data-k="f1">
           <span className="sc-asta__num" data-k="n2">~0%</span>
-          <span className="sc-asta__lab">of them completed registration without help from school staff</span>
+          <span className="sc-asta__lab">without help</span>
         </div>
       </div>
 

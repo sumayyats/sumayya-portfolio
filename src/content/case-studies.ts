@@ -56,7 +56,8 @@ export const caseStudies: CaseStudy[] = [
       {
         id: "overview",
         title: "Overview",
-        media: "screenshots",
+        media: "motion",
+        motionStageId: "asta-overview",
         body: `**What it is:** The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.
 `,
       },
@@ -306,6 +307,14 @@ For many families, this site is their first real contact with the school. Every 
     ],
     motionStages: [
       {
+        id: "asta-overview",
+        sectionId: "overview",
+        title: "The new homepage",
+        stillAlt: "The redesigned admissions homepage in a browser window.",
+        summary: "A slow scroll down the full redesigned homepage.",
+        durationMs: 10000,
+      },
+      {
         id: "asta-process",
         sectionId: "process",
         title: "From paragraphs to structure",
@@ -386,7 +395,8 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "overview",
         title: "Overview",
-        media: "screenshots",
+        media: "motion",
+        motionStageId: "kyros-overview",
         body: `**What it is:** Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.
 
 **Timeline:** November 2025 to January 2026 (3 months), alongside my Master's studies.`,
@@ -595,6 +605,14 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
     ],
     motionStages: [
       {
+        id: "kyros-overview",
+        sectionId: "overview",
+        title: "Kyros on iPhone",
+        stillAlt: "Three Kyros screens on phones: Home, Your Activities and an activity.",
+        summary: "The three screens float gently, side by side.",
+        durationMs: 10000,
+      },
+      {
         id: "kyros-research",
         sectionId: "research",
         after: "**Interview.**",
@@ -688,7 +706,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "overview",
         title: "Overview",
-        media: "screenshots",
+        media: "motion",
+        motionStageId: "gut-overview",
         body: `**What it is:** Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.
 
 **Methods:** Double Diamond, with Design Thinking techniques in the Discover and Define stages.`,
@@ -967,6 +986,14 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       },
     ],
     motionStages: [
+      {
+        id: "gut-overview",
+        sectionId: "overview",
+        title: "Light and dark",
+        stillAlt: "The Gut-Skin home screen on two phones, in light and dark mode.",
+        summary: "The main features (home, insights, scan, community, profile) step through in light and dark mode side by side.",
+        durationMs: 10000,
+      },
       {
         id: "gut-define",
         sectionId: "process",
