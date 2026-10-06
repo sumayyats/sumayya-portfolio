@@ -11,6 +11,8 @@ import { useSound } from "@/lib/sound";
 import { FigureGallery } from "./Figure";
 import { Segmented } from "./Reader";
 import { PrototypeEmbed } from "./PrototypeEmbed";
+import { MotionStage } from "@/components/stages/MotionStage";
+import { splitBody } from "@/components/stages/splitBody";
 
 const PROTOTYPE_ID = "prototype";
 const ARTIFACTS_ID = "artifacts";
@@ -127,17 +129,31 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
         tabIndex={-1}
         className="px-[max(1.25rem,5vw)] pb-24 pt-8 focus:outline-none lg:overflow-y-auto lg:px-10 lg:py-9"
       >
-        <div className="mx-auto max-w-[68ch] lg:mx-0">
+        <div
+          className={`mx-auto lg:mx-0 ${
+            section?.media === "motion" ? "max-w-[min(100%,1100px)]" : "max-w-[68ch]"
+          }`}
+        >
           {activeId === PROTOTYPE_ID ? (
             <PrototypeEmbed study={study} bare />
           ) : activeId === ARTIFACTS_ID ? (
             <Artifacts study={study} />
           ) : section ? (
             <article key={section.id}>
-              <h2 className="mb-5 font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight tracking-tight text-ink">
+              <h2 className="mb-5 max-w-[68ch] font-display text-[clamp(1.5rem,3vw,2rem)] leading-tight tracking-tight text-ink">
                 {section.title}
               </h2>
-              <Markdown source={section.body} />
+              {/* prose at reading measure; motion stages break out to the
+                  full width of the pane */}
+              {splitBody(study, section).map((part, i) =>
+                part.kind === "md" ? (
+                  <div key={i} className="max-w-[68ch]">
+                    <Markdown source={part.source} />
+                  </div>
+                ) : (
+                  <MotionStage key={part.spec.id} spec={part.spec} className="my-10" />
+                )
+              )}
               <FigureGallery visuals={visuals} />
             </article>
           ) : null}
