@@ -18,6 +18,38 @@ export type CaseStudySection = {
   title: string;
   /** Markdown. Rendered by the reading views. */
   body: string;
+  /**
+   * What sits beside the prose. `screenshots` only in the overview; `motion`
+   * where a motion stage carries the section; `none` is text only. Every
+   * other figure lives on the Artifacts page.
+   */
+  media: "screenshots" | "motion" | "none";
+  /** The section's first motion stage (more can follow; see `MotionStageSpec.after`). */
+  motionStageId?: string;
+};
+
+/**
+ * One animated scene. The scene itself is code (components/stages/); this is
+ * what the page needs to place it and to describe it to screen readers.
+ */
+export type MotionStageSpec = {
+  /** e.g. `asta-process`; also the scene's registry key. */
+  id: string;
+  sectionId: string;
+  /**
+   * Where the stage breaks into the prose: after the paragraph that starts
+   * with this text. Defaults to the section's opening paragraph.
+   */
+  after?: string;
+  /** Straight under the heading instead (for sections that open on a table). */
+  atTop?: boolean;
+  /** Short caption under the stage. */
+  title: string;
+  /** Describes the still frame. */
+  stillAlt: string;
+  /** One sentence on what the animation shows. */
+  summary: string;
+  durationMs: number;
 };
 
 /** One image in a multi-part figure. */
@@ -110,7 +142,13 @@ export type CaseStudy = {
     mockup?: string;
   };
   sections: CaseStudySection[];
+  /**
+   * Figures. Those with `sectionId: "overview"` are the only screenshots
+   * shown in the reading flow; the rest are listed on the Artifacts page,
+   * grouped by the section they document.
+   */
   visuals: CaseStudyVisual[];
+  motionStages: MotionStageSpec[];
   prototype?: CaseStudyPrototype;
 };
 

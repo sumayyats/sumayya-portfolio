@@ -56,12 +56,15 @@ export const caseStudies: CaseStudy[] = [
       {
         id: "overview",
         title: "Overview",
+        media: "screenshots",
         body: `**What it is:** The online admissions website (PPDB) for Asy-Syukriyyah Islamic School in Tangerang, Indonesia. Parents use it to choose one of the school's eight units, from kindergarten to senior high, and to register their child.
 `,
       },
       {
         id: "impact",
         title: "Impact",
+        media: "motion",
+        motionStageId: "asta-impact",
         body: `> **~700 families** registered through the new site in the last intake.
 > **~97%** of them completed registration **without help** from school staff.
 >
@@ -70,6 +73,7 @@ export const caseStudies: CaseStudy[] = [
       {
         id: "challenge",
         title: "The challenge",
+        media: "none",
         body: `The old site worked, but it made parents do the work. The school's own feedback was clear: **it looked old, and requirements were hard to find because the pages were text-heavy with no icons.**
 
 - **Text-heavy:** the homepage explained the whole process in dense paragraphs. Parents had to read all of it to find which of three registration types applied to them.
@@ -89,6 +93,8 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "process",
         title: "Process",
+        media: "motion",
+        motionStageId: "asta-process",
         body: `**1. Understanding the landscape.** I compared six Indonesian school admissions sites (including Sekolah Kak Seto, SIT Nurul Fikri and Jakarta Intercultural School). I noted what felt familiar to parents and what created friction.
 
 **2. Restructuring the information.** I split the product into two parts with separate information architectures:
@@ -105,6 +111,8 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "decisions",
         title: "Key design decisions",
+        media: "motion",
+        motionStageId: "asta-decisions",
         body: `| Problem | Decision |
 |---|---|
 | Paragraphs of instructions | Replaced them with **programme cards** (one per school unit) and **numbered step graphics** for the regular (8 steps) and internal (6 steps) routes |
@@ -117,6 +125,7 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "constraints",
         title: "Constraints and trade-offs",
+        media: "none",
         body: `- **No user testing.** This was a freelance project with a design-only brief, so I didn't test with parents. I relied on the comparative review, the client's requirements, and established patterns parents would recognise from other school sites.
 - **Design handover, not build.** Implementation sat with the developer. My deliverable was a complete set of screens and components that left as little as possible to interpretation.
 - **No "before" numbers.** The school didn't track registrations or support requests before launch. The "before" side of this story is their qualitative feedback (dated, confusing, text-heavy), and the impact figures show how the new site performs now.`,
@@ -124,12 +133,37 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "learned",
         title: "What I learned",
+        media: "none",
         body: `- **Structure beats styling.** The biggest improvement came from reorganising information (cards, steps, a progress checklist), not from the new visual style.
 - **Plan measurement before launch.** Now I'd agree baseline metrics with the client before launch (registrations, support calls, completion without help) so the change can be measured, not only the outcome.
 - **Test even when the brief doesn't ask for it.** Next time I'd push for a few quick sessions with parents, even informal ones, before handover.`,
       },
     ],
     visuals: [
+      {
+        id: "asta-hero",
+        title: "The new site",
+        src: "/images/asta/cover-mockup.png",
+        width: 2000,
+        height: 1095,
+        sectionId: "overview",
+        alt: "The redesigned admissions homepage on a laptop and a phone.",
+        caption: "The redesigned admissions site on desktop and mobile.",
+        shape: "wide",
+      },
+      {
+        id: "asta-old-new",
+        title: "Old and new homepage",
+        src: "/images/asta/before-homepage.png",
+        sectionId: "overview",
+        alt: "The old admissions homepage, dense with paragraphs, beside the full redesigned homepage with programme cards and numbered step graphics.",
+        caption: "Before and after: the old homepage and the new one.",
+        shape: "wide",
+        frames: [
+          { src: "/images/asta/before-homepage.png", width: 2000, height: 1244, label: "Before" },
+          { src: "/images/asta/homepage.png", width: 512, height: 2000, label: "After" },
+        ],
+      },
       {
         id: "asta-before",
         title: "The old homepage",
@@ -270,6 +304,38 @@ For many families, this site is their first real contact with the school. Every 
         ],
       },
     ],
+    motionStages: [
+      {
+        id: "asta-process",
+        sectionId: "process",
+        title: "From paragraphs to structure",
+        stillAlt:
+          "The old homepage: dense grey paragraphs and a small dashed image box reading \"8-step flow, click to zoom\".",
+        summary:
+          "The old homepage's paragraphs dissolve into labelled chips that arrange into the two information architectures, the public site and the parent dashboard, which then collapse into the design system: the green colour scale, TT Commons, and a button, field and card in their states.",
+        durationMs: 10000,
+      },
+      {
+        id: "asta-decisions",
+        sectionId: "decisions",
+        atTop: true,
+        title: "Problem → decision",
+        stillAlt: "A single panel labelled Problem: Paragraphs of instructions.",
+        summary:
+          "Each problem panel expands, fills with loading lines and resolves into its decision: programme cards with one being selected, the numbered step graphic, the programme detail page with icon-led requirement cards, and the profile accordion opening one section at a time.",
+        durationMs: 10000,
+      },
+      {
+        id: "asta-impact",
+        sectionId: "impact",
+        atTop: true,
+        title: "~700 families · ~97% without help",
+        stillAlt: "The parent dashboard with an empty 8-step progress checklist.",
+        summary:
+          "The checklist fills one step at a time as a progress bar runs, then the view pulls back to two figures: about 700 families registered in the last intake, and about 97% completed registration without help. Figures reported by the school's IT team.",
+        durationMs: 8000,
+      },
+    ],
   },
 
   // ─────────────────────────────────────────────────────────── BINAPANI ──
@@ -319,6 +385,7 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "overview",
         title: "Overview",
+        media: "screenshots",
         body: `**What it is:** Kyros, Binapani's scheduling app. It helps autistic children follow a daily routine through visual, card-based activities. The app is now live on Google Play.
 
 **Timeline:** November 2025 to January 2026 (3 months), alongside my Master's studies.`,
@@ -326,6 +393,7 @@ For many families, this site is their first real contact with the school. Every 
       {
         id: "challenge",
         title: "The challenge",
+        media: "none",
         body: `For many autistic children, a predictable routine means less anxiety and more independence. Schools already know this: they use physical timeline boards, symbol cards and communication boards every day. But these tools are manual (printing and moving symbols around), they're hard to personalise, and there was no digital scheduling app that fit these children's needs.
 
 The brief: a clean, calm scheduling app for mobile and tablet with visual task cards, timers, and tasks that can be edited, skipped or replaced.`,
@@ -333,6 +401,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "research",
         title: "Research",
+        media: "motion",
+        motionStageId: "kyros-research",
         body: `**Literature review.** Uduak and I split the reading. The evidence pointed clearly towards **visual schedules**: they increase on-task behaviour and independence, and make transitions smoother because upcoming events are visible.
 
 **Interview.** I interviewed a teaching assistant who supports autistic children at school. Key insights:
@@ -345,6 +415,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "insight-to-design",
         title: "From insight to design",
+        media: "motion",
+        motionStageId: "kyros-design",
         body: `| Insight | What I designed |
 |---|---|
 | Symbols over text | **Activity cards led by a large icon**, with a short label underneath |
@@ -360,6 +432,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "constraints",
         title: "Constraints and trade-offs",
+        media: "none",
         body: `- **Time.** Three months, part-time around my studies, so we prioritised the core flows over extra features.
 - **Custom icons.** Binapani wanted every icon drawn in-house, which wasn't achievable for a full library in three months. Instead, I adapted icons from **Streamline** into one consistent style, which gave the team a complete, usable set within the timeline.
 - **Handover.** The flows shipped as designed, but the build changed some visual details: the icons were swapped, and some buttons were restyled. For example, the **remove button became red**. Strong reds can read as alarming and be overstimulating for autistic children, which is why I had kept destructive actions calm and relied on a confirmation step instead. This case study shows my original designs and the reasoning behind them.`,
@@ -367,17 +440,36 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "feedback",
         title: "Feedback and iteration",
+        media: "none",
         body: `Feedback centred on the **card style**, which I refined. The flow structure itself held up without major changes.`,
       },
       {
         id: "learned",
         title: "What I learned",
+        media: "none",
         body: `- **Designing for accessibility starts with restraint.** Fewer colours, fewer words and bigger targets did more than any added feature.
 - **Research can be small and still useful.** One interview grounded in lived classroom experience changed how we thought about personalisation and choice.
 - **Document the "why", not just the "what".** The red remove button taught me that a design system needs its accessibility reasoning written down. Otherwise, a well-meant change can undo a deliberate decision. Next time I'd add usage notes (e.g. "no high-alert colours for destructive actions") to key components.`,
       },
     ],
     visuals: [
+      {
+        id: "bina-hero",
+        title: "Kyros on iPhone",
+        src: "/images/binapani/cover-phones.webp",
+        sectionId: "overview",
+        alt: "Two iPhones: the Home screen, with what is on now and next, and the Your Activities grid of pastel activity cards.",
+        caption: "Home and the activities library.",
+        shape: "wide",
+        video: {
+          src: "/images/binapani/cover.mp4",
+          poster: "/images/binapani/cover-phones.webp",
+          width: 2902,
+          height: 2176,
+        },
+      },
+      // TODO(Sumayya): a Google Play listing screenshot for the overview. No
+      // export yet; the listing is linked from the shelf card meanwhile.
       {
         id: "bina-mockup",
         title: "Kyros on iPhone",
@@ -394,7 +486,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         id: "bina-onboarding",
         title: "Onboarding directions",
         src: "/images/binapani/screens/onboard-blue-1.png",
-        sectionId: "insight-to-design",
+        sectionId: "overview",
         alt: "Three onboarding screens in a light direction and a blue one.",
         caption: "Onboarding, explored in blue and light directions.",
         frames: [
@@ -500,6 +592,38 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
         ],
       },
     ],
+    motionStages: [
+      {
+        id: "kyros-research",
+        sectionId: "research",
+        after: "**Interview.**",
+        title: "Four insights, and what each became",
+        stillAlt: "A soft, blurred classroom communication board made of simple symbol tiles.",
+        summary:
+          "Four insight cards from the interview float in over the board one at a time (every child is different, symbols over text, routine changes cause distress, choice matters), then each slowly becomes the design element it led to: the add-activity panel, an icon-led card, the edit-mode confirmation, and the suggested activities row.",
+        durationMs: 10000,
+      },
+      {
+        id: "kyros-design",
+        sectionId: "insight-to-design",
+        atTop: true,
+        title: "Adding an activity, and removing one calmly",
+        stillAlt: "The empty state: \"No activities yet\" with an \"Add activity\" button.",
+        summary:
+          "A slow pan across pastel activity cards while an activity is added (a name typed, an icon and a colour picked, saved) and a category list is browsed. New cards settle into the grid, then edit mode removes one through a calm confirmation step.",
+        durationMs: 11000,
+      },
+      {
+        id: "kyros-devices",
+        sectionId: "insight-to-design",
+        after: "**Mobile and tablet.**",
+        title: "From phone to iPad landscape",
+        stillAlt: "The activities screen on a phone.",
+        summary:
+          "The phone becomes an iPad in landscape, the card grid reflows into three columns, and the 4-digit passcode fills one dot at a time.",
+        durationMs: 8000,
+      },
+    ],
   },
 
   // ─────────────────────────────────────────────────────────── GUT-SKIN ──
@@ -562,6 +686,7 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "overview",
         title: "Overview",
+        media: "screenshots",
         body: `**What it is:** Gut-Skin is an AI-assisted app for women aged 22 to 30 with recurring skin concerns. It helps them understand how gut health, diet, sleep and stress affect their skin, through skin scanning, a daily log, an AI assistant and personalised recommendations.
 
 **Methods:** Double Diamond, with Design Thinking techniques in the Discover and Define stages.`,
@@ -569,6 +694,8 @@ The brief: a clean, calm scheduling app for mobile and tablet with visual task c
       {
         id: "impact",
         title: "Impact",
+        media: "motion",
+        motionStageId: "gut-impact",
         body: `| | Round 1 · Low-fi | Round 2 · Mid-fi | Round 3 · Hi-fi |
 |---|---|---|---|
 | Task success | 69.0% | 68.6% | **100%** |
@@ -580,6 +707,7 @@ Final round: **SUS 82.5** (grade A, above the 68 benchmark) and an average **+2.
       {
         id: "challenge",
         title: "The challenge",
+        media: "none",
         body: `The problem isn't a lack of information. It's that the information is scattered.
 
 - **38 survey responses:** 63% had managed their skin concern for **more than two years**.
@@ -597,6 +725,8 @@ Existing apps don't close the gap. I scored **17 apps** across five dimensions. 
       {
         id: "process",
         title: "Process",
+        media: "motion",
+        motionStageId: "gut-define",
         body: `**Discover.** Survey, semi-structured interviews and a competitor review. Five interviewees asked, unprompted, for a skin scanner.
 
 **Define.** A remote co-creation workshop with 3 participants (card sorting, dot voting, a prioritisation matrix and Crazy 8s). It changed two of my assumptions:
@@ -624,6 +754,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       {
         id: "ai",
         title: "Designing AI responsibly",
+        media: "none",
         body: `- **Patterns, not diagnoses.** Individual microbiome responses vary a lot, so the app helps users notice their own patterns instead of claiming to know the cause.
 - **Sources.** The assistant cites its sources and makes clear it doesn't replace a GP or dermatologist.
 - **Privacy at the point of use.** A first-time participant asked, *"When I am scanning my face, I want to know how that is being taken care of."* Face images count as special category data under UK GDPR, so the scan screen states how long images are kept.
@@ -633,6 +764,7 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       {
         id: "risks",
         title: "Risks and trade-offs",
+        media: "none",
         body: `- **The 100% needs context.** Four of the five round-3 participants had seen an earlier version, and task titles named the destinations. The one true newcomer scored lowest (SUS 60). The design is well liked, but first-use learnability is only partly proven.
 - **Scoped out on purpose:** visual grouping inside History and moving one progress control. I explored three options for grouping but didn't build them before the deadline.
 - **Not yet tested:** whether users understand that scan results and the assistant's answers are AI-generated.`,
@@ -640,12 +772,36 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
       {
         id: "learned",
         title: "What I learned",
+        media: "none",
         body: `- **Fixing one layer reveals the next.** A flat score between rounds 1 and 2 wasn't failure; the problems had moved from labels to structure.
 - **A headline number needs its caveats alongside it**, not in a footnote.
 - **Recruit fresh participants for the final round.** Next time I'd bring in at least two first-time users.`,
       },
     ],
     visuals: [
+      {
+        id: "gs-hero",
+        title: "Gut-Skin on iPhone",
+        src: "/images/gut-skin/cover-mockup-2.png",
+        sectionId: "overview",
+        alt: "Two iPhones showing the Gut-Skin home screen and the AI assistant, and the app icon on a home screen and in the dock.",
+        caption: "The home screen, the AI assistant, and the app icon at home on a phone.",
+        shape: "wide",
+        frames: [
+          { src: "/images/gut-skin/cover-mockup-2.png", width: 844, height: 1026, label: "Home and assistant" },
+          { src: "/images/gut-skin/app-icon-home.webp", width: 2000, height: 2000, label: "Home screen" },
+          { src: "/images/gut-skin/app-icon-dock.webp", width: 1896, height: 1506, label: "Dock" },
+        ],
+      },
+      {
+        id: "gs-splash",
+        title: "Splash screen",
+        src: "/images/gut-skin/splash.png",
+        sectionId: "overview",
+        alt: "The Gut-Skin splash screen.",
+        caption: "Splash screen.",
+        frames: [{ src: "/images/gut-skin/splash.png" }],
+      },
       {
         id: "gs-axis",
         title: "The gut-skin axis",
@@ -806,6 +962,39 @@ Card sorting also showed that **tracking is the foundation and guidance is its o
           { src: "/images/gut-skin/screens/dark-community-2.png", label: "Communities" },
           { src: "/images/gut-skin/screens/dark-profile-2.png", label: "Profile" },
         ],
+      },
+    ],
+    motionStages: [
+      {
+        id: "gut-define",
+        sectionId: "process",
+        after: "Card sorting also showed",
+        title: "Scattered research, down to Doubt",
+        stillAlt:
+          "A dark tile filling the frame: \"The problem isn't a lack of information. It's that the information is scattered.\"",
+        summary:
+          "The view zooms out to a wall of research artefacts drifting in rows (survey figures, the 17-app competitor matrix, card-sort chips, dot votes and Crazy 8s), then the current-state journey draws across, Notice to Search, Buy, Try, Doubt and Drop, and pushes in on Doubt, where the line breaks.",
+        durationMs: 12000,
+      },
+      {
+        id: "gut-testing",
+        sectionId: "process",
+        after: "**Develop: three rounds of testing.**",
+        title: "Three rounds, and what each revealed",
+        stillAlt: "Three empty columns labelled Round 1 · Low-fi, Round 2 · Mid-fi and Round 3 · Hi-fi.",
+        summary:
+          "Lines draw in and converge across the three rounds as each one's task success and confusion moments appear (69.0% and 46, 68.6% and 42, 100% and 26) with what testing revealed, then the two separate history screens merge into one screen with filters.",
+        durationMs: 12000,
+      },
+      {
+        id: "gut-impact",
+        sectionId: "impact",
+        after: "Final round:",
+        title: "Day 1 vs Day 7, and the final round",
+        stillAlt: "A phone on the face-scan screen, a scan line at the top of a dashed oval.",
+        summary:
+          "The scan line sweeps the face twice, a Day 1 vs Day 7 weekly summary resolves and story cards slide past; the view pulls back to rows of findings and quotes: SUS 82.5 (grade A, above the 68 benchmark), a +2.00 average confidence gain, the persona quote and a round-3 participant on face scanning, with the caveat that four of the five round-3 participants had seen an earlier version.",
+        durationMs: 10000,
       },
     ],
   },

@@ -61,7 +61,11 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
   );
 
   const section = study.sections.find((s) => s.id === activeId);
-  const visuals = study.visuals.filter((v) => v.sectionId === activeId);
+  // Screenshots sit in the overview only; the rest are on the Artifacts page.
+  const visuals =
+    section?.media === "screenshots"
+      ? study.visuals.filter((v) => v.sectionId === activeId)
+      : [];
 
   return (
     <div className="lg:grid lg:h-[calc(100dvh-3.5rem)] lg:grid-cols-[minmax(230px,290px)_minmax(190px,240px)_minmax(0,1fr)] lg:overflow-hidden">

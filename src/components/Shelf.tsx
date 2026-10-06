@@ -269,20 +269,35 @@ export function Shelf() {
         {/* soft surface — the cast shadows do the grounding, like the reference */}
         <div className="mx-[max(1rem,6vw)] mt-5 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
 
-        {/* progress bar + page count */}
-        <div className="mt-7 flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
-          <span aria-live="polite" className="tabular-nums">
-            {position} / {total}
-          </span>
-          <span
-            className="relative h-[3px] w-40 overflow-hidden rounded-full bg-edge"
-            aria-hidden="true"
-          >
-            <span
-              className="absolute inset-y-0 left-0 rounded-full bg-ink-soft transition-[width] duration-300 ease-out"
-              style={{ width: `${progress * 100}%` }}
+        {/* step controls, position, progress, and how to move along */}
+        <div className="mt-7 flex flex-col items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
+          <div className="flex items-center gap-3">
+            <ShelfStep
+              dir={-1}
+              disabled={centerIndex <= 0}
+              onStep={() => focusBook(centerIndex - 1)}
             />
-          </span>
+            <span aria-live="polite" className="tabular-nums">
+              {position} / {total}
+            </span>
+            <span
+              className="relative h-[3px] w-40 overflow-hidden rounded-full bg-edge"
+              aria-hidden="true"
+            >
+              <span
+                className="absolute inset-y-0 left-0 rounded-full bg-ink-soft transition-[width] duration-300 ease-out"
+                style={{ width: `${progress * 100}%` }}
+              />
+            </span>
+            <ShelfStep
+              dir={1}
+              disabled={centerIndex >= total - 1}
+              onStep={() => focusBook(centerIndex + 1)}
+            />
+          </div>
+          <p className="text-[10px] tracking-[0.2em] opacity-80">
+            drag · scroll · arrow keys
+          </p>
         </div>
 
         {/* ── open book overlay ── */}
@@ -329,5 +344,28 @@ export function Shelf() {
         </AnimatePresence>
       </div>
     </MotionConfig>
+  );
+}
+
+/** One step along the shelf: the ← / → either side of the counter. */
+function ShelfStep({
+  dir,
+  disabled,
+  onStep,
+}: {
+  dir: 1 | -1;
+  disabled: boolean;
+  onStep: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onStep}
+      disabled={disabled}
+      aria-label={dir < 0 ? "Previous book" : "Next book"}
+      className="grid h-7 w-7 place-items-center rounded-full border border-edge text-[12px] text-ink-soft transition-colors hover:border-ink-soft hover:text-ink disabled:pointer-events-none disabled:opacity-35"
+    >
+      <span aria-hidden="true">{dir < 0 ? "←" : "→"}</span>
+    </button>
   );
 }

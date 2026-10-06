@@ -66,10 +66,11 @@ export function paginate(study: CaseStudy, scale: number): Page[] {
     }
     flush();
 
-    // each of the section's exported figures gets a page of its own, after
-    // its text (placeholders stay in Scroll view only)
+    // each overview screenshot gets a page of its own, after its text; the
+    // other figures are on the Artifacts page (Scroll view)
+    if (section.media !== "screenshots") return;
     for (const v of study.visuals) {
-      if (v.sectionId === section.id && (v.frames || v.width)) {
+      if (v.sectionId === section.id && (v.frames || v.width || v.video)) {
         pages.push({ kind: "figure", visual: v });
       }
     }
