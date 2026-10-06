@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from "react";
+import { FlipCards } from "./FlipCards";
 
 /**
  * A small Markdown renderer for the exact subset used in the case-study bodies:
@@ -6,16 +7,17 @@ import { Fragment, type ReactNode } from "react";
  * tables. Kept deliberately minimal to avoid a Markdown dependency; the content
  * is authored in-repo so the supported syntax is known and fixed.
  */
-export function Markdown({ source }: { source: string }) {
-  return <Blocks blocks={parseMarkdown(source)} />;
+export function Markdown({ source, cards = false }: { source: string; cards?: boolean }) {
+  return <Blocks blocks={parseMarkdown(source)} cards={cards} />;
 }
 
 /** Render a pre-parsed list of blocks (used by the flip paginator). */
-export function Blocks({ blocks }: { blocks: Block[] }) {
+/** `cards` turns lists into flip cards (scroll view; the book keeps plain lists). */
+export function Blocks({ blocks, cards = false }: { blocks: Block[]; cards?: boolean }) {
   return (
     <div className="prose-body">
       {blocks.map((b, i) => (
-        <Block key={i} block={b} />
+        <Block key={i} block={b} cards={cards} />
       ))}
     </div>
   );
@@ -132,7 +134,9 @@ function splitRow(row: string): string[] {
     .map((c) => c.trim());
 }
 
-function Block({ block }: { block: Block }) {
+function Block({ block, cards }: { block: Block; cards: boolean }) {
+  if (cards && (block.type === "ul" || block.type === "ol"))
+    return <FlipCards items={block.items} ordered={block.type === "ol"} render={inline} />;
   switch (block.type) {
     case "p":
       return <p>{inline(block.text)}</p>;

@@ -150,7 +150,7 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
               {splitBody(study, section).map((part, i) =>
                 part.kind === "md" ? (
                   <div key={i} className="max-w-[68ch]">
-                    <Markdown source={part.source} />
+                    <Markdown source={part.source} cards />
                   </div>
                 ) : (
                   <MotionStage key={part.spec.id} spec={part.spec} className="my-10" />
