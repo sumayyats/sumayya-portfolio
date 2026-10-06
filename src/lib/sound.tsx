@@ -19,7 +19,7 @@ import {
  */
 
 /** A recording of a real page being turned. */
-const PAGE_TURN_SRC = "/audio/page-turn.mp3";
+const PAGE_TURN_SRC = "/audio/page-turn.m4a";
 
 type SoundContextValue = {
   on: boolean;
