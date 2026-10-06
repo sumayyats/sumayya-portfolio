@@ -53,7 +53,7 @@ const tiltHandlers = {
 };
 
 /** Splits "**Lead.** rest" into the front and back of a card. */
-export function splitLead(item: string): { lead: string; back: string } | null {
+export function splitLead(item: string): { lead: string; context?: string; back: string } | null {
   const m = item.match(/^\*\*([\s\S]+?)\*\*\s*([\s\S]*)$/);
   if (!m) {
     // bold mid-sentence ("A **time filter** on History…"): the bold phrase
@@ -68,10 +68,12 @@ export function splitLead(item: string): { lead: string; back: string } | null {
   // "Lead." / "Lead:" ends a thought, so the back is just what follows; a
   // lead that runs on into the sentence ("**71%** already…") keeps it whole.
   const ends = /[.:]$/.test(rawLead.trim()) || /^[:–—-]/.test(rest);
-  return {
-    lead: rawLead.trim().replace(/[.:]$/, ""),
-    back: ends ? rest.replace(/^[:–—-]\s*/, "") : item,
-  };
+  const lead = rawLead.trim().replace(/[.:]$/, "");
+  // A figure on its own ("71%") says nothing: give it its clause, up to the
+  // first comma or full stop, so the front reads as a finding.
+  const context =
+    !ends && /^[~+]?\d/.test(lead) ? rest.split(/,\s|\.(?:\s|$)/)[0].trim() : undefined;
+  return { lead, context, back: ends ? rest.replace(/^[:–—-]\s*/, "") : item };
 }
 
 function FlipCard({ item, index, render }: { item: string; index: number; render: (t: string) => ReactNode }) {
@@ -104,7 +106,16 @@ function FlipCard({ item, index, render }: { item: string; index: number; render
       <span className="flip-inner">
         <span className="flip-face flip-front" aria-hidden={flipped}>
           <span className="flip-num">{num}</span>
-          <span className="flip-lead">{render(parts.lead)}</span>
+          <span className="flip-lead">
+            {parts.context ? (
+              <>
+                <span className="flip-stat">{render(parts.lead)}</span>
+                <span className="flip-context">{render(parts.context)}</span>
+              </>
+            ) : (
+              render(parts.lead)
+            )}
+          </span>
           <span className="flip-hint" aria-hidden="true">
             Tap for more <span>↻</span>
           </span>
