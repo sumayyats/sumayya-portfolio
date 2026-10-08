@@ -2,6 +2,12 @@
   command = "npm run build"
   publish = ".next"
 
+# The Next runtime owns the functions pipeline, so this has to be named
+# explicitly — left to the default it was never picked up and the endpoint
+# 404ed while the rest of the site deployed fine.
+[functions]
+  directory = "netlify/functions"
+
 # Netlify auto-detects Next.js, but pinning the plugin keeps builds reproducible.
 [[plugins]]
   package = "@netlify/plugin-nextjs"
