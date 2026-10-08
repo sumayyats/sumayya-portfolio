@@ -6,13 +6,23 @@ import {
   motion,
   useReducedMotion,
 } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { BookSpine } from "./BookSpine";
 import { BookCover } from "./BookCover";
 import { ShelfBookDetail } from "./ShelfBookDetail";
+import { ShelfBookStack } from "./ShelfBookStack";
 import { shelfItems } from "./shelf-data";
 import { bookGeometry, projectedWidth } from "./book-geometry";
 import { useSound } from "@/lib/sound";
+
+const PHONE = "(max-width: 767px)";
+const subPhone = (cb: () => void) => {
+  const mq = window.matchMedia(PHONE);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+/** Phones get the picked-up book as a swipeable stack of two cards. */
+const usePhone = () => useSyncExternalStore(subPhone, () => window.matchMedia(PHONE).matches, () => false);
 
 /** The tallest a book gets (see bookGeometry), before `scale`. */
 const SHELF_MAX_H = 528;
@@ -23,6 +33,7 @@ export function Shelf() {
   const triggerRef = useRef<HTMLElement | null>(null);
   const reduce = useReducedMotion();
   const { click } = useSound();
+  const phone = usePhone();
 
   const [centerIndex, setCenterIndex] = useState(0);
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
@@ -318,18 +329,10 @@ export function Shelf() {
                 className="absolute inset-0 bg-[color-mix(in_srgb,var(--paper)_58%,transparent)] backdrop-blur-[2px]"
               />
 
-              <div className="pointer-events-none relative z-10 flex w-full max-w-5xl flex-col items-center gap-6 px-4 md:flex-row md:items-center md:justify-center md:gap-10">
-                <motion.div
-                  layoutId={`book-${activeStudy.slug}`}
-                  className="pointer-events-auto aspect-[3/4] h-[46vh] max-h-[540px] shrink-0 md:h-[70vh]"
-                  transition={{ type: "spring", stiffness: 220, damping: 30 }}
-                >
-                  <BookCover study={activeStudy} />
-                </motion.div>
-
-                <AnimatePresence mode="wait">
-                  <ShelfBookDetail
-                    key={activeStudy.slug}
+              {phone ? (
+                <div className="relative z-10">
+                  {/* no key: browsing with ← → keeps whichever card is in front */}
+                  <ShelfBookStack
                     study={activeStudy}
                     position={activeIndex + 1}
                     total={total}
@@ -337,8 +340,30 @@ export function Shelf() {
                     onPrev={() => browseFeatured(-1)}
                     onNext={() => browseFeatured(1)}
                   />
-                </AnimatePresence>
-              </div>
+                </div>
+              ) : (
+                <div className="pointer-events-none relative z-10 flex w-full max-w-5xl flex-col items-center gap-6 px-4 md:flex-row md:items-center md:justify-center md:gap-10">
+                  <motion.div
+                    layoutId={`book-${activeStudy.slug}`}
+                    className="pointer-events-auto aspect-[3/4] h-[46vh] max-h-[540px] shrink-0 md:h-[70vh]"
+                    transition={{ type: "spring", stiffness: 220, damping: 30 }}
+                  >
+                    <BookCover study={activeStudy} />
+                  </motion.div>
+
+                  <AnimatePresence mode="wait">
+                    <ShelfBookDetail
+                      key={activeStudy.slug}
+                      study={activeStudy}
+                      position={activeIndex + 1}
+                      total={total}
+                      onClose={close}
+                      onPrev={() => browseFeatured(-1)}
+                      onNext={() => browseFeatured(1)}
+                    />
+                  </AnimatePresence>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

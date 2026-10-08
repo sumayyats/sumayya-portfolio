@@ -13,6 +13,8 @@ type Props = {
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  /** Phone layout: fills a card in the swipeable stack, no slide-in of its own. */
+  stacked?: boolean;
 };
 
 /**
@@ -26,16 +28,21 @@ export function ShelfBookDetail({
   onClose,
   onPrev,
   onNext,
+  stacked = false,
 }: Props) {
   const { click } = useSound();
   return (
     <motion.aside
       key={study.slug}
-      initial={{ x: 32, opacity: 0 }}
+      initial={stacked ? false : { x: 32, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 32, opacity: 0 }}
+      exit={stacked ? undefined : { x: 32, opacity: 0 }}
       transition={{ type: "spring", stiffness: 320, damping: 34 }}
-      className="pointer-events-auto w-[min(88vw,360px)] rounded-2xl border border-edge bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] p-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)] backdrop-blur-sm"
+      className={
+        stacked
+          ? "pointer-events-auto no-scrollbar h-full w-full overflow-y-auto rounded-2xl border border-edge bg-paper p-5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)]"
+          : "pointer-events-auto w-[min(88vw,360px)] rounded-2xl border border-edge bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] p-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)] backdrop-blur-sm"
+      }
       role="dialog"
       aria-label={`${study.title} — book details`}
     >
