@@ -1,0 +1,17 @@
+<!doctype html>
+<!-- Netlify scans this file at deploy time to register forms.
+     Visitors never see it; the guestbook posts here from /library/. -->
+<html>
+  <head><meta charset="utf-8"><title>forms</title></head>
+  <body>
+    <form name="guestbook" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="guestbook" />
+      <input type="text" name="name" />
+      <textarea name="message"></textarea>
+      <input type="text" name="country" />
+      <input type="text" name="timezone" />
+      <input type="text" name="visited_at" />
+      <input type="text" name="bot-field" />
+    </form>
+  </body>
+</html>

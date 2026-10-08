@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Netlify auto-detects Next.js, but pinning the plugin keeps builds reproducible.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# The library scene is a standalone static page under public/.
+# Next.js does not resolve a directory to its index.html, so map it explicitly
+# — this makes /library work as well as /library/index.html.
+[[redirects]]
+  from = "/library"
+  to = "/library/index.html"
+  status = 200
+
+# The scene is meant to be iframed from the Readymag portfolio.
+[[headers]]
+  for = "/library/*"
+  [headers.values]
+    X-Frame-Options = "ALLOWALL"
+    Content-Security-Policy = "frame-ancestors 'self' https://*.readymag.com https://*.readymag.website"
+
+# Fingerprinted-by-content, never-changing art and audio.
+[[headers]]
+  for = "/library/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
