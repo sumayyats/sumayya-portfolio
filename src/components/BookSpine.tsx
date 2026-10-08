@@ -141,7 +141,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         preview={study.cover.mockup}
         // a mockup sits on transparency: fit it rather than crop the device
         previewFit="contain"
-        slide
+        entrance={ENTRANCE[study.slug]}
         accent
       />
       <CastShadow />
@@ -266,6 +266,14 @@ function useShelfLabel(host: React.RefObject<HTMLElement | null>) {
   return { at, place, clear };
 }
 
+/** How each featured book's mockup arrives in its hover preview. */
+type Entrance = "left" | "bottom" | "scale";
+const ENTRANCE: Record<string, Entrance> = {
+  asta: "left",
+  binapani: "bottom",
+  "gut-skin": "scale",
+};
+
 /**
  * The label that appears above a book on hover or focus. It is drawn into the
  * body rather than the book, because the shelf scrolls horizontally and any
@@ -279,7 +287,7 @@ function HoverLabel({
   teaser,
   preview,
   previewFit = "cover",
-  slide = false,
+  entrance,
   accent = false,
 }: {
   at: { x: number; y: number } | null;
@@ -290,8 +298,8 @@ function HoverLabel({
   preview?: string;
   /** `contain` for a mockup on transparency, `cover` for a flat screenshot. */
   previewFit?: "cover" | "contain";
-  /** Slide the preview into its frame as the label appears (featured books). */
-  slide?: boolean;
+  /** How the preview arrives as the label appears (featured books only). */
+  entrance?: Entrance;
   accent?: boolean;
 }) {
   if (!at) return null;
@@ -317,7 +325,7 @@ function HoverLabel({
               alt=""
               fill
               sizes="56px"
-              className={`${previewFit === "contain" ? "object-contain p-1" : "object-cover"} ${slide ? "label-slide" : ""}`}
+              className={`${previewFit === "contain" ? "object-contain p-1" : "object-cover"} ${entrance ? `label-in label-in--${entrance}` : ""}`}
             />
           </span>
         )}

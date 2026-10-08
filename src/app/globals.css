@@ -436,14 +436,29 @@ body {
 }
 
 /* ── Shelf hover preview (featured books) ───────────────────────────────
-   The mockup slides into its frame once as the label appears, then rests. */
-.label-slide {
-  animation: label-slide 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+   Each book's mockup arrives its own way as the label appears, then rests:
+   a big, playful move on a long, soft ease so it never feels busy. */
+.label-in {
+  animation: 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-@keyframes label-slide {
-  from { transform: translateX(70%); }
+.label-in--left { animation-name: label-in-left; }
+.label-in--bottom { animation-name: label-in-bottom; }
+.label-in--scale {
+  animation-name: label-in-scale;
+  animation-timing-function: cubic-bezier(0.34, 1.35, 0.64, 1); /* a soft settle */
+}
+@keyframes label-in-left {
+  from { transform: translateX(-95%) rotate(-10deg); }
+  to { transform: none; }
+}
+@keyframes label-in-bottom {
+  from { transform: translateY(95%) rotate(8deg); }
+  to { transform: none; }
+}
+@keyframes label-in-scale {
+  from { transform: scale(0.35) rotate(-12deg); }
   to { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .label-slide { animation: none; }
+  .label-in { animation: none; }
 }
