@@ -142,6 +142,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         // a mockup sits on transparency: fit it rather than crop the device
         previewFit="contain"
         entrance={ENTRANCE[study.slug]}
+        previewBg={PREVIEW_BG[study.slug]}
         accent
       />
       <CastShadow />
@@ -268,6 +269,11 @@ function useShelfLabel(host: React.RefObject<HTMLElement | null>) {
 
 /** How each featured book's mockup arrives in its hover preview. */
 type Entrance = "left" | "bottom" | "scale";
+/** Preview backgrounds that differ from the paper tint. */
+const PREVIEW_BG: Record<string, string> = {
+  binapani: "#ffffff",
+};
+
 const ENTRANCE: Record<string, Entrance> = {
   asta: "left",
   binapani: "bottom",
@@ -288,6 +294,7 @@ function HoverLabel({
   preview,
   previewFit = "cover",
   entrance,
+  previewBg,
   accent = false,
 }: {
   at: { x: number; y: number } | null;
@@ -300,6 +307,8 @@ function HoverLabel({
   previewFit?: "cover" | "contain";
   /** How the preview arrives as the label appears (featured books only). */
   entrance?: Entrance;
+  /** Background behind the preview (defaults to a light paper tint). */
+  previewBg?: string;
   accent?: boolean;
 }) {
   // The entrance waits for the image: started on mount, it would be over
@@ -322,7 +331,10 @@ function HoverLabel({
     >
       <span className={preview ? "flex items-start gap-3" : "block"}>
         {preview && (
-          <span className="relative block h-14 w-14 shrink-0 overflow-hidden rounded-[6px] border border-edge bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))]">
+          <span
+            className="relative block h-14 w-14 shrink-0 overflow-hidden rounded-[6px] border border-edge bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))]"
+            style={previewBg ? { background: previewBg } : undefined}
+          >
             <Image
               src={preview}
               alt=""
