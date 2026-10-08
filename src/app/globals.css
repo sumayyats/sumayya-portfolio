@@ -435,25 +435,15 @@ body {
   transform: none;
 }
 
-/* ── Shelf hover preview reel (BookSpine REELS) ─────────────────────────
-   A quiet carousel: each frame holds, then slides out to the left as the
-   next slides in from the right. Every frame runs the same loop, offset by
-   its index, so the hand-over is seamless. No fades, no zoom. */
-.label-reel > span {
-  --slot: 2.4s;
-  transform: translateX(100%);
-  animation: label-reel calc(var(--slot) * var(--n)) cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  animation-delay: calc(var(--slot) * (var(--i) - var(--n)));
+/* ── Shelf hover preview (featured books) ───────────────────────────────
+   The mockup slides into its frame once as the label appears, then rests. */
+.label-slide {
+  animation: label-slide 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.label-reel > span:first-child { transform: none; }
-@keyframes label-reel {
-  0% { transform: translateX(0); }
-  21% { transform: translateX(0); }
-  25% { transform: translateX(-100%); }
-  25.01% { transform: translateX(100%); }
-  96% { transform: translateX(100%); }
-  100% { transform: translateX(0); }
+@keyframes label-slide {
+  from { transform: translateX(70%); }
+  to { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .label-reel > span { animation: none; }
+  .label-slide { animation: none; }
 }

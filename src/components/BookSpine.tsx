@@ -141,7 +141,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
         preview={study.cover.mockup}
         // a mockup sits on transparency: fit it rather than crop the device
         previewFit="contain"
-        reel={REELS[study.slug]}
+        slide
         accent
       />
       <CastShadow />
@@ -266,33 +266,6 @@ function useShelfLabel(host: React.RefObject<HTMLElement | null>) {
   return { at, place, clear };
 }
 
-type ReelFrame = { src: string; fit: "cover" | "contain" };
-
-/**
- * The featured books' hover preview, in motion: the cover mockup, then three
- * real screens, crossfading on a loop (see .label-reel in globals.css).
- */
-const REELS: Record<string, ReelFrame[]> = {
-  asta: [
-    { src: "/images/asta/cover-mockup.png", fit: "contain" },
-    { src: "/images/asta/homepage.png", fit: "cover" },
-    { src: "/images/asta/programme-detail.png", fit: "cover" },
-    { src: "/images/asta/dashboard.png", fit: "cover" },
-  ],
-  binapani: [
-    { src: "/images/binapani/cover-mockup.png", fit: "contain" },
-    { src: "/images/binapani/screens/home.png", fit: "cover" },
-    { src: "/images/binapani/screens/activities.png", fit: "cover" },
-    { src: "/images/binapani/screens/colour-picker.png", fit: "cover" },
-  ],
-  "gut-skin": [
-    { src: "/images/gut-skin/cover-mockup-2.png", fit: "contain" },
-    { src: "/images/gut-skin/screens/home.png", fit: "cover" },
-    { src: "/images/gut-skin/screens/insights.png", fit: "cover" },
-    { src: "/images/gut-skin/screens/dark-home-3.png", fit: "cover" },
-  ],
-};
-
 /**
  * The label that appears above a book on hover or focus. It is drawn into the
  * body rather than the book, because the shelf scrolls horizontally and any
@@ -306,7 +279,7 @@ function HoverLabel({
   teaser,
   preview,
   previewFit = "cover",
-  reel,
+  slide = false,
   accent = false,
 }: {
   at: { x: number; y: number } | null;
@@ -317,8 +290,8 @@ function HoverLabel({
   preview?: string;
   /** `contain` for a mockup on transparency, `cover` for a flat screenshot. */
   previewFit?: "cover" | "contain";
-  /** Frames that crossfade in the preview, in place of the still. */
-  reel?: ReelFrame[];
+  /** Slide the preview into its frame as the label appears (featured books). */
+  slide?: boolean;
   accent?: boolean;
 }) {
   if (!at) return null;
@@ -336,32 +309,15 @@ function HoverLabel({
         paddingBlock: teaser ? "0.5rem" : "0.375rem",
       }}
     >
-      <span className={preview || reel ? "flex items-start gap-3" : "block"}>
-        {reel ? (
-          <span
-            className="label-reel relative block h-14 w-14 shrink-0 overflow-hidden rounded-[6px] border border-edge bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))]"
-            style={{ "--n": reel.length } as React.CSSProperties}
-          >
-            {reel.map((f, i) => (
-              <span key={f.src} className="absolute inset-0" style={{ "--i": i } as React.CSSProperties}>
-                <Image
-                  src={f.src}
-                  alt=""
-                  fill
-                  sizes="112px"
-                  className={f.fit === "contain" ? "object-contain p-1" : "object-cover object-top"}
-                />
-              </span>
-            ))}
-          </span>
-        ) : preview && (
+      <span className={preview ? "flex items-start gap-3" : "block"}>
+        {preview && (
           <span className="relative block h-14 w-14 shrink-0 overflow-hidden rounded-[6px] border border-edge bg-[color-mix(in_srgb,var(--ink)_4%,var(--paper))]">
             <Image
               src={preview}
               alt=""
               fill
               sizes="56px"
-              className={previewFit === "contain" ? "object-contain p-1" : "object-cover"}
+              className={`${previewFit === "contain" ? "object-contain p-1" : "object-cover"} ${slide ? "label-slide" : ""}`}
             />
           </span>
         )}
