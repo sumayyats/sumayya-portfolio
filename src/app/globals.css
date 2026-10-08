@@ -419,3 +419,18 @@ body {
   .flip-front { transition: opacity 0.2s ease; }
   .flip-card.is-flipped .flip-front { transform: none; opacity: 0; }
 }
+
+/* ── Scroll reveal (lib/reveal.ts) ──────────────────────────────────────
+   Blocks rise into place as they scroll in. Only once the script has run
+   (html.reveal-on), so nothing is hidden without JavaScript. */
+.reveal-on .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s ease-out var(--reveal-delay, 0ms),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+.reveal-on .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}

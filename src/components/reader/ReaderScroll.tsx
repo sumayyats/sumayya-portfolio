@@ -12,6 +12,7 @@ import { Segmented } from "./Reader";
 import { PrototypeEmbed } from "./PrototypeEmbed";
 import { MotionStage } from "@/components/stages/MotionStage";
 import { splitBody } from "@/components/stages/splitBody";
+import { useReveal } from "@/lib/reveal";
 
 const PROTOTYPE_ID = "prototype";
 const ARTIFACTS_ID = "artifacts";
@@ -31,6 +32,8 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
   ];
   const [activeId, setActiveId] = useState(items[0]?.id ?? "");
   const chipsRef = useRef<HTMLOListElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  useReveal(bodyRef, study.slug);
 
   // deep link: jump to #section once the page is laid out
   useEffect(() => {
@@ -137,7 +140,7 @@ export function ReaderScroll({ study }: { study: CaseStudy }) {
           {nav("chips")}
         </nav>
 
-        <div className="mx-auto max-w-[1040px] px-[max(1.25rem,5vw)] pb-28 pt-10 lg:px-12 lg:pt-14">
+        <div ref={bodyRef} className="mx-auto max-w-[1040px] px-[max(1.25rem,5vw)] pb-28 pt-10 lg:px-12 lg:pt-14">
           {study.sections.map((section) => (
             <section
               key={section.id}
