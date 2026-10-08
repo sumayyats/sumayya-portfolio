@@ -434,3 +434,24 @@ body {
   opacity: 1;
   transform: none;
 }
+
+/* ── Shelf hover preview reel (BookSpine REELS) ─────────────────────────
+   Frames crossfade in turn, each drifting in from a slight zoom. Every frame
+   runs the same loop, offset by its index, so one is always showing. */
+.label-reel > span {
+  --slot: 1.6s;
+  opacity: 0;
+  animation: label-reel calc(var(--slot) * var(--n)) linear infinite;
+  animation-delay: calc(var(--slot) * (var(--i) - var(--n)));
+}
+.label-reel > span:first-child { opacity: 1; }
+@keyframes label-reel {
+  0% { opacity: 1; transform: scale(1.08); }
+  25% { opacity: 1; transform: scale(1); }
+  31% { opacity: 0; transform: scale(1); }
+  94% { opacity: 0; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .label-reel > span { animation: none; }
+}
