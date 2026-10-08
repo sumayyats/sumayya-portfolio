@@ -302,6 +302,9 @@ function HoverLabel({
   entrance?: Entrance;
   accent?: boolean;
 }) {
+  // The entrance waits for the image: started on mount, it would be over
+  // before a first, uncached load arrived, and the mockup would just appear.
+  const [loaded, setLoaded] = useState(false);
   if (!at) return null;
   const edge = LABEL_MAX / 2 + 12;
   const x = Math.min(Math.max(at.x, edge), window.innerWidth - edge);
@@ -325,7 +328,11 @@ function HoverLabel({
               alt=""
               fill
               sizes="56px"
-              className={`${previewFit === "contain" ? "object-contain p-1" : "object-cover"} ${entrance ? `label-in label-in--${entrance}` : ""}`}
+              loading="eager"
+              onLoad={() => setLoaded(true)}
+              className={`${previewFit === "contain" ? "object-contain p-1" : "object-cover"} ${
+                entrance ? (loaded ? `label-in label-in--${entrance}` : "opacity-0") : ""
+              }`}
             />
           </span>
         )}

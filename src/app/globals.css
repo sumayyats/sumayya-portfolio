@@ -439,7 +439,10 @@ body {
    Each book's mockup arrives its own way as the label appears, then rests:
    a big, playful move on a long, soft ease so it never feels busy. */
 .label-in {
-  animation: 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* longhands: the build turns a shorthand without a name into "none" */
+  animation-duration: 0.85s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
 }
 .label-in--left { animation-name: label-in-left; }
 .label-in--bottom { animation-name: label-in-bottom; }
