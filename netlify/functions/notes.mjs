@@ -20,10 +20,14 @@ export default async (req, context) => {
   });
   const report = (stage) => Response.json({ stage, ...diag }, { status: 200 });
 
-  const token = process.env.NETLIFY_ACCESS_TOKEN;
+  // Either name works. GUESTBOOK_TOKEN is preferred because it cannot collide
+  // with anything Netlify reserves for itself under the NETLIFY_ prefix.
+  const token = process.env.GUESTBOOK_TOKEN || process.env.NETLIFY_ACCESS_TOKEN;
   const siteId = context?.site?.id || process.env.SITE_ID;
   diag.hasToken = Boolean(token);
   diag.tokenLength = token ? token.length : 0;
+  diag.sawGuestbookToken = Boolean(process.env.GUESTBOOK_TOKEN);
+  diag.sawNetlifyAccessToken = Boolean(process.env.NETLIFY_ACCESS_TOKEN);
   diag.siteIdFrom = context?.site?.id ? "context" : (process.env.SITE_ID ? "env" : "none");
   diag.siteId = siteId || null;
   // No token yet? Hand back an empty book rather than an error — a visitor
