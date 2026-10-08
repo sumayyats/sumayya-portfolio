@@ -484,9 +484,10 @@
   hoverBind(hitBook, "hover-book");
 
   function openGuestbook() {
+    gbOpened = true;
     if (spreads[spreadAt].stamped) {       // start fresh rather than reopening a signed page
       storeSpread();
-      if (spreads.length < MAX_SPREADS) {
+      if (spreads.length < maxSpreads()) {
         spreads.push(newSpread());
         spreadAt = spreads.length - 1;
       }
@@ -522,6 +523,7 @@
   var gbPress = gb.querySelector(".ls-gb-press");
   var HINT_WRITE = "feather to write, stamp to sign";
   var HINT_ARMED = "press your seal anywhere on the page";
+  var HINT_PAST  = "a note from an earlier visitor";
 
   function armStamp() {
     if (scene.classList.contains("gb-stamped")) return;
@@ -595,15 +597,19 @@
 
   /* ---------- spreads: one note per spread, flip for a fresh page ---------- */
 
-  var MAX_SPREADS = 6;
+  var NEW_SPREADS = 6;          // blank pages a single visitor may fill
   var spreads = [newSpread()];
   var spreadAt = 0;
   var turning = false;
+  var pastCount = 0;            // read-only pages ahead of the writable one
+  var gbOpened = false;
+  function maxSpreads() { return pastCount + NEW_SPREADS; }
 
   function newSpread() { return { name: "", msg: "", stamped: false, sx: null, sy: null, wax: "", hint: HINT_WRITE }; }
 
   function storeSpread() {
     var sp = spreads[spreadAt];
+    if (sp.readonly) return;    // never write over someone else's note
     sp.name = gbName.value;
     sp.msg = gbMsg.value;
     sp.stamped = scene.classList.contains("gb-stamped");
@@ -615,8 +621,13 @@
     }
   }
 
+  var gbTitle = gb.querySelector(".ls-gb-title");
+
   function showSpread() {
     var sp = spreads[spreadAt];
+    // someone else's page is for reading, so stop inviting a name
+    gbTitle.textContent = sp.readonly ? "A visitor's note" : "Leave a note";
+    gbName.placeholder = sp.readonly ? "" : "your name";
     gbName.value = sp.name;
     gbMsg.value = sp.msg;
     gbHint.textContent = sp.hint;
@@ -636,7 +647,7 @@
 
   function refreshNav() {
     gbPrev.disabled = spreadAt === 0;
-    gbNext.disabled = spreadAt >= MAX_SPREADS - 1 ||
+    gbNext.disabled = spreadAt >= maxSpreads() - 1 ||
       (!spreads[spreadAt].stamped && spreadAt === spreads.length - 1);
     gbFolio.textContent = "page " + (spreadAt + 1) + " of " + Math.max(spreads.length, 1);
   }
@@ -644,7 +655,7 @@
   function turnPage(dir) {
     if (turning) return;
     var target = spreadAt + dir;
-    if (target < 0 || target >= MAX_SPREADS) return;
+    if (target < 0 || target >= maxSpreads()) return;
     if (target >= spreads.length) {
       if (!spreads[spreadAt].stamped) return;       // seal this one before starting another
       spreads.push(newSpread());
@@ -673,6 +684,39 @@
     closeGuestbook();
   });
   scene.querySelector(".ls-dim").addEventListener("click", closeGuestbook);
+  /* ---------- earlier visitors' notes ----------
+     Fetched once at load. They become read-only stamped pages before the blank
+     one, so the book opens on a fresh page and you flip back to read others.
+     If the request fails or returns nothing, the book is simply blank. */
+  function waxFrom(country, iso) {
+    var when = "";
+    try {
+      when = new Date(iso).toLocaleDateString(undefined,
+        { day: "numeric", month: "short", year: "numeric" });
+    } catch (e) {}
+    return String(country || "").toUpperCase() + "<br>" + when;
+  }
+
+  fetch("/.netlify/functions/notes")
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .catch(function () { return []; })
+    .then(function (notes) {
+      // if someone already started writing, leave their page alone
+      if (gbOpened || !Array.isArray(notes) || !notes.length) return;
+      var past = notes.map(function (n, i) {
+        return {
+          name: "", msg: n.message, stamped: true, readonly: true,
+          sx: (10 + (i * 7) % 12) + "%",      // scatter the seals a little
+          sy: (56 + (i * 5) % 14) + "%",
+          wax: waxFrom(n.country, n.at), hint: HINT_PAST
+        };
+      });
+      pastCount = past.length;
+      spreads = past.concat([newSpread()]);
+      spreadAt = pastCount;
+      showSpread();
+    });
+
   setTimeout(function () { scene.classList.add("gb-idle", "letter-idle"); }, 2500);
 
 })();
