@@ -521,6 +521,13 @@
   });
 
   var gbPress = gb.querySelector(".ls-gb-press");
+  // seal dates read DD/MM/YY, and stay that way wherever the visitor is
+  function sealDate(d) {
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + "/" +
+           String(d.getFullYear()).slice(-2);
+  }
+
   var HINT_WRITE = "feather to write, stamp to sign";
   var HINT_ARMED = "press your seal anywhere on the page";
   var HINT_PAST  = "a note from an earlier visitor";
@@ -558,7 +565,7 @@
     var msg = gbMsg.value.trim();
     var place = visitorPlace();
     var now = new Date();
-    var when = now.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+    var when = sealDate(now);
 
     gbMark.querySelector(".ls-wax-text").innerHTML =
       place.country.toUpperCase() + "<br>" + when;
@@ -690,10 +697,7 @@
      If the request fails or returns nothing, the book is simply blank. */
   function waxFrom(country, iso) {
     var when = "";
-    try {
-      when = new Date(iso).toLocaleDateString(undefined,
-        { day: "numeric", month: "short", year: "numeric" });
-    } catch (e) {}
+    try { when = sealDate(new Date(iso)); } catch (e) {}
     return String(country || "").toUpperCase() + "<br>" + when;
   }
 
