@@ -24,12 +24,14 @@
   status = 200
   force = true
 
-# The scene is meant to be iframed from the Readymag portfolio.
-[[headers]]
-  for = "/library/*"
-  [headers.values]
-    X-Frame-Options = "ALLOWALL"
-    Content-Security-Policy = "frame-ancestors 'self' https://*.readymag.com https://*.readymag.website"
+# Deliberately no framing headers on /library.
+#
+# An allowlist cannot work here: Readymag renders a Code widget inside its own
+# sandboxed iframe, so the scene's parent chain is an opaque origin that no
+# frame-ancestors list can match. ("X-Frame-Options: ALLOWALL" was wrong too —
+# the only valid values are DENY and SAMEORIGIN, so it either did nothing or
+# blocked outright.) Sending nothing leaves the page embeddable anywhere, which
+# is right for a public portfolio hero with no sensitive content.
 
 # Fingerprinted-by-content, never-changing art and audio.
 [[headers]]
