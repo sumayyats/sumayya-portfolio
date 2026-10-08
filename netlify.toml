@@ -9,10 +9,20 @@
 # The library scene is a standalone static page under public/.
 # Next.js does not resolve a directory to its index.html, so map it explicitly
 # — this makes /library work as well as /library/index.html.
+# Next.js does not resolve a directory to its index.html, and it 308s
+# "/library/" back to "/library", which then 404s. Both spellings are mapped
+# here so the scene is reachable however it is typed.
 [[redirects]]
   from = "/library"
   to = "/library/index.html"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/library/"
+  to = "/library/index.html"
+  status = 200
+  force = true
 
 # The scene is meant to be iframed from the Readymag portfolio.
 [[headers]]
