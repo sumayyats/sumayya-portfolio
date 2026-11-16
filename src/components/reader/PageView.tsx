@@ -214,7 +214,7 @@ function EndPage({ study }: { study: CaseStudy }) {
         ))}
       </div>
       <Link
-        href="/"
+        href="/works/"
         className="book-small mt-8 font-mono uppercase tracking-widest text-ink-soft hover:text-ink"
       >
         ← Back to the shelf

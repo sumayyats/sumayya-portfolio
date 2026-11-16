@@ -73,7 +73,7 @@ export function Reader({ study }: { study: CaseStudy }) {
         <header className="sticky top-0 z-30 border-b border-edge bg-[color-mix(in_srgb,var(--paper)_86%,transparent)] backdrop-blur">
           <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between gap-3 px-[max(1rem,4vw)]">
             <Link
-              href="/"
+              href="/works/"
               className="flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-widest text-ink-soft transition-colors hover:text-ink"
             >
               <span aria-hidden="true">←</span>
@@ -108,7 +108,7 @@ export function Reader({ study }: { study: CaseStudy }) {
           </div>
         </header>
 
-        <main className={view === "flip" ? "pt-3 pb-4" : ""}>
+        <main id="main" className={view === "flip" ? "pt-3 pb-4" : ""}>
           {view === "scroll" ? (
             <ReaderScroll study={study} />
           ) : (

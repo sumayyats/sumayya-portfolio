@@ -21,6 +21,17 @@
   --cover-paper: #f6f3ea;
   --cover-ink: #23281f;
 
+  /* Rooms. Ballpark values read off the live site.
+     TODO: replace with exact hex once reference/ screenshots are in. */
+  --room-frame: #1b2010;
+  --room-linen: #efe9dc;
+  --nav-key: #33170e;
+  --nav-key-base: #170a06;
+  --nav-key-active: #3b4a22;
+  --nav-key-active-base: #1c240f;
+  --nav-ink: #f3eee2;
+  --nav-h: 4rem;
+
   /* Type size scale (reading views adjust --reading-scale). */
   --reading-scale: 1;
 }
@@ -63,6 +74,12 @@
   --color-button: var(--button);
   --color-button-ink: var(--button-ink);
 
+  --color-room-frame: var(--room-frame);
+  --color-room-linen: var(--room-linen);
+
+  /* TODO: Dito font files. Until they are in public/fonts this is a stand-in. */
+  --font-script: "Dito", "Snell Roundhand", "Apple Chancery", cursive;
+  --font-nav: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-display: var(--font-dico), "Libre Baskerville", Georgia, serif;
   --font-body: "Helvetica Neue", Helvetica, "Arial Narrow", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -464,4 +481,66 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .label-in { animation: none; }
+}
+
+/* ── Rooms ────────────────────────────────────────────────────────────── */
+/* Each room fades in on navigation (app/template.tsx). Opacity only, so it
+   is already the reduced-motion version. */
+@keyframes room-in {
+  from { opacity: 0; }
+}
+.room-in {
+  animation: room-in 250ms ease-out;
+}
+/* Keeps room content clear of the fixed nav. */
+.room-pad {
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+}
+
+.room-nav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  translate: -50% 0;
+  z-index: 40;
+  display: flex;
+  max-width: calc(100vw - 1rem);
+}
+/* A key cap: it sits on a darker base and bottoms out when pressed, quick
+   on the way down and a touch springy on the way back. */
+.room-key {
+  --base: var(--nav-key-base);
+  padding: 0.6rem clamp(0.6rem, 3vw, 1.5rem);
+  background: var(--nav-key);
+  color: var(--nav-ink);
+  font-family: var(--font-nav);
+  font-variant-caps: all-small-caps;
+  font-size: clamp(0.8rem, 3.4vw, 1rem);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 4px 0 var(--base);
+  transition:
+    transform 180ms cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 180ms cubic-bezier(0.3, 1.6, 0.5, 1),
+    filter 120ms;
+}
+.room-key[aria-current="page"] {
+  --base: var(--nav-key-active-base);
+  background: var(--nav-key-active);
+}
+.room-key:hover {
+  filter: brightness(1.15);
+}
+.room-key:active {
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 2px 3px rgb(0 0 0 / 0.45),
+    0 0 0 var(--base);
+  transition-duration: 40ms;
+}
+.room-key:focus-visible {
+  outline-color: var(--nav-ink);
+  outline-offset: -4px;
 }

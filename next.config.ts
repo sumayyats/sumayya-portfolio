@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // The Readymag site's URLs are /works/ and /about/; keep them canonical.
+  trailingSlash: true,
 };
 
 export default nextConfig;
