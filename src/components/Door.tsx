@@ -1,23 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/** The lobby's front door. It eases ajar as you reach for it; opening it fades through to the library. */
+// Coming back to the lobby from another room shouldn't replay the preload.
+let seen = false;
+
+/** The lobby's preload screen: the front door waits while the library loads, then swings open onto it. */
 export function Door() {
-  const [open, setOpen] = useState(false);
+  const scene = useRef<HTMLIFrameElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [waited, setWaited] = useState(seen);
+  const open = seen || (loaded && waited);
+
+  useEffect(() => {
+    // The scene can finish loading before React attaches onLoad.
+    if (scene.current?.contentDocument?.readyState === "complete") setLoaded(true);
+    const t = setTimeout(() => setWaited(true), 1400); // long enough to register the door
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    if (open) seen = true;
+  }, [open]);
+
   return (
     <div className="lobby" data-open={open}>
-      {open && (
-        <iframe src="/library/index.html" title="The library lobby" className="lobby-scene" />
-      )}
-      <div className="lobby-front" inert={open}>
-        <button
-          type="button"
-          className="door"
-          onClick={() => setOpen(true)}
-          aria-label="Open the door to the library lobby"
-        >
+      <iframe
+        ref={scene}
+        src="/library/index.html"
+        title="The library lobby"
+        className="lobby-scene"
+        onLoad={() => setLoaded(true)}
+      />
+      <div className="lobby-front" role="status" aria-hidden={open}>
+        <span className="sr-only">Opening the library</span>
+        <div className="door">
           <span className="door-way" aria-hidden="true" />
           <Image
             className="door-leaf"
@@ -27,7 +44,7 @@ export function Door() {
             height={718}
             priority
           />
-        </button>
+        </div>
         <p className="font-display text-lg sm:text-xl">⊹ ࣪ ˖ good things are about to open ⊹ ࣪ ˖</p>
       </div>
     </div>
