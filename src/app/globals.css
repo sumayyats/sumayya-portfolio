@@ -586,12 +586,12 @@ body {
   width: min(15rem, 55vw, 26dvh);
   perspective: 900px;
 }
-/* warm light from the library, seen through the gap */
+/* the dark beyond the door: the same black the room then fades to */
 .door-way {
   position: absolute;
   inset: 0;
   border-radius: 2.6% / 1.4%;
-  background: radial-gradient(ellipse at 30% 55%, #ffe9a8, #d99a45 70%, #7a4a1c);
+  background: #000;
 }
 .door-leaf {
   position: relative;
