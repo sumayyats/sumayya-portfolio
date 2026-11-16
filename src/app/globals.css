@@ -545,17 +545,25 @@ body {
 
 /* ── Lobby door ───────────────────────────────────────────────────────── */
 .lobby {
-  position: relative;
   flex: 1;
-  overflow: hidden;
-  background: #000;
+  display: grid;
+  place-items: center;
+  container-type: size;
 }
+/* The iframe takes the scene's own shape, as large as the room allows, so
+   there is no letterbox. The scene switches to its portrait art at 700px
+   wide; the second condition is the height at which the landscape box
+   would itself be under 700px. */
 .lobby-scene {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  aspect-ratio: 2086 / 1161;
+  width: min(100cqw, 100cqh * 2086 / 1161);
   border: 0;
+}
+@container (max-width: 700px) or (max-height: 390px) {
+  .lobby-scene {
+    aspect-ratio: 406 / 738;
+    width: min(100cqw, 100cqh * 406 / 738);
+  }
 }
 /* The preload screen: covers the whole window, nav included, while the
    library loads underneath. Opening: the wall goes dark as the door swings,
