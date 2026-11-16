@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-/** The lobby's front door. It eases ajar as you reach for it; opening it walks you into the library. */
+/** The lobby's front door. It eases ajar as you reach for it; opening it fades through to the library. */
 export function Door() {
   const [open, setOpen] = useState(false);
   return (

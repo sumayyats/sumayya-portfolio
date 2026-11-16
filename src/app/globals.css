@@ -78,7 +78,6 @@
   --color-room-frame: var(--room-frame);
   --color-room-linen: var(--room-linen);
 
-  --font-nav: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-display: var(--font-dico), "Libre Baskerville", Georgia, serif;
   --font-body: "Helvetica Neue", Helvetica, "Arial Narrow", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -512,7 +511,7 @@ body {
   padding: 0.6rem clamp(0.6rem, 3vw, 1.5rem);
   background: var(--nav-key);
   color: var(--nav-ink);
-  font-family: var(--font-nav);
+  font-family: var(--font-display);
   font-variant-caps: all-small-caps;
   font-size: clamp(0.8rem, 3.4vw, 1rem);
   letter-spacing: 0.06em;
@@ -561,14 +560,10 @@ body {
   gap: 1.5rem;
   padding: 1rem;
   text-align: center;
-  transform-origin: 50% 42%; /* the doorway, not the caption */
-  /* stepping through: starts once the door has swung clear */
-  transition:
-    transform 900ms cubic-bezier(0.6, 0, 0.85, 0.3) 350ms,
-    opacity 350ms ease-in 900ms;
+  /* opening is a plain fade: the door gives way, then the library arrives */
+  transition: opacity 450ms ease-in;
 }
 .lobby[data-open="true"] .lobby-front {
-  transform: scale(7);
   opacity: 0;
 }
 .door {
@@ -598,21 +593,17 @@ body {
 .door:focus-visible .door-leaf {
   transform: rotateY(-16deg);
 }
-.lobby[data-open="true"] .door-leaf {
-  transform: rotateY(-104deg);
-}
 .lobby-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
-  animation: room-in 500ms ease-out 800ms backwards;
+  animation: room-in 600ms ease-out 450ms backwards;
 }
 @media (prefers-reduced-motion: reduce) {
-  /* no swing, no walk-through: the door simply gives way to the library */
-  .door-leaf,
-  .lobby[data-open="true"] .lobby-front {
+  /* no swing on hover either */
+  .door-leaf {
     transform: none !important;
   }
   .lobby-scene {
