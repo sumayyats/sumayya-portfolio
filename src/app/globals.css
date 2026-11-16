@@ -552,6 +552,11 @@ body {
   overflow: hidden;
   background: var(--lobby-wall);
   color: #22271f;
+  transition: background-color 600ms ease-in;
+}
+/* the wall goes dark as the door swings, taking the caption with it */
+.lobby[data-open="true"] {
+  background: #000;
 }
 .lobby-front {
   display: flex;
