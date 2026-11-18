@@ -869,6 +869,20 @@
    Tablet — keeps the landscape artwork, but the guestbook and
    the letter are too small to read when the scene shrinks.
    ============================================================ */
+/* Welcome sign, hung across the top of the arch. It sits at the bottom of
+   the stack so everything that opens (letter, guestbook) covers it. */
+.library-scene .ls-sign {
+  position: absolute;
+  left: 50%;
+  top: 3.5%;
+  width: 44%;
+  height: auto;
+  translate: -50% 0;
+  border-radius: 1.2% / 8%; /* trims the export's pale corners */
+  filter: drop-shadow(0 0.5cqw 0.5cqw rgba(30, 14, 4, 0.55));
+  pointer-events: none;
+}
+
 @media (max-width: 999px) {
   .ls-gb { width: 86%; }
   .ls-letter { width: 72%; }
@@ -887,6 +901,7 @@
    ============================================================ */
 @media (max-width: 700px) {
   .library-scene { aspect-ratio: 406 / 738; }
+  .library-scene .ls-sign { width: 86%; top: 2.5%; }
 
   .ls-window,
   .ls-lights,
