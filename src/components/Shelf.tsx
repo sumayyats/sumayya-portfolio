@@ -46,10 +46,10 @@ export function Shelf() {
   // Fit the books to the viewport height (tallest featured book ≈ base 520px).
   useEffect(() => {
     const measure = () => {
-      // header + gutters + the room dock; the lower shelf's books
-      // stand at LOWER_ROW of the top row's height, so both rows share it
-      const avail = window.innerHeight - 340;
-      setScale(Math.max(0.42, Math.min(1.28, avail / (560 * (1 + LOWER_ROW)))));
+      // The top row fills the window (header, gutters and the dock aside);
+      // the lower shelf sits below it, a scroll away on shorter screens.
+      const avail = window.innerHeight - 300;
+      setScale(Math.max(0.55, Math.min(1.28, avail / 620)));
     };
     measure();
     window.addEventListener("resize", measure);
@@ -228,7 +228,7 @@ export function Shelf() {
           onPointerLeave={endDrag}
           onScroll={onScroll}
           aria-label="Bookshelf of case studies"
-          className="no-scrollbar touch-pan-y snap-x overflow-x-auto pb-3 pt-8 outline-none [scrollbar-width:none]"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto pb-6 pt-12 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           <div
@@ -282,13 +282,13 @@ export function Shelf() {
         </div>
 
         {/* soft surface — the cast shadows do the grounding, like the reference */}
-        <div className="mx-[max(1rem,6vw)] mt-2 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
+        <div className="mx-[max(1rem,6vw)] mt-4 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
 
         {/* the lower shelf: résumé, LinkedIn and kind words */}
         <div
           role="list"
           aria-label="Résumé, LinkedIn and kind words"
-          className="mx-auto mt-3 flex w-max max-w-full items-end justify-center px-4"
+          className="mx-auto mt-10 flex w-max max-w-full items-end justify-center px-4"
         >
           {contactItems.map((item, i) => (
             <div key={item.slug} role="listitem" className="shrink-0">
