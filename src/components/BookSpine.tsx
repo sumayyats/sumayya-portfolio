@@ -70,7 +70,9 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           place();
         }}
         {...watch}
-        aria-label={`${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens ${
+        aria-label={
+          item.ariaLabel ??
+          `${item.title}${item.year ? `, ${item.year}` : ""} — optional read, opens ${
           item.note ? "the publication" : "the case study on Behance"
         } in a new tab`}
         className="group relative z-0 mx-0 flex shrink-0 snap-center items-end justify-start self-end outline-none transition-[margin] duration-200 ease-out [--lift:0px] hover:z-20 hover:mx-2 hover:[--lift:-9px] focus-visible:z-20 focus-visible:mx-2 focus-visible:[--lift:-9px]"
@@ -119,7 +121,8 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
     <motion.button
       ref={attach as React.Ref<HTMLButtonElement>}
       type="button"
-      layoutId={`book-${study.slug}`}
+      layoutId={`book-${study.slug}`
+        }
       data-book
       data-index={index}
       onFocus={() => {

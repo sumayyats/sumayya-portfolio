@@ -19,6 +19,8 @@ export type ShelfItem =
       note?: string;
       /** Cover image from the publication, previewed on hover. */
       preview?: string;
+      /** Replaces the default "opens the case study on Behance" label. */
+      ariaLabel?: string;
     };
 
 /**
@@ -74,6 +76,23 @@ export const shelfItems: ShelfItem[] = [
       })
     )
     .sort(newestFirst),
+  // Not case studies: how to reach me, standing at the end of the shelf.
+  {
+    kind: "external",
+    slug: "resume",
+    title: "Résumé",
+    url: "/Sumayya_Tsabitah_CV.pdf",
+    note: "PDF · opens in a new tab",
+    ariaLabel: "Résumé — opens Sumayya's CV as a PDF in a new tab",
+  },
+  {
+    kind: "external",
+    slug: "linkedin",
+    title: "LinkedIn",
+    url: "https://www.linkedin.com/in/sumayyatsabitah/",
+    note: "linkedin.com/in/sumayyatsabitah",
+    ariaLabel: "LinkedIn — opens Sumayya's LinkedIn profile in a new tab",
+  },
 ];
 
 export const featuredSlugs = shelfItems

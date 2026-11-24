@@ -696,3 +696,91 @@ body:has(.lobby[data-open="false"]) .room-nav {
     transition-delay: 0s;
   }
 }
+
+/* ── Kind words (KindWords.tsx) ─────────────────────────────────────────
+   On the shelf: the two feedback windows stacked like letters, fanned a
+   little, lifting together on hover like the books. Opened: one window at a
+   time over the dimmed shelf. */
+.kind-stack {
+  display: block;
+  cursor: pointer;
+  transition: transform 200ms ease-out;
+}
+.kind-stack:hover,
+.kind-stack:focus-visible { transform: translateY(-10px); }
+.kind-stack:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
+.kind-stack__card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.4rem;
+  transform-origin: 50% 100%;
+  transform: rotate(calc(-5deg + var(--i) * 8deg)) translateX(calc(var(--i) * 6%));
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.28));
+  transition: transform 260ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.kind-stack__card img { display: block; width: 100%; height: auto; }
+.kind-stack:hover .kind-stack__card,
+.kind-stack:focus-visible .kind-stack__card {
+  transform: rotate(calc(-9deg + var(--i) * 15deg)) translateX(calc(var(--i) * 12%));
+}
+.kind-stack__label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.kind-view {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  animation: shelf-label-in 200ms ease-out both;
+}
+.kind-view__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--paper) 62%, transparent);
+  backdrop-filter: blur(3px);
+}
+.kind-view__window {
+  position: relative;
+  width: min(560px, 92vw, calc(78dvh * var(--ratio, 0.9)));
+  margin: 0;
+  filter: drop-shadow(0 24px 40px rgb(0 0 0 / 0.35));
+}
+.kind-view__window img { display: block; width: 100%; height: auto; }
+.kind-view__hit { position: absolute; display: block; border-radius: 2px; }
+.kind-view__hit:focus-visible { outline: 3px solid #0b5ad9; outline-offset: 2px; }
+.kind-view__nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.kind-view__nav button {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--edge);
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .kind-stack, .kind-stack__card { transition: none; }
+}

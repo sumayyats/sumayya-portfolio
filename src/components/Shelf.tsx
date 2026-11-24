@@ -11,6 +11,7 @@ import { BookSpine } from "./BookSpine";
 import { BookCover } from "./BookCover";
 import { ShelfBookDetail } from "./ShelfBookDetail";
 import { ShelfBookStack } from "./ShelfBookStack";
+import { KindWords } from "./KindWords";
 import { shelfItems } from "./shelf-data";
 import { bookGeometry, projectedWidth } from "./book-geometry";
 import { useSound } from "@/lib/sound";
@@ -274,6 +275,10 @@ export function Shelf() {
                 </div>
               );
             })}
+            {/* the end of the shelf: notes from people I've worked with */}
+            <div role="listitem" className="shrink-0 self-end">
+              <KindWords scale={scale} />
+            </div>
           </div>
         </div>
 
