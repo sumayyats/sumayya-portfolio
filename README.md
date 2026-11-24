@@ -1,8 +1,12 @@
 # Sumayya's portfolio
 
-The UX/UI portfolio of Sumayya Tsabitah, a designer working where design meets
-psychology. It's built as a small building you walk through: a lobby, a work
-room with a bookshelf of case studies, and a room of my own.
+The UX/UI portfolio of Sumayya Tsabitah.
+
+> I believe good design starts where people hesitate. I use research to
+> understand why they get stuck and design a clearer next step.
+
+The site is built as a small building you walk through: a lobby, a work room
+with a bookshelf of case studies, and a room of my own.
 
 **Live site:** https://sumayyalibrary.netlify.app
 
