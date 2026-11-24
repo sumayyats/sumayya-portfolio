@@ -42,7 +42,7 @@ export function Shelf() {
   // Fit the books to the viewport height (tallest featured book ≈ base 520px).
   useEffect(() => {
     const measure = () => {
-      const avail = window.innerHeight - 250; // header + progress + gutters
+      const avail = window.innerHeight - 300; // header + progress + gutters + the room dock
       setScale(Math.max(0.55, Math.min(1.28, avail / 620)));
     };
     measure();
