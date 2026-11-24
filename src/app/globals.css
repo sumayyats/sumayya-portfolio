@@ -505,19 +505,50 @@ body {
   max-width: calc(100vw - 1rem);
 }
 /* A dock: each room is a cut-out picture standing on its own, its name
-   beneath in lowercase, on a white bar that floats over every room. The
-   picture lifts toward the pointer the way a dock icon does; the room you're
-   in reads in full ink. */
+   beneath in lowercase, on a frosted-glass bar that floats over every room
+   and takes its colour from what's behind it. Dark glass with light labels
+   over the lobby and the work table; light glass over the work room, which
+   turns dark with the site's dark theme. */
 .room-nav {
+  --dock-ink: #f3eee2;
   align-items: flex-end;
   gap: clamp(0.75rem, 4vw, 1.6rem);
   padding: 0.65rem clamp(1rem, 4.5vw, 1.6rem) 0.6rem;
   border-radius: 1.6rem;
-  background: rgb(255 255 255 / 0.92);
+  color: var(--dock-ink);
+  background: rgb(255 255 255 / 0.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: blur(18px) saturate(1.5);
   box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    0 0 0 1px rgb(255 255 255 / 0.12),
+    0 14px 32px -18px rgb(0 0 0 / 0.6);
+}
+.room-nav[data-tone="light"] {
+  --dock-ink: #1c1b17;
+  background: rgb(255 255 255 / 0.42);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.7),
     0 0 0 1px rgb(0 0 0 / 0.06),
-    0 14px 34px -14px rgb(0 0 0 / 0.45);
-  backdrop-filter: blur(14px);
+    0 14px 32px -20px rgb(0 0 0 / 0.35);
+}
+:root[data-theme="dark"] .room-nav[data-tone="light"] {
+  --dock-ink: #f3eee2;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 0 0 1px rgb(255 255 255 / 0.1),
+    0 14px 32px -18px rgb(0 0 0 / 0.6);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .room-nav[data-tone="light"] {
+    --dock-ink: #f3eee2;
+    background: rgb(255 255 255 / 0.08);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      0 0 0 1px rgb(255 255 255 / 0.1),
+      0 14px 32px -18px rgb(0 0 0 / 0.6);
+  }
 }
 .room-key {
   display: flex;
@@ -525,7 +556,7 @@ body {
   align-items: center;
   gap: 0.4rem;
   min-width: 3.25rem;
-  color: #1c1b17;
+  color: inherit;
   text-decoration: none;
   border-radius: 0.6rem;
 }
@@ -541,7 +572,7 @@ body {
   font-size: clamp(0.72rem, 2.9vw, 0.85rem);
   line-height: 1;
   white-space: nowrap;
-  opacity: 0.6;
+  opacity: 0.68;
   transition: opacity 150ms;
 }
 .room-key[aria-current="page"] .room-label,
@@ -555,7 +586,7 @@ body {
   transition-duration: 60ms;
 }
 .room-key:focus-visible {
-  outline: 2px solid #1c1b17;
+  outline: 2px solid currentColor;
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
