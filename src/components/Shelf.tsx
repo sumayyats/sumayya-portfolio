@@ -12,7 +12,7 @@ import { BookCover } from "./BookCover";
 import { ShelfBookDetail } from "./ShelfBookDetail";
 import { ShelfBookStack } from "./ShelfBookStack";
 import { KindWords } from "./KindWords";
-import { shelfItems } from "./shelf-data";
+import { contactItems, shelfItems } from "./shelf-data";
 import { bookGeometry, projectedWidth } from "./book-geometry";
 import { useSound } from "@/lib/sound";
 
@@ -24,6 +24,9 @@ const subPhone = (cb: () => void) => {
 };
 /** Phones get the picked-up book as a swipeable stack of two cards. */
 const usePhone = () => useSyncExternalStore(subPhone, () => window.matchMedia(PHONE).matches, () => false);
+
+/** The lower shelf's books, as a share of the top row's size. */
+const LOWER_ROW = 0.55;
 
 /** The tallest a book gets (see bookGeometry), before `scale`. */
 const SHELF_MAX_H = 528;
@@ -43,8 +46,10 @@ export function Shelf() {
   // Fit the books to the viewport height (tallest featured book ≈ base 520px).
   useEffect(() => {
     const measure = () => {
-      const avail = window.innerHeight - 300; // header + progress + gutters + the room dock
-      setScale(Math.max(0.55, Math.min(1.28, avail / 620)));
+      // header + gutters + the room dock; the lower shelf's books
+      // stand at LOWER_ROW of the top row's height, so both rows share it
+      const avail = window.innerHeight - 340;
+      setScale(Math.max(0.42, Math.min(1.28, avail / (560 * (1 + LOWER_ROW)))));
     };
     measure();
     window.addEventListener("resize", measure);
@@ -65,8 +70,6 @@ export function Shelf() {
       ? shelfItems[activeIndex].study
       : null;
 
-  const position = (activeIndex >= 0 ? activeIndex : centerIndex) + 1;
-  const progress = total > 1 ? (position - 1) / (total - 1) : 0;
 
   // ── open / close ──────────────────────────────────────────────
   const open = useCallback(
@@ -225,7 +228,7 @@ export function Shelf() {
           onPointerLeave={endDrag}
           onScroll={onScroll}
           aria-label="Bookshelf of case studies"
-          className="no-scrollbar touch-pan-y snap-x overflow-x-auto pb-16 pt-14 outline-none [scrollbar-width:none]"
+          className="no-scrollbar touch-pan-y snap-x overflow-x-auto pb-3 pt-8 outline-none [scrollbar-width:none]"
           style={{ cursor: "grab" }}
         >
           <div
@@ -275,46 +278,34 @@ export function Shelf() {
                 </div>
               );
             })}
-            {/* the end of the shelf: notes from people I've worked with */}
-            <div role="listitem" className="shrink-0 self-end">
-              <KindWords scale={scale} />
-            </div>
           </div>
         </div>
 
         {/* soft surface — the cast shadows do the grounding, like the reference */}
-        <div className="mx-[max(1rem,6vw)] mt-5 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
+        <div className="mx-[max(1rem,6vw)] mt-2 h-6 rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
 
-        {/* step controls, position, progress, and how to move along */}
-        <div className="mt-7 flex flex-col items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
-          <div className="flex items-center gap-3">
-            <ShelfStep
-              dir={-1}
-              disabled={centerIndex <= 0}
-              onStep={() => focusBook(centerIndex - 1)}
-            />
-            <span aria-live="polite" className="tabular-nums">
-              {position} / {total}
-            </span>
-            <span
-              className="relative h-[3px] w-40 overflow-hidden rounded-full bg-edge"
-              aria-hidden="true"
-            >
-              <span
-                className="absolute inset-y-0 left-0 rounded-full bg-ink-soft transition-[width] duration-300 ease-out"
-                style={{ width: `${progress * 100}%` }}
+        {/* the lower shelf: résumé, LinkedIn and kind words */}
+        <div
+          role="list"
+          aria-label="Résumé, LinkedIn and kind words"
+          className="mx-auto mt-3 flex w-max max-w-full items-end justify-center px-4"
+        >
+          {contactItems.map((item, i) => (
+            <div key={item.slug} role="listitem" className="shrink-0">
+              <BookSpine
+                item={item}
+                index={shelfItems.length + i}
+                scale={scale * LOWER_ROW}
+                onOpen={() => {}}
+                onFocusItem={() => {}}
               />
-            </span>
-            <ShelfStep
-              dir={1}
-              disabled={centerIndex >= total - 1}
-              onStep={() => focusBook(centerIndex + 1)}
-            />
+            </div>
+          ))}
+          <div role="listitem" className="shrink-0 self-end">
+            <KindWords scale={scale * LOWER_ROW * 1.5} />
           </div>
-          <p className="text-[10px] tracking-[0.2em] opacity-80">
-            drag · scroll · arrow keys
-          </p>
         </div>
+        <div className="mx-auto mt-3 h-4 w-[min(32rem,80vw)] rounded-b-xl bg-gradient-to-b from-[color-mix(in_srgb,var(--ink)_6%,transparent)] to-transparent" />
 
         {/* ── open book overlay ── */}
         <AnimatePresence>
@@ -374,28 +365,5 @@ export function Shelf() {
         </AnimatePresence>
       </div>
     </MotionConfig>
-  );
-}
-
-/** One step along the shelf: the ← / → either side of the counter. */
-function ShelfStep({
-  dir,
-  disabled,
-  onStep,
-}: {
-  dir: 1 | -1;
-  disabled: boolean;
-  onStep: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onStep}
-      disabled={disabled}
-      aria-label={dir < 0 ? "Previous book" : "Next book"}
-      className="grid h-7 w-7 place-items-center rounded-full border border-edge text-[12px] text-ink-soft transition-colors hover:border-ink-soft hover:text-ink disabled:pointer-events-none disabled:opacity-35"
-    >
-      <span aria-hidden="true">{dir < 0 ? "←" : "→"}</span>
-    </button>
   );
 }

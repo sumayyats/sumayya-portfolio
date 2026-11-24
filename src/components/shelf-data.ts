@@ -78,7 +78,13 @@ export const shelfItems: ShelfItem[] = [
       })
     )
     .sort(newestFirst),
-  // Not case studies: how to reach me, standing at the end of the shelf.
+];
+
+/**
+ * Not case studies: how to reach me. They stand on a second, lower shelf
+ * beside the kind words, outside the top row's counter and arrow keys.
+ */
+export const contactItems: ShelfItem[] = [
   {
     kind: "external",
     slug: "resume",
