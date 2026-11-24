@@ -9,7 +9,7 @@ const ROOMS = [
   { href: "/", label: "lobby", icon: "/images/lobby/door.png", w: 380, h: 718 },
   { href: "/works/", label: "work room", icon: "/images/nav/books.png", w: 119, h: 200 },
   // TODO(Sumayya): swap in the analog photo, cut out; the pixel avatar stands in until then
-  { href: "/about/", label: "sumayya's room", icon: "/assistant/ask-mayya.png", w: 200, h: 200 },
+  { href: "/about/", label: "sumayya's room", icon: "/images/nav/mayya.png", w: 200, h: 200 },
 ] as const;
 
 /** The persistent bottom nav, a dock of rooms. Shown in the rooms only: the case study reader has its own header. */
