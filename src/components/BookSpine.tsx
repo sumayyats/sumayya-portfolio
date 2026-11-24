@@ -56,7 +56,9 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
   };
 
   if (item.kind === "external") {
-    const spineColor = "color-mix(in srgb, var(--ink) 13%, var(--paper))";
+    const spineColor = item.cloth ?? "color-mix(in srgb, var(--ink) 13%, var(--paper))";
+    // a coloured cloth takes light lettering, like the featured books
+    const lettering = item.cloth ? "#F5F2E9" : undefined;
     return (
       <a
         ref={attach as React.Ref<HTMLAnchorElement>}
@@ -92,8 +94,11 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
           coverColor={`color-mix(in srgb, ${spineColor} 86%, #000)`}
           pageColor="color-mix(in srgb, var(--ink) 6%, var(--paper))"
           spine={
-            <div className="absolute inset-0 flex flex-col items-center justify-between py-4 text-ink-soft">
-              <span className="h-3 w-[2px] rounded bg-[color-mix(in_srgb,var(--ink)_28%,transparent)]" />
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-between py-4 text-ink-soft"
+              style={lettering ? { color: `color-mix(in srgb, ${lettering} 88%, transparent)` } : undefined}
+            >
+              <span className="h-3 w-[2px] rounded bg-[color-mix(in_srgb,currentColor_45%,transparent)]" />
               <span
                 className="min-h-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap py-2 text-center font-mono uppercase leading-none tracking-[0.14em]"
                 style={{
@@ -105,7 +110,7 @@ export const BookSpine = forwardRef<HTMLElement, Props>(function BookSpine(
               >
                 {item.title}
               </span>
-              <span className="h-3 w-[2px] rounded bg-[color-mix(in_srgb,var(--ink)_18%,transparent)]" />
+              <span className="h-3 w-[2px] rounded bg-[color-mix(in_srgb,currentColor_30%,transparent)]" />
             </div>
           }
         />

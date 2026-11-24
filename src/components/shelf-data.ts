@@ -21,6 +21,8 @@ export type ShelfItem =
       preview?: string;
       /** Replaces the default "opens the case study on Behance" label. */
       ariaLabel?: string;
+      /** A cloth colour of its own, instead of the quiet grey. */
+      cloth?: string;
     };
 
 /**
@@ -84,6 +86,7 @@ export const shelfItems: ShelfItem[] = [
     url: "/Sumayya_Tsabitah_CV.pdf",
     note: "PDF · opens in a new tab",
     ariaLabel: "Résumé — opens Sumayya's CV as a PDF in a new tab",
+    cloth: "#66702F", // olive
   },
   {
     kind: "external",
@@ -92,6 +95,7 @@ export const shelfItems: ShelfItem[] = [
     url: "https://www.linkedin.com/in/sumayyatsabitah/",
     note: "linkedin.com/in/sumayyatsabitah",
     ariaLabel: "LinkedIn — opens Sumayya's LinkedIn profile in a new tab",
+    cloth: "#2B5C9A", // LinkedIn's blue, muted to sit with the shelf
   },
 ];
 
